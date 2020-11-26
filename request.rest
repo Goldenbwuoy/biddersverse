@@ -1,0 +1,26 @@
+POST http://localhost:5000/api/users
+Content-Type: application/json
+
+{
+    "name": "Mark",
+    "email": "mark@mail.com",
+    "password": "12345678"
+}
+###
+GET http://localhost:5000/api/users
+
+###
+GET http://localhost:5000/api/users/5fa7923a09b8e73d940ced5c
+
+###
+PUT http://localhost:5000/api/users/5fa7923a09b8e73d940ced5c
+Content-Type: application/json
+
+{
+    "name": "Mark seven",
+    "email": "mark@mail.com",
+    "password": "12345678"
+}
+
+###
+DELETE http://localhost:5000/api/users/5fa7923a09b8e73d940ced5c
