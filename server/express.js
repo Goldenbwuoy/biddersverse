@@ -5,6 +5,7 @@ import cors from "cors";
 import helmet from "helmet";
 import userRoutes from "./routes/user.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import auctionRoutes from "./routes/auction.routes.js";
 import morgan from "morgan";
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(morgan("dev"));
 
 app.use("/", userRoutes);
 app.use("/", authRoutes);
+app.use("/", auctionRoutes);
 
 /* To handle auth-related errors thrown by express-jwt when it tries to validate JWT
 tokens in incoming requests */
