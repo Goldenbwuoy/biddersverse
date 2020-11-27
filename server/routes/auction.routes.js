@@ -24,6 +24,9 @@ router
 
 router.route("/api/auctions/bid/:userId").get(auctionCtrl.listByBidder);
 
+router.route("/api/auctions/image/:auctionId").get(auctionCtrl.photo);
+
 router.param("userId", userCtrl.userByID);
+router.param("auctionId", auctionCtrl.auctionByID);
 
 export default router;

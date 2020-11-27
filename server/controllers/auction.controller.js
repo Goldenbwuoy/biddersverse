@@ -55,6 +55,33 @@ const listByBidder = async (req, res) => {
   }
 };
 
+const auctionByID = async (req, res, next, id) => {
+  try {
+    let auction = await Auction.findById(id)
+      .populate("seller", "_id name")
+      .populate("bids.bidder", "_id name")
+      .exec();
+    if (!auction)
+      return res.status("400").json({
+        error: "Auction not found",
+      });
+    req.auction = auction;
+    next();
+  } catch (err) {
+    return res.status("400").json({
+      error: "Could not retrieve auction",
+    });
+  }
+};
+
+const photo = (req, res, next) => {
+  if (req.auction.image.data) {
+    res.set("Content-Type", req.auction.image.contentType);
+    return res.send(req.auction.image.data);
+  }
+  next();
+};
+
 const listBySeller = async (req, res) => {
   try {
     let auctions = await Auction.find({ seller: req.profile._id })
@@ -68,4 +95,11 @@ const listBySeller = async (req, res) => {
   }
 };
 
-export default { create, listOpen, listByBidder, listBySeller };
+export default {
+  create,
+  listOpen,
+  listByBidder,
+  listBySeller,
+  auctionByID,
+  photo,
+};
