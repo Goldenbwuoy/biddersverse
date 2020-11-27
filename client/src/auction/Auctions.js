@@ -9,7 +9,6 @@ import IconButton from "@material-ui/core/IconButton";
 import Edit from "@material-ui/icons/Edit";
 import ViewIcon from "@material-ui/icons/Visibility";
 import Divider from "@material-ui/core/Divider";
-import DeleteAuction from "./DeleteAuction";
 import auth from "../auth/auth-helper";
 import { Link } from "react-router-dom";
 
@@ -33,7 +32,7 @@ const calculateTimeLeft = (date) => {
 };
 
 function Auctions(props) {
-  const currentTime = new Date();
+  const currentDate = new Date();
   const showTimeLeft = (date) => {
     let timeLeft = calculateTimeLeft(date);
     return (
@@ -78,7 +77,7 @@ function Auctions(props) {
                 <Avatar
                   variant="square"
                   src={
-                    "http://localhost/api/auctions/image/" +
+                    "http://localhost:5000/api/auctions/image/" +
                     auction._id +
                     "?" +
                     new Date().getTime()

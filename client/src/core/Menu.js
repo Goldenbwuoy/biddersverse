@@ -43,7 +43,7 @@ const Menu = withRouter(({ history }) => (
           {auth.isAuthenticated().user.seller && (
             <>
               <Link to="/auction/new">
-                <Button>New Auction</Button>
+                <Button>Live Auctions</Button>
               </Link>
               <Link to="/myauctions">
                 <Button>My Auctions</Button>

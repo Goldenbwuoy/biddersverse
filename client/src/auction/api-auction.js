@@ -15,4 +15,31 @@ const create = (params, credentials, auction) => {
     .catch((err) => console.log(err));
 };
 
-export { create };
+const listOpen = async (signal) => {
+  try {
+    let response = await fetch(`${BASE_URL}/api/auctions`, {
+      method: "GET",
+      signal: signal,
+    });
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const listBySeller = async (params, credentials, signal) => {
+  try {
+    let response = await fetch(`${BASE_URL}/api/auctions/by/${params.userId}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${credentials.token}`,
+      },
+    });
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export { create, listOpen, listBySeller };
