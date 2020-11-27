@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 mongoose.Promise = global.Promise;
 mongoose.connect(
-  config.mongoUri_remote,
+  config.mongoUri,
   {
     useNewUrlParser: true,
     useCreateIndex: true,
@@ -13,7 +13,7 @@ mongoose.connect(
   () => console.log("Connected to mongo")
 );
 mongoose.connection.on("error", () => {
-  throw new Error(`Unable to connect to database: ${config.mongoUri_remote}`);
+  throw new Error(`Unable to connect to database: ${config.mongoUri}`);
 });
 
 app.listen(config.port, (err) => {

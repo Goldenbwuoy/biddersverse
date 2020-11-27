@@ -34,7 +34,8 @@ function OpenAuctions() {
     const signal = abortController.signal;
     listOpen(signal).then((data) => {
       if (data.error) {
-        setRedirectToSignin(true);
+        // setRedirectToSignin(true);
+        console.log(data.error);
       } else {
         setAuctions(data);
       }
