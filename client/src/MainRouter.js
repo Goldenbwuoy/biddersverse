@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
+import NewAuction from "./auction/NewAuction";
 import PrivateRoute from "./auth/PrivateRoute";
 import SignIn from "./auth/SignIn";
 import Home from "./core/Home";
@@ -19,6 +20,7 @@ function MainRouter() {
         <Route path="/signup" component={Signup} />
         <Route path="/signin" component={SignIn} />
         <PrivateRoute path="/user/edit/:userId" component={EditProfile} />
+        <PrivateRoute path="/auction/new" component={NewAuction} />
         <Route path="/user/:userId" component={Profile} />
       </Switch>
     </div>

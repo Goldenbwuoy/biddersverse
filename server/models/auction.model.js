@@ -13,8 +13,7 @@ const AuctionSchema = new mongoose.Schema(
     },
     image: {
       data: Buffer,
-      contentType: mongoose.Schema.ObjectId,
-      ref: "User",
+      contentType: String,
     },
     bidStart: {
       type: Date,
@@ -27,6 +26,10 @@ const AuctionSchema = new mongoose.Schema(
     startingBid: {
       type: Number,
       default: 0,
+    },
+    seller: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
     },
     bids: [
       {

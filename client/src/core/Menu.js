@@ -37,8 +37,19 @@ const Menu = withRouter(({ history }) => (
           </Link>
         </span>
       )}
+
       {auth.isAuthenticated() && (
         <span>
+          {auth.isAuthenticated().user.seller && (
+            <>
+              <Link to="/auction/new">
+                <Button>New Auction</Button>
+              </Link>
+              <Link to="/myauctions">
+                <Button>My Auctions</Button>
+              </Link>
+            </>
+          )}
           <Link to={"/user/" + auth.isAuthenticated().user._id}>
             <Button
               style={isActive(
