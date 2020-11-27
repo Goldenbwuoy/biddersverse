@@ -17,7 +17,7 @@ const Menu = withRouter(({ history }) => (
   <AppBar position="static">
     <Toolbar>
       <Typography variant="h6" color="inherit">
-        MERN Skeleton
+        Biddersverse
       </Typography>
       <Link to="/">
         <IconButton aria-label="Home" style={isActive(history, "/")}>
@@ -42,7 +42,7 @@ const Menu = withRouter(({ history }) => (
         <span>
           {auth.isAuthenticated().user.seller && (
             <>
-              <Link to="/auction/new">
+              <Link to="/auctions/all">
                 <Button>Live Auctions</Button>
               </Link>
               <Link to="/myauctions">

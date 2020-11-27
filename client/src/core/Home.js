@@ -4,7 +4,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import dellImage from "../assets/images/dell1.jpg";
+import dellImage from "../assets/images/bidders.PNG";
 import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -37,7 +37,7 @@ function Home() {
       />
       <CardContent>
         <Typography variant="body2" component="p">
-          Welcome to the MERN Skeleton home page.
+          Welcome to Biddersverse home page.
         </Typography>
       </CardContent>
     </Card>
