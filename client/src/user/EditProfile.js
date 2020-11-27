@@ -11,7 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import auth from "./../auth/auth-helper";
 import { read, update } from "./api-user.js";
 import { Redirect } from "react-router-dom";
-import { Avatar } from "@material-ui/core";
+import { Avatar, FormControlLabel, Switch } from "@material-ui/core";
 import defaultImage from "../assets/images/profile-pic.png";
 
 const useStyles = makeStyles((theme) => ({
@@ -49,6 +49,10 @@ const useStyles = makeStyles((theme) => ({
     height: 60,
     margin: "auto",
   },
+  subheading: {
+    marginTop: theme.spacing(2),
+    color: theme.palette.openTitle,
+  },
 }));
 
 function EditProfile({ match }) {
@@ -59,7 +63,7 @@ function EditProfile({ match }) {
     photo: "",
     password: "",
     email: "",
-    open: false,
+    seller: false,
     error: "",
     id: "",
     redirectToProfile: false,
@@ -86,6 +90,7 @@ function EditProfile({ match }) {
           name: data.name,
           email: data.email,
           about: data.about,
+          seller: data.seller,
         });
       }
     });
@@ -100,6 +105,7 @@ function EditProfile({ match }) {
     values.email && userData.append("email", values.email);
     values.passoword && userData.append("passoword", values.passoword);
     values.about && userData.append("about", values.about);
+    values.seller && userData.append("seller", values.seller);
     values.photo && userData.append("photo", values.photo);
     update(
       {
@@ -113,7 +119,9 @@ function EditProfile({ match }) {
       if (data && data.error) {
         setValues({ ...values, error: data.error });
       } else {
-        setValues({ ...values, userId: data._id, redirectToProfile: true });
+        auth.updateUser(data, () => {
+          setValues({ ...values, userId: data._id, redirectToProfile: true });
+        });
       }
     });
   };
@@ -121,6 +129,11 @@ function EditProfile({ match }) {
     const value = name === "photo" ? event.target.files[0] : event.target.value;
     setValues({ ...values, [name]: value });
   };
+
+  const handleCheck = (event, checked) => {
+    setValues({ ...values, seller: checked });
+  };
+
   const url = "http://localhost:5000";
   const photoUrl = values.id
     ? `${url}/api/users/photo/${values.id}?${new Date().getTime()}`
@@ -191,6 +204,22 @@ function EditProfile({ match }) {
           value={values.password}
           onChange={handleChange("password")}
           margin="normal"
+        />
+        <Typography variant="subtitle1" className={classes.subheading}>
+          Seller Account
+        </Typography>
+        <FormControlLabel
+          control={
+            <Switch
+              classes={{
+                checked: classes.checked,
+                bar: classes.bar,
+              }}
+              checked={values.seller}
+              onChange={handleCheck}
+            />
+          }
+          label={values.seller ? "Active" : "Inactive"}
         />
         <br />{" "}
         {values.error && (
