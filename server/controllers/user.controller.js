@@ -1,8 +1,8 @@
-import User from "../models/user.model.js";
-import errorHandler from "../helpers/dbErrorHandler.js";
-import extend from "lodash/extend.js";
-import formidable from "formidable";
-import fs from "fs";
+const User = require("../models/user.model.js");
+const errorHandler = require("../helpers/dbErrorHandler.js");
+const extend = require("lodash/extend");
+const formidable = require("formidable");
+const fs = require("fs");
 
 const create = async (req, res) => {
   const user = new User(req.body);
@@ -106,7 +106,7 @@ const isSeller = (req, res, next) => {
   next();
 };
 
-export default {
+module.exports = {
   create,
   userByID,
   read,

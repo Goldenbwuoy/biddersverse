@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const AuctionSchema = new mongoose.Schema(
   {
@@ -42,4 +42,4 @@ const AuctionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Auction", AuctionSchema);
+module.exports = mongoose.model("Auction", AuctionSchema);

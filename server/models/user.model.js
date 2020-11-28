@@ -1,6 +1,5 @@
-import mongoose from "mongoose";
-import crypto from "crypto";
-import bcrypt from "bcryptjs";
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const UserSchema = mongoose.Schema(
   {
@@ -62,4 +61,4 @@ UserSchema.methods.authenticate = async function (plainText) {
 //   }
 // }, null);
 
-export default mongoose.model("User", UserSchema);
+module.exports = mongoose.model("User", UserSchema);

@@ -1,8 +1,7 @@
-import express from "express";
-import authCtrl from "../controllers/auth.controller.js";
-import userCtrl from "../controllers/user.controller.js";
-import auctionCtrl from "../controllers/auction.controller.js";
-import auctionController from "../controllers/auction.controller.js";
+const express = require("express");
+const authCtrl = require("../controllers/auth.controller.js");
+const userCtrl = require("../controllers/user.controller.js");
+const auctionCtrl = require("../controllers/auction.controller.js");
 
 const router = express.Router();
 
@@ -31,4 +30,4 @@ router.route("/api/auctions/image/:auctionId").get(auctionCtrl.photo);
 router.param("userId", userCtrl.userByID);
 router.param("auctionId", auctionCtrl.auctionByID);
 
-export default router;
+module.exports = router;

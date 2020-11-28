@@ -7,4 +7,4 @@ const config = {
     "mongodb+srv://Golden:UsiqKhyLrAgEMRyE@biddersverse.puwe4.mongodb.net/biddersverse?retryWrites=true&w=majority",
 };
 
-export default config;
+module.exports = config;

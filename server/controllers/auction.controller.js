@@ -1,7 +1,7 @@
-import formidable from "formidable";
-import Auction from "../models/auction.model.js";
-import errorHandler from "../helpers/dbErrorHandler.js";
-import fs from "fs";
+const formidable = require("formidable");
+const Auction = require("../models/auction.model");
+const errorHandler = require("../helpers/dbErrorHandler");
+const fs = require("fs");
 
 const create = (req, res) => {
   let form = new formidable.IncomingForm();
@@ -100,7 +100,7 @@ const listBySeller = async (req, res) => {
   }
 };
 
-export default {
+module.exports = {
   create,
   listOpen,
   listByBidder,

@@ -1,12 +1,12 @@
-import express from "express";
-import cookieParser from "cookie-parser";
-import compress from "compression";
-import cors from "cors";
-import helmet from "helmet";
-import userRoutes from "./routes/user.routes.js";
-import authRoutes from "./routes/auth.routes.js";
-import auctionRoutes from "./routes/auction.routes.js";
-import morgan from "morgan";
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const compress = require("compression");
+const cors = require("cors");
+const helmet = require("helmet");
+const userRoutes = require("./routes/user.routes.js");
+const authRoutes = require("./routes/auth.routes.js");
+const auctionRoutes = require("./routes/auction.routes.js");
+const morgan = require("morgan");
 
 const app = express();
 
@@ -33,4 +33,4 @@ app.use((err, req, res, next) => {
   }
 });
 
-export default app;
+module.exports = app;

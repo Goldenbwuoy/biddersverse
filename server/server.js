@@ -1,6 +1,7 @@
-import config from "./config/config.js";
-import app from "./express.js";
-import mongoose from "mongoose";
+const config = require("./config/config.js");
+const app = require("./express.js");
+const mongoose = require("mongoose");
+const bidding = require("./controllers/bidding.controller.js");
 
 mongoose.Promise = global.Promise;
 mongoose.connect(
@@ -16,9 +17,11 @@ mongoose.connection.on("error", () => {
   throw new Error(`Unable to connect to database: ${config.mongoUri}`);
 });
 
-app.listen(config.port, (err) => {
+const server = app.listen(config.port, (err) => {
   if (err) {
     console.log(err);
   }
   console.info(`Server started on port ${config.port}`);
 });
+
+bidding(server);
