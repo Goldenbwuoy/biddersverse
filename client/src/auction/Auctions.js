@@ -19,7 +19,7 @@ const calculateTimeLeft = (date) => {
   if (difference > 0) {
     timeLeft = {
       days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((difference / (100 * 60 * 60)) % 24),
+      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
       minutes: Math.floor((difference / 1000 / 60) % 60),
       seconds: Math.floor((difference / 1000) % 60),
       timeEnd: false,
@@ -38,10 +38,10 @@ function Auctions(props) {
     return (
       !timeLeft.timeEnd && (
         <span>
-          {timeLeft.days != 0 && `${timeLeft.days} d `}
-          {timeLeft.hours != 0 && `${timeLeft.hours} h `}
-          {timeLeft.minutes != 0 && `${timeLeft.minutes} m `}
-          {timeLeft.seconds != 0 && `${timeLeft.seconds} s `} left
+          {timeLeft.days !== 0 && `${timeLeft.days} d `}
+          {timeLeft.hours !== 0 && `${timeLeft.hours} h `}
+          {timeLeft.minutes !== 0 && `${timeLeft.minutes} m `}
+          {timeLeft.seconds !== 0 && `${timeLeft.seconds} s `} left
         </span>
       )
     );
@@ -95,7 +95,7 @@ function Auctions(props) {
                   </IconButton>
                 </Link>
                 {auth.isAuthenticated().user &&
-                  auth.isAuthenticated().user._id == auction.seller._id && (
+                  auth.isAuthenticated().user._id === auction.seller._id && (
                     <>
                       <Link to={"/auction/edit/" + auction._id}>
                         <IconButton aria-label="Edit" color="primary">
