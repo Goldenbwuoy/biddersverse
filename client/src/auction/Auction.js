@@ -9,6 +9,7 @@ import { read } from "./api-auction.js";
 import { Link } from "react-router-dom";
 import auth from "../auth/auth-helper.js";
 import Timer from "./Timer.js";
+import Bidding from "./Bidding.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -154,12 +155,11 @@ function Auction({ match }) {
                   </Typography>
                 )}
                 {auth.isAuthenticated() && (
-                  <Typography>Bidding is On</Typography>
-                  //   <Bidding
-                  //     auction={auction}
-                  //     justEnded={justEnded}
-                  //     updateBids={updateBids}
-                  //   />
+                  <Bidding
+                    auction={auction}
+                    justEnded={justEnded}
+                    updateBids={updateBids}
+                  />
                 )}
               </>
             ) : (
