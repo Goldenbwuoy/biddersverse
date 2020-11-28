@@ -5,9 +5,9 @@ import Typography from "@material-ui/core/Typography";
 import auth from "../auth/auth-helper";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
-import { io } from "socket.io-client";
-
-const socket = io();
+import SocketIOClient from "socket.io-client";
+const endpoint = "http://127.0.0.1:5000";
+// import { io } from "socket.io-client";
 
 const useStyles = makeStyles((theme) => ({
   bidHistory: {
@@ -28,12 +28,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+let socket;
+
 function Bidding(props) {
   const classes = useStyles();
   const [bid, setBid] = useState("");
   const { user } = auth.isAuthenticated();
 
   useEffect(() => {
+    socket = SocketIOClient(endpoint);
     socket.emit("join auction room", { room: props.auction._id });
     return () => {
       socket.emit("leave auction room", {
@@ -66,6 +69,7 @@ function Bidding(props) {
       room: props.auction._id,
       bidInfo: newBid,
     });
+    console.log(newBid);
     setBid("");
   };
 

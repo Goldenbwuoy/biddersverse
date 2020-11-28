@@ -36,6 +36,7 @@ const listOpen = async (req, res) => {
       .sort("bidStart")
       .populate("seller", "_id name")
       .populate("bids.bidder", "_id name");
+    console.log(auctions);
     res.json(auctions);
   } catch (err) {
     return res.status(400).json({ error: errorHandler.getErrorMessage(err) });
