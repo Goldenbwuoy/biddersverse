@@ -74,6 +74,11 @@ const auctionByID = async (req, res, next, id) => {
   }
 };
 
+const read = (req, res) => {
+  req.auction.image = undefined;
+  return res.json(req.auction);
+};
+
 const photo = (req, res, next) => {
   if (req.auction.image.data) {
     res.set("Content-Type", req.auction.image.contentType);
@@ -102,4 +107,5 @@ export default {
   listBySeller,
   auctionByID,
   photo,
+  read,
 };
