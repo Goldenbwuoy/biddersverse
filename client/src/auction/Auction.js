@@ -8,6 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { read } from "./api-auction.js";
 import { Link } from "react-router-dom";
 import auth from "../auth/auth-helper.js";
+import Timer from "./Timer.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,6 +87,14 @@ function Auction({ match }) {
     };
   }, [match.params.auctionId]);
 
+  const updateBids = (updatedAuction) => {
+    setAuction(updatedAuction);
+  };
+
+  const update = () => {
+    setJustEnded(true);
+  };
+
   const imageUrl = `http://localhost:5000/api/auctions/image/${
     auction?._id
   }?${new Date().getTime()}`;
@@ -129,7 +138,7 @@ function Auction({ match }) {
           <Grid item xs={7} sm={7}>
             {currentDate > new Date(auction.bidStart) ? (
               <>
-                {/* <Timer endTime={auction.bidEnd} update={update} /> */}
+                <Timer endTime={auction.bidEnd} update={update} />
                 {auction.bids.length > 0 && (
                   <Typography
                     component="p"
