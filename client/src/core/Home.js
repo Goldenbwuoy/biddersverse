@@ -5,6 +5,7 @@ import Categories from "./../auction/Categories";
 import { Typography } from "@material-ui/core";
 import { listLatest } from "../auction/api-auction";
 import Suggestions from "../auction/Suggestions";
+import Search from "../auction/Search";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,6 +38,7 @@ function Home() {
     <div className={classes.root}>
       <Grid container spacing={2}>
         <Grid item xs={8} sm={8}>
+          <Search />
           <Categories />
         </Grid>
         <Grid item xs={4} sm={4}>

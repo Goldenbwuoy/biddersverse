@@ -5,7 +5,6 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
-import Icon from "@material-ui/core/Icon";
 import { listOpenByCategory } from "./api-auction";
 import AuctionsGrid from "./AuctionsGrid";
 import { listCategories } from "../category/api-category";
@@ -75,6 +74,7 @@ function Categories() {
         data.map((item) => {
           names.push(item.categoryName);
           ids.push(item._id);
+          return null;
         });
         setCategoryNames(names);
         setCategoryIds(ids);
@@ -108,8 +108,6 @@ function Categories() {
       }
     });
   };
-
-  console.log(selected);
 
   return (
     <div>

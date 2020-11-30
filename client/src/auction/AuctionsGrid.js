@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "5px",
     color: "rgb(189, 222, 219)",
     display: "block",
+    textDecoration: "none",
   },
 }));
 
