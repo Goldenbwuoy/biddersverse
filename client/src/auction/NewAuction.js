@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
@@ -11,6 +11,8 @@ import Icon from "@material-ui/core/Icon";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link, Redirect } from "react-router-dom";
 import { create } from "./api-auction";
+import { MenuItem, Select } from "@material-ui/core";
+import { list } from "../category/api-category";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -36,6 +38,12 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: "auto",
     marginBottom: theme.spacing(2),
+  },
+  select: {
+    marginTop: 25,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 300,
   },
   input: {
     display: "none",
@@ -70,6 +78,7 @@ const getDateString = (date) => {
 function NewAuction() {
   const classes = useStyles();
   const { user, token } = auth.isAuthenticated();
+  const [categories, setCategories] = useState([]);
   const currentDate = new Date();
   const defaultStartTime = getDateString(currentDate);
   const defaultEndTime = getDateString(
@@ -78,6 +87,7 @@ function NewAuction() {
 
   const [values, setValues] = useState({
     itemName: "",
+    category: "none",
     description: "",
     image: "",
     bidStart: defaultStartTime,
@@ -86,6 +96,19 @@ function NewAuction() {
     redirect: false,
     error: "",
   });
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    list(signal).then((data) => {
+      if (data && data.error) {
+        console.log(data.error);
+      } else {
+        setCategories(data);
+      }
+    });
+  }, []);
 
   const handleChange = (name) => (event) => {
     const value = name === "image" ? event.target.files[0] : event.target.value;
@@ -98,6 +121,8 @@ function NewAuction() {
     } else {
       let auctionData = new FormData();
       values.itemName && auctionData.append("itemName", values.itemName);
+      values.category !== "none" &&
+        auctionData.append("category", values.category);
       values.description &&
         auctionData.append("description", values.description);
       values.image && auctionData.append("image", values.image);
@@ -124,7 +149,7 @@ function NewAuction() {
   };
 
   if (values.redirect) {
-    return <Redirect to={"/"} />;
+    return <Redirect to={"/myauctions"} />;
   }
 
   return (
@@ -160,6 +185,24 @@ function NewAuction() {
             onChange={handleChange("itemName")}
             margin="normal"
           />
+          <br />
+          <Select
+            id="device"
+            variant="filled"
+            // disableUnderline
+            className={classes.select}
+            value={values.category}
+            onChange={handleChange("category")}
+          >
+            <MenuItem value="none" disabled>
+              Select Category
+            </MenuItem>
+            {categories.map((category) => (
+              <MenuItem key={category._id} value={category._id}>
+                {category.categoryName}
+              </MenuItem>
+            ))}
+          </Select>
           <br />
           <TextField
             id="multiline-flexible"

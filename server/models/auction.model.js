@@ -7,6 +7,11 @@ const AuctionSchema = new mongoose.Schema(
       trim: true,
       required: "Item name is required",
     },
+    category: {
+      type: mongoose.Schema.ObjectId,
+      ref: "Category",
+      required: "Product category is required",
+    },
     description: {
       type: String,
       trim: true,

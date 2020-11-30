@@ -43,6 +43,21 @@ const listOpen = async (req, res) => {
   }
 };
 
+const listOpenByCategory = async (req, res) => {
+  try {
+    let auctions = await Auction.find({
+      category: req.category,
+      bidEnd: { $gt: new Date() },
+    })
+      .sort("bidStart")
+      .populate("seller", "_id name")
+      .populate("bids.bidder", "_id name");
+    res.json(auctions);
+  } catch (err) {
+    return res.status(400).json({ error: errorHandler.getErrorMessage(err) });
+  }
+};
+
 const listByBidder = async (req, res) => {
   try {
     let auctions = await Auction.find({ "bids.bidder": req.profile._id })
@@ -109,4 +124,5 @@ module.exports = {
   auctionByID,
   photo,
   read,
+  listOpenByCategory,
 };

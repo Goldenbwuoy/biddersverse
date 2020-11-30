@@ -24,3 +24,17 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:5000/api/users/5fa7923a09b8e73d940ced5c
+
+### create a category
+POST http://localhost:5000/api/categories
+Content-Type: application/json
+
+{
+    "categoryName": "Wearable Technology"
+}
+
+### retrieve categories
+GET http://localhost:5000/api/categories
+
+### retrieve auctions in a given category
+GET http://localhost:5000/api/auctions/category/5fc33baa8f4b033f000edc59
