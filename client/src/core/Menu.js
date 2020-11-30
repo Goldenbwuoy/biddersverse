@@ -14,7 +14,7 @@ const isActive = (history, path) => {
 };
 
 const Menu = withRouter(({ history }) => (
-  <AppBar position="static">
+  <AppBar position="sticky">
     <Toolbar>
       <Typography variant="h6" color="inherit">
         Biddersverse

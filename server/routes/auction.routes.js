@@ -30,6 +30,8 @@ router
   .route("/api/auctions/category/:categoryId")
   .get(auctionCtrl.listOpenByCategory);
 
+router.route("/api/auctions/added/latest").get(auctionCtrl.listLatest);
+
 router.route("/api/auctions/image/:auctionId").get(auctionCtrl.photo);
 
 router.param("userId", userCtrl.userByID);

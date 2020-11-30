@@ -38,3 +38,6 @@ GET http://localhost:5000/api/categories
 
 ### retrieve auctions in a given category
 GET http://localhost:5000/api/auctions/category/5fc33baa8f4b033f000edc59
+
+### retrieve latest auctions added
+GET http://localhost:5000/api/auctions/added/latest

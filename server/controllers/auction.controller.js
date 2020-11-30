@@ -116,6 +116,22 @@ const listBySeller = async (req, res) => {
   }
 };
 
+const listLatest = async (req, res) => {
+  try {
+    let auctions = await Auction.find({})
+      .select("-image")
+      .sort("-createdAt")
+      .limit(5)
+      .populate("seller", "_id name")
+      .populate("bids.bidder", "_id name");
+    res.json(auctions);
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
+  }
+};
+
 module.exports = {
   create,
   listOpen,
@@ -125,4 +141,5 @@ module.exports = {
   photo,
   read,
   listOpenByCategory,
+  listLatest,
 };

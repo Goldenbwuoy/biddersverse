@@ -8,6 +8,7 @@ import GridListTile from "@material-ui/core/GridListTile";
 import Icon from "@material-ui/core/Icon";
 import { listOpenByCategory } from "./api-auction";
 import AuctionsGrid from "./AuctionsGrid";
+import { listCategories } from "../category/api-category";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,20 +55,40 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Categories({ categoryNames, categoryIds }) {
+function Categories() {
   const classes = useStyles();
-  const [selected, setSelected] = useState(categoryNames && categoryNames[0]);
+  const [selected, setSelected] = useState("");
+  const [categoryIds, setCategoryIds] = useState([]);
+  const [categoryNames, setCategoryNames] = useState([]);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     const abortController = new AbortController();
-    listOpenByCategory({
-      categoryId: categoryIds && categoryIds[0],
-    }).then((data) => {
-      if (data && data.error) {
+    const signal = abortController.signal;
+
+    listCategories(signal).then((data) => {
+      if (data.error) {
         console.log(data.error);
       } else {
-        setProducts(data);
+        let names = [],
+          ids = [];
+        data.map((item) => {
+          names.push(item.categoryName);
+          ids.push(item._id);
+        });
+        setCategoryNames(names);
+        setCategoryIds(ids);
+        setSelected(names[0]);
+
+        listOpenByCategory({
+          categoryId: ids[0],
+        }).then((data) => {
+          if (data && data.error) {
+            console.log(data.error);
+          } else {
+            setProducts(data);
+          }
+        });
       }
     });
     return function cleanup() {

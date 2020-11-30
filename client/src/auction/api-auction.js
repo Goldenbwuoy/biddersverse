@@ -27,6 +27,18 @@ const listOpen = async (signal) => {
   }
 };
 
+const listLatest = async (signal) => {
+  try {
+    let response = await fetch(`${BASE_URL}/api/auctions/added/latest`, {
+      method: "GET",
+      signal: signal,
+    });
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const listOpenByCategory = async (params) => {
   try {
     let response = await fetch(
@@ -68,4 +80,4 @@ const listBySeller = async (params, credentials, signal) => {
   }
 };
 
-export { create, listOpen, listBySeller, read, listOpenByCategory };
+export { create, listOpen, listBySeller, read, listOpenByCategory, listLatest };
