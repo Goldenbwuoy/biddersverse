@@ -1,6 +1,6 @@
 const BASE_URL = "http://localhost:5000";
 
-const list = async (signal) => {
+const listCategories = async (signal) => {
   try {
     let response = await fetch(`${BASE_URL}/api/categories/`, {
       method: "GET",
@@ -12,4 +12,4 @@ const list = async (signal) => {
   }
 };
 
-export { list };
+export { listCategories };

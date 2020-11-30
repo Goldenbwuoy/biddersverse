@@ -12,7 +12,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Link, Redirect } from "react-router-dom";
 import { create } from "./api-auction";
 import { MenuItem, Select } from "@material-ui/core";
-import { list } from "../category/api-category";
+import { listCategories } from "../category/api-category";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -101,7 +101,7 @@ function NewAuction() {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
-    list(signal).then((data) => {
+    listCategories(signal).then((data) => {
       if (data && data.error) {
         console.log(data.error);
       } else {

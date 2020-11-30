@@ -27,13 +27,12 @@ const listOpen = async (signal) => {
   }
 };
 
-const listOpenByCategory = async (params, signal) => {
+const listOpenByCategory = async (params) => {
   try {
     let response = await fetch(
       `${BASE_URL}/api/auctions/category/${params.categoryId}`,
       {
         method: "GET",
-        signal: signal,
       }
     );
     return response.json();
