@@ -2,43 +2,41 @@ import React from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import HomeIcon from "@material-ui/icons/Home";
 import Button from "@material-ui/core/Button";
 import auth from "./../auth/auth-helper";
 import { Link, withRouter } from "react-router-dom";
 
-const isActive = (history, path) => {
-  if (history.location.pathname == path) return { color: "#ff4081" };
-  else return { color: "#ffffff" };
+const styles = {
+  icon: {
+    color: "white",
+  },
+  links: {
+    textDecoration: "none",
+    color: "white",
+  },
 };
 
 const Menu = withRouter(({ history }) => (
   <AppBar position="sticky">
     <Toolbar>
-      <Typography variant="h6" color="inherit">
-        Biddersverse
+      <Typography
+        variant="h6"
+        color="inherit"
+        aria-label="Home"
+        style={{ flexGrow: 1 }}
+      >
+        <Link style={styles.links} to="/">
+          Biddersverse
+        </Link>
       </Typography>
-      <Link to="/">
-        <IconButton aria-label="Home" style={isActive(history, "/")}>
-          <HomeIcon />
-        </IconButton>
-      </Link>
-      <Link to="/users">
-        <Button style={isActive(history, "/users")}>Users</Button>
-      </Link>
-      <Link to="/auctions/all">
-        <Button style={isActive(history, "/auctions/all")}>
-          Live Auctions
-        </Button>
-      </Link>
+
       {!auth.isAuthenticated() && (
         <span>
-          <Link to="/signup">
-            <Button style={isActive(history, "/signup")}>Sign up</Button>
+          <Link style={styles.links} to="/signup">
+            <Button color="inherit">Sign Up</Button>
           </Link>
-          <Link to="/signin">
-            <Button style={isActive(history, "/signin")}>Sign In</Button>
+          <Link style={styles.links} to="/signin">
+            <Button color="inherit">Sign In</Button>
           </Link>
         </span>
       )}
@@ -47,20 +45,16 @@ const Menu = withRouter(({ history }) => (
         <span>
           {auth.isAuthenticated().user.seller && (
             <>
-              <Link to="/myauctions">
-                <Button>My Auctions</Button>
+              <Link style={styles.links} to="/myauctions">
+                <Button color="inherit">My Auctions</Button>
               </Link>
             </>
           )}
-          <Link to={"/user/" + auth.isAuthenticated().user._id}>
-            <Button
-              style={isActive(
-                history,
-                "/user/" + auth.isAuthenticated().user._id
-              )}
-            >
-              My Profile
-            </Button>
+          <Link
+            style={styles.links}
+            to={"/user/" + auth.isAuthenticated().user._id}
+          >
+            <Button color="inherit">Profile</Button>
           </Link>
           <Button
             color="inherit"

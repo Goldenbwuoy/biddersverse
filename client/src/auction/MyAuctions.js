@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import Icon from "@material-ui/core/Icon";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import auth from "../auth/auth-helper";
 import { listBySeller } from "./api-auction";
-import Auctions from "./Auctions";
 import { Link } from "react-router-dom";
 import AddIcon from "@material-ui/icons/Add";
+import AuctionsGrid from "./AuctionsGrid";
 
 const useStyles = makeStyles((theme) => ({
   root: theme.mixins.gutters({
-    maxWidth: 600,
+    maxWidth: 1200,
     margin: "auto",
     padding: theme.spacing(3),
     marginTop: theme.spacing(5),
@@ -70,7 +69,7 @@ function MyAuctions() {
             </Link>
           </span>
         </Typography>
-        <Auctions auctions={auctions} />
+        <AuctionsGrid products={auctions} searched={false} />
       </Paper>
     </div>
   );
