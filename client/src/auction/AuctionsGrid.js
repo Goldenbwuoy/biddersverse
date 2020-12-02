@@ -4,7 +4,9 @@ import Typography from "@material-ui/core/Typography";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
+import Settings from "@material-ui/icons/Settings";
 import { Link } from "react-router-dom";
+import auth from "../auth/auth-helper";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,10 +51,71 @@ const useStyles = makeStyles((theme) => ({
     display: "block",
     textDecoration: "none",
   },
+  actions: {},
+  bottom: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
 }));
+
+const calculateTimeLeft = (date) => {
+  const difference = date - new Date();
+  let timeLeft = {};
+
+  if (difference > 0) {
+    timeLeft = {
+      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((difference / 1000 / 60) % 60),
+      seconds: Math.floor((difference / 1000) % 60),
+      timeEnd: false,
+    };
+  } else {
+    timeLeft = { timeEnd: true };
+  }
+
+  return timeLeft;
+};
 
 function AuctionsGrid(props) {
   const classes = useStyles();
+  const currentDate = new Date();
+
+  const showTimeLeft = (date) => {
+    let timeLeft = calculateTimeLeft(date);
+    return (
+      !timeLeft.timeEnd && (
+        <span>
+          {timeLeft.days !== 0 && `${timeLeft.days} d `}
+          {timeLeft.hours !== 0 && `${timeLeft.hours} h `}
+          {timeLeft.minutes !== 0 && `${timeLeft.minutes} m `}
+          {timeLeft.seconds !== 0 && `${timeLeft.seconds} s `} left
+        </span>
+      )
+    );
+  };
+
+  const auctionState = (auction) => {
+    return (
+      <span>
+        {currentDate < new Date(auction.bidStart) &&
+          `Auction Starts at ${new Date(auction.bidStart).toLocaleString()}`}
+        {currentDate > new Date(auction.bidStart) &&
+          currentDate < new Date(auction.bidEnd) && (
+            <>
+              {`Auction is live | ${auction.bids.length} bids |`} <br />
+              {showTimeLeft(new Date(auction.bidEnd))}
+            </>
+          )}
+        {currentDate > new Date(auction.bidEnd) &&
+          `Auction Ended | ${auction.bids.length} bids `}
+        {currentDate > new Date(auction.bidStart) &&
+          auction.bids.length > 0 &&
+          ` | Last bid: $ ${auction.bids[0].bid}`}
+      </span>
+    );
+  };
   return (
     <div className={classes.root}>
       {props.products.length > 0 ? (
@@ -82,7 +145,20 @@ function AuctionsGrid(props) {
                       {product.itemName}
                     </Link>
                   }
-                  //   subtitle={<span>$ {product.price}</span>}
+                  subtitle={
+                    <>
+                      <div className={classes.bottom}>
+                        <span>{auctionState(product)}</span>
+                        {auth.isAuthenticated().user &&
+                          auth.isAuthenticated().user._id ===
+                            product.seller._id && (
+                            <span className={classes.actions}>
+                              <Settings />
+                            </span>
+                          )}
+                      </div>
+                    </>
+                  }
                 />
               </GridListTile>
             ))}
