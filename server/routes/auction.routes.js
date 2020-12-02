@@ -22,9 +22,14 @@ router
     auctionCtrl.listBySeller
   );
 
+router
+  .route("/api/auctions/:auctionId")
+  .delete(authCtrl.requireSignin, auctionCtrl.isSeller, auctionCtrl.remove)
+  .put(authCtrl.requireSignin, auctionCtrl.isSeller, auctionCtrl.update);
+
 router.route("/api/auctions/bid/:userId").get(auctionCtrl.listByBidder);
 
-router.route("/api/auctions/:auctionId").get(auctionCtrl.read);
+router.route("/api/auction/:auctionId").get(auctionCtrl.read);
 
 router
   .route("/api/auctions/category/:categoryId")

@@ -55,7 +55,7 @@ const listOpenByCategory = async (params) => {
 
 const read = async (params, signal) => {
   try {
-    let response = await fetch(`${BASE_URL}/api/auctions/${params.auctionId}`, {
+    let response = await fetch(`${BASE_URL}/api/auction/${params.auctionId}`, {
       method: "GET",
       signal: signal,
     });
@@ -80,4 +80,43 @@ const listBySeller = async (params, credentials, signal) => {
   }
 };
 
-export { create, listOpen, listBySeller, read, listOpenByCategory, listLatest };
+const deleteAuction = async (params, credentials) => {
+  try {
+    let response = await fetch(`${BASE_URL}/api/auctions/${params.auctionId}`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${credentials.token}`,
+      },
+    });
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const updateAuction = (params, credentials, auction) => {
+  return fetch(`${BASE_URL}/api/auctions/${params.auctionId}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${credentials.token}`,
+    },
+    body: auction,
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};
+
+export {
+  create,
+  listOpen,
+  listBySeller,
+  read,
+  listOpenByCategory,
+  listLatest,
+  deleteAuction,
+  updateAuction,
+};

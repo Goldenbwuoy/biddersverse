@@ -7,6 +7,7 @@ import GridListTileBar from "@material-ui/core/GridListTileBar";
 import Settings from "@material-ui/icons/Settings";
 import { Link } from "react-router-dom";
 import auth from "../auth/auth-helper";
+import AuctionSettingsMenu from "./AuctionSettingsMenu";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -149,13 +150,6 @@ function AuctionsGrid(props) {
                     <>
                       <div className={classes.bottom}>
                         <span>{auctionState(product)}</span>
-                        {auth.isAuthenticated().user &&
-                          auth.isAuthenticated().user._id ===
-                            product.seller._id && (
-                            <span className={classes.actions}>
-                              <Settings />
-                            </span>
-                          )}
                       </div>
                     </>
                   }

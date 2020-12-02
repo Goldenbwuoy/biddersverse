@@ -2,6 +2,7 @@ const formidable = require("formidable");
 const Auction = require("../models/auction.model");
 const errorHandler = require("../helpers/dbErrorHandler");
 const fs = require("fs");
+const { extend } = require("lodash");
 
 const create = (req, res) => {
   let form = new formidable.IncomingForm();
@@ -132,6 +133,56 @@ const listLatest = async (req, res) => {
   }
 };
 
+const isSeller = (req, res, next) => {
+  const isSeller =
+    req.auction && req.auth && req.auction.seller._id == req.auth._id;
+  if (!isSeller) {
+    return res.status("403").json({
+      error: "User is not authorized",
+    });
+  }
+  next();
+};
+
+const update = (req, res) => {
+  let form = new formidable.IncomingForm();
+  form.keepExtensions = true;
+  form.parse(req, async (err, fields, files) => {
+    if (err) {
+      res.status(400).json({
+        message: "Photo could not be uploaded",
+      });
+    }
+    let auction = req.auction;
+    auction = extend(auction, fields);
+    auction.updated = Date.now();
+    if (files.image) {
+      auction.image.data = fs.readFileSync(files.image.path);
+      auction.image.contentType = files.image.type;
+    }
+    try {
+      let result = await auction.save();
+      res.json(result);
+    } catch (err) {
+      return res.status(400).json({
+        error: errorHandler.getErrorMessage(err),
+      });
+    }
+  });
+};
+
+const remove = async (req, res) => {
+  try {
+    let auction = req.auction;
+    await auction.remove();
+    return res.status(200).json({ message: "Auction deleted successfully" });
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
+  }
+};
+
 module.exports = {
   create,
   listOpen,
@@ -142,4 +193,7 @@ module.exports = {
   read,
   listOpenByCategory,
   listLatest,
+  remove,
+  isSeller,
+  update,
 };

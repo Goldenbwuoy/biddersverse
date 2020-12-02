@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import Auction from "./auction/Auction";
+import EditAuction from "./auction/EditAuction";
 import MyAuctions from "./auction/MyAuctions";
 import NewAuction from "./auction/NewAuction";
 import OpenAuctions from "./auction/OpenAuctions";
@@ -22,6 +23,7 @@ function MainRouter() {
         <Route path="/signin" component={SignIn} />
         <PrivateRoute path="/user/edit/:userId" component={EditProfile} />
         <PrivateRoute path="/auction/new" component={NewAuction} />
+        <PrivateRoute path="/auction/edit/:auctionId" component={EditAuction} />
         <PrivateRoute path="/myauctions" component={MyAuctions} />
         <Route path="/auctions/all" component={OpenAuctions} />
         <Route path="/auction/:auctionId" component={Auction} />

@@ -6,10 +6,11 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { read } from "./api-auction.js";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import auth from "../auth/auth-helper.js";
 import Timer from "./Timer.js";
 import Bidding from "./Bidding.js";
+import AuctionSettingsMenu from "./AuctionSettingsMenu";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -70,6 +71,7 @@ function Auction({ match }) {
   const [auction, setAuction] = useState({});
   const [error, setError] = useState("");
   const [justEnded, setJustEnded] = useState(false);
+  const [redirectToMyAuctions, setRedirectToMyAuctions] = useState(false);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -100,6 +102,10 @@ function Auction({ match }) {
     auction?._id
   }?${new Date().getTime()}`;
 
+  if (redirectToMyAuctions) {
+    return <Redirect to="/myauctions" />;
+  }
+
   const currentDate = new Date();
   return (
     <div className={classes.root}>
@@ -107,14 +113,25 @@ function Auction({ match }) {
         <CardHeader
           title={auction.itemName}
           subheader={
-            <span>
-              {currentDate < new Date(auction.bidStart) &&
-                "Auction Not Started"}
-              {currentDate > new Date(auction.bidStart) &&
-                currentDate < new Date(auction.bidEnd) &&
-                "Auction Live"}
-              {currentDate > new Date(auction.bidEnd) && "Auction Ended"}
-            </span>
+            <>
+              <span>
+                {currentDate < new Date(auction.bidStart) &&
+                  "Auction Not Started"}
+                {currentDate > new Date(auction.bidStart) &&
+                  currentDate < new Date(auction.bidEnd) &&
+                  "Auction Live"}
+                {currentDate > new Date(auction.bidEnd) && "Auction Ended"}
+              </span>
+              {auth.isAuthenticated().user &&
+                auth.isAuthenticated().user._id === auction.seller?._id && (
+                  <span style={{ float: "right" }}>
+                    <AuctionSettingsMenu
+                      auction={auction}
+                      SetRedirect={setRedirectToMyAuctions}
+                    />
+                  </span>
+                )}
+            </>
           }
         />
         <Grid container spacing={6}>
