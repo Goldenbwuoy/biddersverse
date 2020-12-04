@@ -5,18 +5,19 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
-import { read } from "./api-auction.js";
+import { listRelated, read } from "./api-auction.js";
 import { Link, Redirect } from "react-router-dom";
 import auth from "../auth/auth-helper.js";
 import Timer from "./Timer.js";
 import Bidding from "./Bidding.js";
 import AuctionSettingsMenu from "./AuctionSettingsMenu";
 import { getAuctionImage } from "../helpers/auction-helper.js";
+import Suggestions from "./Suggestions.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    margin: 60,
+    margin: 30,
   },
   flex: {
     display: "flex",
@@ -71,6 +72,7 @@ function Auction({ match }) {
   const classes = useStyles();
   const [auction, setAuction] = useState({});
   const [error, setError] = useState("");
+  const [relatedAuctions, setRelatedAuctions] = useState([]);
   const [justEnded, setJustEnded] = useState(false);
   const [redirectToMyAuctions, setRedirectToMyAuctions] = useState(false);
 
@@ -91,6 +93,25 @@ function Auction({ match }) {
     };
   }, [match.params.auctionId]);
 
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    listRelated({ auctionId: match.params.auctionId }, signal).then((data) => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        setRelatedAuctions(data);
+      }
+    });
+
+    return function cleanup() {
+      abortController.abort();
+    };
+  }, [match.params.auctionId]);
+
+  console.log(relatedAuctions);
+
   const updateBids = (updatedAuction) => {
     setAuction(updatedAuction);
   };
@@ -106,87 +127,95 @@ function Auction({ match }) {
   const currentDate = new Date();
   return (
     <div className={classes.root}>
-      <Card className={classes.card}>
-        <CardHeader
-          title={auction.itemName}
-          subheader={
-            <>
-              <span>
-                {currentDate < new Date(auction.bidStart) &&
-                  "Auction Not Started"}
-                {currentDate > new Date(auction.bidStart) &&
-                  currentDate < new Date(auction.bidEnd) &&
-                  "Auction Live"}
-                {currentDate > new Date(auction.bidEnd) && "Auction Ended"}
-              </span>
-              {auth.isAuthenticated().user &&
-                auth.isAuthenticated().user._id === auction.seller?._id && (
-                  <span style={{ float: "right" }}>
-                    <AuctionSettingsMenu
-                      auction={auction}
-                      SetRedirect={setRedirectToMyAuctions}
-                    />
-                  </span>
-                )}
-            </>
-          }
-        />
-        <Grid container spacing={6}>
-          <Grid item xs={5} sm={5}>
-            <CardMedia
-              className={classes.media}
-              image={getAuctionImage(auction)}
+      <Grid container spacing={2}>
+        <Grid item xs={8} sm={8}>
+          <Card className={classes.card}>
+            <CardHeader
               title={auction.itemName}
+              subheader={
+                <>
+                  <span>
+                    {currentDate < new Date(auction.bidStart) &&
+                      "Auction Not Started"}
+                    {currentDate > new Date(auction.bidStart) &&
+                      currentDate < new Date(auction.bidEnd) &&
+                      "Auction Live"}
+                    {currentDate > new Date(auction.bidEnd) && "Auction Ended"}
+                  </span>
+                  {auth.isAuthenticated().user &&
+                    auth.isAuthenticated().user._id === auction.seller?._id && (
+                      <span style={{ float: "right" }}>
+                        <AuctionSettingsMenu
+                          auction={auction}
+                          SetRedirect={setRedirectToMyAuctions}
+                        />
+                      </span>
+                    )}
+                </>
+              }
             />
-            <Typography
-              component="p"
-              variant="subtitle1"
-              className={classes.subheading}
-            >
-              About Item
-            </Typography>
-            <Typography component="p" className={classes.description}>
-              {auction.description}
-            </Typography>
-          </Grid>
+            <Grid container spacing={6}>
+              <Grid item xs={5} sm={5}>
+                <CardMedia
+                  className={classes.media}
+                  image={getAuctionImage(auction)}
+                  title={auction.itemName}
+                />
+                <Typography
+                  component="p"
+                  variant="subtitle1"
+                  className={classes.subheading}
+                >
+                  About Item
+                </Typography>
+                <Typography component="p" className={classes.description}>
+                  {auction.description}
+                </Typography>
+              </Grid>
 
-          <Grid item xs={7} sm={7}>
-            {currentDate > new Date(auction.bidStart) ? (
-              <>
-                <Timer endTime={auction.bidEnd} update={update} />
-                {auction.bids.length > 0 && (
+              <Grid item xs={7} sm={7}>
+                {currentDate > new Date(auction.bidStart) ? (
+                  <>
+                    <Timer endTime={auction.bidEnd} update={update} />
+                    {auction.bids.length > 0 && (
+                      <Typography
+                        component="p"
+                        variant="subtitle1"
+                        className={classes.lastBid}
+                      >
+                        {` Last bid: $ ${auction.bids[0].bid}`}
+                      </Typography>
+                    )}
+                    {!auth.isAuthenticated() && (
+                      <Typography>
+                        Please, <Link to="/signin">sign in</Link> to place your
+                        bid.
+                      </Typography>
+                    )}
+                    {auth.isAuthenticated() && (
+                      <Bidding
+                        auction={auction}
+                        justEnded={justEnded}
+                        updateBids={updateBids}
+                      />
+                    )}
+                  </>
+                ) : (
                   <Typography
                     component="p"
-                    variant="subtitle1"
-                    className={classes.lastBid}
-                  >
-                    {` Last bid: $ ${auction.bids[0].bid}`}
-                  </Typography>
+                    variant="h6"
+                  >{`Auction Starts at ${new Date(
+                    auction.bidStart
+                  ).toLocaleString()}`}</Typography>
                 )}
-                {!auth.isAuthenticated() && (
-                  <Typography>
-                    Please, <Link to="/signin">sign in</Link> to place your bid.
-                  </Typography>
-                )}
-                {auth.isAuthenticated() && (
-                  <Bidding
-                    auction={auction}
-                    justEnded={justEnded}
-                    updateBids={updateBids}
-                  />
-                )}
-              </>
-            ) : (
-              <Typography
-                component="p"
-                variant="h6"
-              >{`Auction Starts at ${new Date(
-                auction.bidStart
-              ).toLocaleString()}`}</Typography>
-            )}
-          </Grid>
+              </Grid>
+            </Grid>
+          </Card>
         </Grid>
-      </Card>
+        <Grid item xs={4} sm={4}>
+          <Suggestions auctions={relatedAuctions} title="Related Auctions" />
+        </Grid>
+      </Grid>
     </div>
   );
 }

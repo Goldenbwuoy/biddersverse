@@ -44,6 +44,19 @@ const listOpen = async (req, res) => {
   }
 };
 
+const listRelated = async (req, res) => {
+  try {
+    let auctions = await Auction.find({
+      _id: { $ne: req.auction },
+      bidEnd: { $gt: new Date() },
+      category: req.auction.category,
+    }).limit(5);
+    res.status(200).json(auctions);
+  } catch (err) {
+    return res.status(400).json({ error: errorHandler.getErrorMessage(err) });
+  }
+};
+
 const listOpenByCategory = async (req, res) => {
   try {
     let auctions = await Auction.find({
@@ -196,4 +209,5 @@ module.exports = {
   remove,
   isSeller,
   update,
+  listRelated,
 };
