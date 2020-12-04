@@ -12,6 +12,7 @@ import { Link, Redirect } from "react-router-dom";
 import { Avatar, MenuItem, Select } from "@material-ui/core";
 import { listCategories } from "../category/api-category";
 import { read, updateAuction } from "./api-auction";
+import { getAuctionImage } from "../helpers/auction-helper";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -157,12 +158,6 @@ function EditAuction({ match }) {
     });
   };
 
-  const logoUrl =
-    auction._id &&
-    `http://localhost:5000/api/auctions/image/${
-      auction?._id
-    }?${new Date().getTime()}`;
-
   if (redirectToAuction) {
     return <Redirect to={`/auction/${auction._id}`} />;
   }
@@ -175,7 +170,10 @@ function EditAuction({ match }) {
             Update Auction
           </Typography>
           <br />
-          <Avatar src={logoUrl} className={classes.bigAvatar} />
+          <Avatar
+            src={getAuctionImage(auction)}
+            className={classes.bigAvatar}
+          />
           <br />
           <input
             accept="image/*"

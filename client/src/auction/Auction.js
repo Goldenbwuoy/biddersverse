@@ -11,6 +11,7 @@ import auth from "../auth/auth-helper.js";
 import Timer from "./Timer.js";
 import Bidding from "./Bidding.js";
 import AuctionSettingsMenu from "./AuctionSettingsMenu";
+import { getAuctionImage } from "../helpers/auction-helper.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -98,10 +99,6 @@ function Auction({ match }) {
     setJustEnded(true);
   };
 
-  const imageUrl = `http://localhost:5000/api/auctions/image/${
-    auction?._id
-  }?${new Date().getTime()}`;
-
   if (redirectToMyAuctions) {
     return <Redirect to="/myauctions" />;
   }
@@ -138,7 +135,7 @@ function Auction({ match }) {
           <Grid item xs={5} sm={5}>
             <CardMedia
               className={classes.media}
-              image={imageUrl}
+              image={getAuctionImage(auction)}
               title={auction.itemName}
             />
             <Typography

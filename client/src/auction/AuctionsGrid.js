@@ -8,6 +8,7 @@ import Settings from "@material-ui/icons/Settings";
 import { Link } from "react-router-dom";
 import auth from "../auth/auth-helper";
 import AuctionSettingsMenu from "./AuctionSettingsMenu";
+import { getAuctionImage } from "../helpers/auction-helper";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -127,12 +128,7 @@ function AuctionsGrid(props) {
                 <Link to={"/auction/" + product._id}>
                   <img
                     className={classes.image}
-                    src={
-                      "http://localhost:5000/api/auctions/image/" +
-                      product._id +
-                      "?" +
-                      new Date().getTime()
-                    }
+                    src={getAuctionImage(product)}
                     alt={product.itemName}
                   />
                 </Link>

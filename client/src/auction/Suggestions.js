@@ -10,6 +10,7 @@ import Divider from "@material-ui/core/Divider";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
+import { getAuctionImage } from "../helpers/auction-helper";
 
 const useStyles = makeStyles((theme) => ({
   root: theme.mixins.gutters({
@@ -91,12 +92,7 @@ function Suggestions({ auctions, title }) {
               <Card className={classes.card}>
                 <CardMedia
                   className={classes.cover}
-                  image={
-                    "http://localhost:5000/api/auctions/image/" +
-                    item._id +
-                    "?" +
-                    new Date().getTime()
-                  }
+                  image={getAuctionImage(item)}
                   title={item.itemName}
                 />
                 <div className={classes.details}>
