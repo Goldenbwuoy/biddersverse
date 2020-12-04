@@ -12,7 +12,7 @@ import { Link, Redirect } from "react-router-dom";
 import { Avatar, MenuItem, Select } from "@material-ui/core";
 import { listCategories } from "../category/api-category";
 import { read, updateAuction } from "./api-auction";
-import { getAuctionImage } from "../helpers/auction-helper";
+import { getAuctionImage, getDateString } from "../helpers/auction-helper";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -57,28 +57,6 @@ const useStyles = makeStyles((theme) => ({
     margin: "auto",
   },
 }));
-
-const getDateString = (date) => {
-  let year = date.getFullYear();
-  let day =
-    date.getDate().toString().length === 1
-      ? "0" + date.getDate()
-      : date.getDate();
-  let month =
-    date.getMonth().toString().length === 1
-      ? "0" + (date.getMonth() + 1)
-      : date.getMonth() + 1;
-  let hours =
-    date.getHours().toString().length === 1
-      ? "0" + date.getHours()
-      : date.getHours();
-  let minutes =
-    date.getMinutes().toString().length === 1
-      ? "0" + date.getMinutes()
-      : date.getMinutes();
-  let dateString = `${year}-${month}-${day}T${hours}:${minutes}`;
-  return dateString;
-};
 
 function EditAuction({ match }) {
   const classes = useStyles();
