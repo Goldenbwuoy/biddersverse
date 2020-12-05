@@ -35,8 +35,8 @@ const listOpen = async (req, res) => {
   try {
     let auctions = await Auction.find({ bidEnd: { $gt: new Date() } })
       .sort("bidStart")
-      .populate("seller", "_id name")
-      .populate("bids.bidder", "_id name");
+      .populate("seller", "_id firstName lastName")
+      .populate("bids.bidder", "_id firstName lastName");
     console.log(auctions);
     res.json(auctions);
   } catch (err) {
@@ -82,8 +82,8 @@ const listOpenByCategory = async (req, res) => {
       bidEnd: { $gt: new Date() },
     })
       .sort("bidStart")
-      .populate("seller", "_id name")
-      .populate("bids.bidder", "_id name");
+      .populate("seller", "_id firstName lastName")
+      .populate("bids.bidder", "_id firstName lastName");
     res.json(auctions);
   } catch (err) {
     return res.status(400).json({ error: errorHandler.getErrorMessage(err) });
@@ -93,8 +93,8 @@ const listOpenByCategory = async (req, res) => {
 const listByBidder = async (req, res) => {
   try {
     let auctions = await Auction.find({ "bids.bidder": req.profile._id })
-      .populate("seller", "_id name")
-      .populate("bids.bidder", "_id name");
+      .populate("seller", "_id firstName lastName")
+      .populate("bids.bidder", "_id firstName lastName");
     res.json(auctions);
   } catch (err) {
     return res.status(400).json({
@@ -106,8 +106,8 @@ const listByBidder = async (req, res) => {
 const auctionByID = async (req, res, next, id) => {
   try {
     let auction = await Auction.findById(id)
-      .populate("seller", "_id name")
-      .populate("bids.bidder", "_id name")
+      .populate("seller", "_id firstName lastName")
+      .populate("bids.bidder", "_id firstName lastName")
       .exec();
     if (!auction)
       return res.status("400").json({
@@ -138,8 +138,8 @@ const photo = (req, res, next) => {
 const listBySeller = async (req, res) => {
   try {
     let auctions = await Auction.find({ seller: req.profile._id })
-      .populate("seller", "_id name")
-      .populate("bids.bidder", "_id name");
+      .populate("seller", "_id firstName lastName")
+      .populate("bids.bidder", "_id firstName lastName");
     res.json(auctions);
   } catch (err) {
     return res.status(400).json({
@@ -154,8 +154,8 @@ const listLatest = async (req, res) => {
       .select("-image")
       .sort("-createdAt")
       .limit(5)
-      .populate("seller", "_id name")
-      .populate("bids.bidder", "_id name");
+      .populate("seller", "_id firstName lastName")
+      .populate("bids.bidder", "_id firstName lastName");
     res.json(auctions);
   } catch (err) {
     return res.status(400).json({

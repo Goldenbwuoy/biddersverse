@@ -44,8 +44,10 @@ const useStyles = makeStyles((theme) => ({
 function Signup() {
   const classes = useStyles();
   const [values, setValues] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
+    phoneNumber: "",
     password: "",
     open: false,
     error: "",
@@ -57,8 +59,10 @@ function Signup() {
 
   const clickSubmit = () => {
     const user = {
-      name: values.name || undefined,
+      firstName: values.firstName || undefined,
+      lastName: values.lastName || undefined,
       email: values.email || undefined,
+      phoneNumber: values.phoneNumber || undefined,
       password: values.password || undefined,
     };
     create(user).then((data) => {
@@ -77,11 +81,20 @@ function Signup() {
             Sign Up
           </Typography>
           <TextField
-            id="name"
-            label="Name"
+            id="firstName"
+            label="First Name"
             className={classes.textField}
-            value={values.name}
-            onChange={handleChange("name")}
+            value={values.firstName}
+            onChange={handleChange("firstName")}
+            margin="normal"
+          />
+          <br />
+          <TextField
+            id="lastName"
+            label="Last Name"
+            className={classes.textField}
+            value={values.lastName}
+            onChange={handleChange("lastName")}
             margin="normal"
           />
           <br />
@@ -92,6 +105,15 @@ function Signup() {
             className={classes.textField}
             value={values.email}
             onChange={handleChange("email")}
+            margin="normal"
+          />
+          <br />
+          <TextField
+            id="phoneNumber"
+            label="Mobile Phone"
+            className={classes.textField}
+            value={values.phoneNumber}
+            onChange={handleChange("phoneNumber")}
             margin="normal"
           />
           <br />

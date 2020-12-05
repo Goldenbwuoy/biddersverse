@@ -58,11 +58,13 @@ const useStyles = makeStyles((theme) => ({
 function EditProfile({ match }) {
   const classes = useStyles();
   const [values, setValues] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     about: "",
     photo: "",
     password: "",
     email: "",
+    phoneNumber: "",
     seller: false,
     error: "",
     id: "",
@@ -87,8 +89,10 @@ function EditProfile({ match }) {
         setValues({
           ...values,
           id: data._id,
-          name: data.name,
+          firstName: data.firstName,
+          lastName: data.lastName,
           email: data.email,
+          phoneNumber: data.phoneNumber,
           about: data.about,
           seller: data.seller,
         });
@@ -101,8 +105,10 @@ function EditProfile({ match }) {
 
   const clickSubmit = () => {
     let userData = new FormData();
-    values.name && userData.append("name", values.name);
+    values.firstName && userData.append("firstName", values.firstName);
+    values.lastName && userData.append("lastName", values.lastName);
     values.email && userData.append("email", values.email);
+    values.phoneNumber && userData.append("phoneNumber", values.phoneNumber);
     values.passoword && userData.append("passoword", values.passoword);
     values.about && userData.append("about", values.about);
     values.seller && userData.append("seller", values.seller);
@@ -168,11 +174,19 @@ function EditProfile({ match }) {
         </span>
         <br />
         <TextField
-          id="name"
-          label="Name"
+          id="firstName"
+          label="First Name"
           className={classes.textField}
-          value={values.name}
-          onChange={handleChange("name")}
+          value={values.firstName}
+          onChange={handleChange("firstName")}
+          margin="normal"
+        />
+        <TextField
+          id="lastName"
+          label="Last Name"
+          className={classes.textField}
+          value={values.lastName}
+          onChange={handleChange("lastName")}
           margin="normal"
         />
         <br />
@@ -193,6 +207,15 @@ function EditProfile({ match }) {
           className={classes.textField}
           value={values.email}
           onChange={handleChange("email")}
+          margin="normal"
+        />
+        <br />
+        <TextField
+          id="phoneNumber"
+          label="Mobile Phone"
+          className={classes.textField}
+          value={values.phoneNumber}
+          onChange={handleChange("phoneNumber")}
           margin="normal"
         />
         <br />

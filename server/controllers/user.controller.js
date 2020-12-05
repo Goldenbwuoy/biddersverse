@@ -19,7 +19,9 @@ const create = async (req, res) => {
 };
 const list = async (req, res) => {
   try {
-    let users = await User.find().select("name email createdAt updatedAt");
+    let users = await User.find().select(
+      "firstName lastName email createdAt updatedAt"
+    );
     res.json(users);
   } catch (err) {
     return res.status(400).json({

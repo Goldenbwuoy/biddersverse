@@ -83,7 +83,10 @@ function Profile({ match }) {
           <ListItemAvatar>
             <Avatar src={photoUrl} className={classes.bigAvatar} />
           </ListItemAvatar>
-          <ListItemText primary={user.name} secondary={user.email} />{" "}
+          <ListItemText
+            primary={`${user.firstName} ${user.lastName}`}
+            secondary={user.email}
+          />{" "}
           {auth.isAuthenticated().user &&
             auth.isAuthenticated().user._id === user._id && (
               <ListItemSecondaryAction>

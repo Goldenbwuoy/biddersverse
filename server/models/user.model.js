@@ -3,10 +3,15 @@ const bcrypt = require("bcryptjs");
 
 const UserSchema = mongoose.Schema(
   {
-    name: {
+    firstName: {
       type: String,
       trim: true,
-      required: "Name is required",
+      required: "First Name is required",
+    },
+    lastName: {
+      type: String,
+      trim: true,
+      required: "Last name is required",
     },
     email: {
       type: String,
@@ -14,6 +19,11 @@ const UserSchema = mongoose.Schema(
       unique: "Email already exists",
       match: [/.+\@.+\..+/, "Please fill a valid email address"],
       required: "Email is required",
+    },
+    phoneNumber: {
+      type: String,
+      trim: true,
+      required: "Last name is required",
     },
     about: {
       type: String,
