@@ -44,6 +44,24 @@ const listOpen = async (req, res) => {
   }
 };
 
+const search = async (req, res) => {
+  const query = {};
+  if (req.query.search)
+    query.itemName = { $regex: req.query.search, $options: "i" };
+  if (req.query.category && req.query.category !== "All")
+    query.category = req.query.category;
+
+  try {
+    let auctions = await Auction.find({ ...query, bidEnd: { $gt: new Date() } })
+      .select("-image")
+      .exec();
+    res.json(auctions);
+  } catch (err) {
+    console.log(err.message);
+    return res.status(400).json({ error: errorHandler.getErrorMessage(err) });
+  }
+};
+
 const listRelated = async (req, res) => {
   try {
     let auctions = await Auction.find({
@@ -210,4 +228,5 @@ module.exports = {
   isSeller,
   update,
   listRelated,
+  search,
 };

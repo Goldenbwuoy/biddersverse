@@ -7,6 +7,8 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import SearchIcon from "@material-ui/icons/Search";
 import { listCategories } from "../category/api-category";
+import { searchAuctions } from "./api-auction";
+import AuctionsGrid from "./AuctionsGrid";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -44,6 +46,9 @@ function Search() {
   const [categories, setCategories] = useState([]);
   const [values, setValues] = useState({
     category: "",
+    search: "",
+    results: [],
+    searched: false,
   });
 
   useEffect(() => {
@@ -59,6 +64,22 @@ function Search() {
     });
   }, []);
 
+  const handleSearch = (event) => {
+    event.preventDefault();
+    if (values.search) {
+      searchAuctions({
+        search: values.search || undefined,
+        category: values.category,
+      }).then((data) => {
+        if (data && data.error) {
+          console.log(data.error);
+        } else {
+          setValues({ ...values, results: data, searched: true });
+        }
+      });
+    }
+  };
+
   const handleChange = (name) => (event) => {
     setValues({
       ...values,
@@ -69,45 +90,49 @@ function Search() {
   return (
     <div>
       <Card className={classes.card}>
-        <TextField
-          id="select-category"
-          select
-          label="Select category"
-          className={classes.textField}
-          value={values.category}
-          onChange={handleChange("category")}
-          SelectProps={{
-            MenuProps: {
-              className: classes.menu,
-            },
-          }}
-          margin="normal"
-        >
-          <MenuItem value="All">All</MenuItem>
-          {categories.map((option) => (
-            <MenuItem key={option._id} value={option._id}>
-              {option.categoryName}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          id="search"
-          label="Search products"
-          type="search"
-          //   onKeyDown={enterKey}
-          onChange={handleChange("search")}
-          className={classes.searchField}
-          margin="normal"
-        />
-        <Button
-          variant="contained"
-          color={"primary"}
-          className={classes.searchButton}
-        >
-          <SearchIcon />
-        </Button>
+        <form onSubmit={handleSearch}>
+          <TextField
+            id="select-category"
+            select
+            label="Select category"
+            className={classes.textField}
+            value={values.category}
+            onChange={handleChange("category")}
+            SelectProps={{
+              MenuProps: {
+                className: classes.menu,
+              },
+            }}
+            margin="normal"
+          >
+            <MenuItem value="All">All</MenuItem>
+            {categories.map((option) => (
+              <MenuItem key={option._id} value={option._id}>
+                {option.categoryName}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            id="search"
+            label="Search products"
+            type="search"
+            //   onKeyDown={enterKey}
+            onChange={handleChange("search")}
+            className={classes.searchField}
+            margin="normal"
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            color={"primary"}
+            className={classes.searchButton}
+          >
+            <SearchIcon />
+          </Button>
+        </form>
+
         <Divider />
-        {/* <Products products={values.results} searched={values.searched}/> */}
+        <AuctionsGrid products={values.results} searched={values.searched} />
       </Card>
     </div>
   );

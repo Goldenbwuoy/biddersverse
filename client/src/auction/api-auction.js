@@ -1,3 +1,4 @@
+import queryString from "querystring";
 const BASE_URL = "http://localhost:5000";
 
 const create = (params, credentials, auction) => {
@@ -47,6 +48,18 @@ const listOpenByCategory = async (params) => {
         method: "GET",
       }
     );
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const searchAuctions = async (params) => {
+  const query = queryString.stringify(params);
+  try {
+    let response = await fetch(`${BASE_URL}/api/auctions?${query}`, {
+      method: "GET",
+    });
     return response.json();
   } catch (err) {
     console.log(err);
@@ -135,4 +148,5 @@ export {
   deleteAuction,
   updateAuction,
   listRelated,
+  searchAuctions,
 };

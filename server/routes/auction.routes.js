@@ -6,9 +6,9 @@ const categoryCtrl = require("../controllers/category.controller");
 
 const router = express.Router();
 
-router.route("/api/auctions").get(auctionCtrl.listOpen);
 router.route("/api/auctions/related/:auctionId").get(auctionCtrl.listRelated);
 
+router.route("/api/auctions").get(auctionCtrl.search);
 router
   .route("/api/auctions/by/:userId")
   .post(
