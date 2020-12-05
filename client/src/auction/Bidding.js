@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
 import auth from "../auth/auth-helper";
-import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import SocketIOClient from "socket.io-client";
+import BidHistory from "./BidHistory";
 const endpoint = "http://127.0.0.1:5000";
-// import { io } from "socket.io-client";
 
 const useStyles = makeStyles((theme) => ({
-  bidHistory: {
-    marginTop: "20px",
-    backgroundColor: "#f3f3f3",
-    padding: "16px",
-  },
   placeForm: {
     margin: "0px 16px 16px",
     backgroundColor: "#e7ede4",
@@ -43,7 +36,7 @@ function Bidding(props) {
         room: props.auction._id,
       });
     };
-  }, []);
+  }, [props.auction._id]);
 
   useEffect(() => {
     socket.on("new bid", (payload) => {
@@ -105,44 +98,9 @@ function Bidding(props) {
           <br />
         </div>
       )}
-      <div className={classes.bidHistory}>
-        <Typography variant="h6">All bids</Typography>
-        <br />
-        <Grid container spacing={4}>
-          <Grid item xs={3} sm={3}>
-            <Typography variant="subtitle1" color="primary">
-              Bid Amount
-            </Typography>
-          </Grid>
-          <Grid item xs={5} sm={5}>
-            <Typography variant="subtitle1" color="primary">
-              Bid Time
-            </Typography>
-          </Grid>
-          <Grid item xs={4} sm={4}>
-            <Typography variant="subtitle1" color="primary">
-              Bidder
-            </Typography>
-          </Grid>
-        </Grid>
-        {props.auction.bids.map((item, index) => {
-          return (
-            <Grid container spacing={4} key={index}>
-              <Grid item xs={3} sm={3}>
-                <Typography variant="body2">${item.bid}</Typography>
-              </Grid>
-              <Grid item xs={5} sm={5}>
-                <Typography variant="body2">
-                  {new Date(item.time).toLocaleString()}
-                </Typography>
-              </Grid>
-              <Grid item xs={4} sm={4}>
-                <Typography variant="body2">{item.bidder.name}</Typography>
-              </Grid>
-            </Grid>
-          );
-        })}
-      </div>
+      {props.auction.bids.length > 0 && (
+        <BidHistory bids={props.auction.bids} />
+      )}
     </div>
   );
 }

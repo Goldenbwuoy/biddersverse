@@ -150,7 +150,7 @@ const listBySeller = async (req, res) => {
 
 const listLatest = async (req, res) => {
   try {
-    let auctions = await Auction.find({})
+    let auctions = await Auction.find({ bidEnd: { $gt: new Date() } })
       .select("-image")
       .sort("-createdAt")
       .limit(5)

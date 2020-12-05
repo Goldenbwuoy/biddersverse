@@ -187,7 +187,7 @@ function Auction({ match }) {
                       </Typography>
                     )}
                     {!auth.isAuthenticated() && (
-                      <Typography>
+                      <Typography style={{ padding: "16px" }}>
                         Please, <Link to="/signin">sign in</Link> to place your
                         bid.
                       </Typography>
