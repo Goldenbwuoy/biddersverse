@@ -1,0 +1,53 @@
+.chat {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 80vh;
+    
+    
+}
+
+.chat__header {
+    background-color: darkblue;
+    position: sticky;
+    padding: 15px;
+}
+
+.chat__header > h3 {
+    color: white;
+}
+
+.chatHeader__item {
+    font-size: smaller;
+    font-weight: 200;
+    font-style: italic;
+}
+
+.chat__messages {
+    padding: 20px;
+    overflow-y: scroll;
+}
+
+.chat__messages::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar in IE, Edge, and Firefox */
+  .chat__messages {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+.chat__form {
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+    align-items: center;
+    position: sticky;
+    
+}
+
+.chatForm__input {
+    display: flex;
+    flex: 1;
+}

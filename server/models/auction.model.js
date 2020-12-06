@@ -43,6 +43,13 @@ const AuctionSchema = new mongoose.Schema(
         time: Date,
       },
     ],
+    messages: [
+      {
+        sender: { type: mongoose.Schema.ObjectId, ref: "User" },
+        message: String,
+        time: Date,
+      },
+    ],
   },
   { timestamps: true }
 );

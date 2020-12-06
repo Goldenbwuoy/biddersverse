@@ -13,6 +13,7 @@ import Bidding from "./Bidding.js";
 import AuctionSettingsMenu from "./AuctionSettingsMenu";
 import { getAuctionImage } from "../helpers/auction-helper.js";
 import Suggestions from "./Suggestions.js";
+import Chat from "./chat/Chat.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -98,7 +99,7 @@ function Auction({ match }) {
     const signal = abortController.signal;
 
     listRelated({ auctionId: match.params.auctionId }, signal).then((data) => {
-      if (data.error) {
+      if (data && data.error) {
         console.log(data.error);
       } else {
         setRelatedAuctions(data);
@@ -211,9 +212,19 @@ function Auction({ match }) {
               </Grid>
             </Grid>
           </Card>
+          {/* <Chat
+            auction={auction}
+            justEnded={justEnded}
+            updateBids={updateBids}
+          /> */}
         </Grid>
         <Grid item xs={4} sm={4}>
-          <Suggestions auctions={relatedAuctions} title="Related Auctions" />
+          {/* <Suggestions auctions={relatedAuctions} title="Related Auctions" /> */}
+          <Chat
+            auction={auction}
+            justEnded={justEnded}
+            updateBids={updateBids}
+          />
         </Grid>
       </Grid>
     </div>

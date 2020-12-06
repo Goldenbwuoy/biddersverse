@@ -20,6 +20,10 @@ module.exports = (server) => {
     socket.on("new bid", (data) => {
       bid(data.bidInfo, data.room);
     });
+
+    socket.on("new message", (data) => {
+      message(data.messageInfo, data.room);
+    });
   });
 
   const bid = async (bid, auction) => {
@@ -37,6 +41,24 @@ module.exports = (server) => {
         .exec();
 
       io.to(auction).emit("new bid", result);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const message = async (message, auction) => {
+    try {
+      let result = await Auction.findOneAndUpdate(
+        {
+          _id: auction,
+        },
+        { $push: { messages: { $each: [message], $position: 0 } } },
+        { new: true }
+      )
+        .populate("messages.sender", "_id name")
+        .exec();
+
+      io.to(auction).emit("new message", result);
     } catch (err) {
       console.log(err);
     }
