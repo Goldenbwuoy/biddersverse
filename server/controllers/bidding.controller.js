@@ -54,11 +54,9 @@ module.exports = (server) => {
         },
         { $push: { messages: { $each: [message] } } },
         { new: true }
-      )
-        .populate("messages.sender", "_id name")
-        .exec();
+      ).exec();
 
-      io.to(auction).emit("new message", result);
+      io.to(auction).emit("new message", result.messages);
     } catch (err) {
       console.log(err);
     }

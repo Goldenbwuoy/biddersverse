@@ -218,11 +218,7 @@ function Auction({ match }) {
         </Grid>
         <Grid item xs={4} sm={4}>
           {/* <Suggestions auctions={relatedAuctions} title="Related Auctions" /> */}
-          <Chat
-            auction={auction}
-            justEnded={justEnded}
-            updateBids={updateBids}
-          />
+          <Chat auction={auction} />
         </Grid>
       </Grid>
     </div>

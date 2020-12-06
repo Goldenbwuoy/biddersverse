@@ -6,11 +6,11 @@ import "./Message.css";
 const Message = ({ message }) => {
   const [isSender, setIsSender] = useState(false);
 
-  useEffect(() => {
-    auth.isAuthenticated().user._id === message.sender && setIsSender(true);
-  }, [message]);
+  //   useEffect(() => {
+  //     auth.isAuthenticated().user?._id === message.sender && setIsSender(true);
+  //   }, [message]);
 
-  return isSender ? (
+  return auth.isAuthenticated().user?._id === message.sender ? (
     <div className="messageContainer justifyEnd">
       <p className="sentText pr-10">sender</p>
       <div className="messageBox backgroundBlue">

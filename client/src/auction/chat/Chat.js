@@ -13,8 +13,10 @@ let socket;
 function Chat({ auction, updateBids }) {
   const { user } = auth.isAuthenticated();
   const [text, setText] = useState("");
+  const [chatMessages, setChatMessages] = useState([]);
 
   useEffect(() => {
+    setChatMessages(auction.messages);
     socket = SocketIOClient(endpoint);
     socket.emit("join auction room", { room: auction._id });
     return () => {
@@ -22,12 +24,12 @@ function Chat({ auction, updateBids }) {
         room: auction._id,
       });
     };
-  }, [auction._id]);
+  }, [auction]);
 
   useEffect(() => {
     socket.on("new message", (payload) => {
       console.log(payload);
-      updateBids(payload);
+      setChatMessages(payload);
     });
 
     return () => {
@@ -53,6 +55,7 @@ function Chat({ auction, updateBids }) {
     setText("");
   };
 
+  console.log(chatMessages);
   return (
     <Card className="chat">
       <div className="chat__header">
@@ -62,8 +65,8 @@ function Chat({ auction, updateBids }) {
         </h3>
       </div>
       <ScrollToBottom className="chat__messages">
-        {auction.messages &&
-          auction.messages.map((message) => (
+        {chatMessages &&
+          chatMessages.map((message) => (
             <Message key={message._id} message={message} />
           ))}
       </ScrollToBottom>
