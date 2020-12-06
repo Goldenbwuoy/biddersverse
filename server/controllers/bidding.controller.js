@@ -52,7 +52,7 @@ module.exports = (server) => {
         {
           _id: auction,
         },
-        { $push: { messages: { $each: [message], $position: 0 } } },
+        { $push: { messages: { $each: [message] } } },
         { new: true }
       )
         .populate("messages.sender", "_id name")
