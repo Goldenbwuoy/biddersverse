@@ -10,7 +10,7 @@ const endpoint = "http://127.0.0.1:5000";
 
 let socket;
 
-function Chat({ auction, updateBids }) {
+function Chat({ auction }) {
   const { user } = auth.isAuthenticated();
   const [text, setText] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
