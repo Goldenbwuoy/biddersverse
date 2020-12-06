@@ -113,7 +113,7 @@ function BidHistory({ bids }) {
 }
 
 const maskIds = (id) => {
-  const strLen = id.length;
+  const strLen = id?.length;
   if (strLen > 4) {
     return (
       id.substr(0, 3) +

@@ -111,8 +111,6 @@ function Auction({ match }) {
     };
   }, [match.params.auctionId]);
 
-  console.log(relatedAuctions);
-
   const updateBids = (updatedAuction) => {
     setAuction(updatedAuction);
   };

@@ -1,16 +1,9 @@
-import {
-  Box,
-  Card,
-  IconButton,
-  makeStyles,
-  Paper,
-  TextField,
-  Typography,
-} from "@material-ui/core";
+import { Card, IconButton, TextField } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import React, { useEffect, useState } from "react";
 import "./Chat.css";
 import SocketIOClient from "socket.io-client";
+import ScrollToBottom from "react-scroll-to-bottom";
 import auth from "../../auth/auth-helper";
 import Message from "./Message";
 const endpoint = "http://127.0.0.1:5000";
@@ -68,13 +61,12 @@ function Chat({ auction, updateBids }) {
           <span className="chatHeader__item">({auction.itemName})</span>
         </h3>
       </div>
-      <div className="chat__messages">
+      <ScrollToBottom className="chat__messages">
         {auction.messages &&
           auction.messages.map((message) => (
-            // <Typography key={message._id}>{message.message}</Typography>
             <Message key={message._id} message={message} />
           ))}
-      </div>
+      </ScrollToBottom>
 
       <form className="chat__form" style={{ bottom: 0 }} onSubmit={sendMessage}>
         <TextField

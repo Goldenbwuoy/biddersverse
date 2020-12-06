@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import auth from "../../auth/auth-helper";
 
 import "./Message.css";
 
 const Message = ({ message }) => {
-  const { user } = auth.isAuthenticated();
+  const [isSender, setIsSender] = useState(false);
 
-  return user._id === message.sender ? (
+  useEffect(() => {
+    auth.isAuthenticated().user._id === message.sender && setIsSender(true);
+  }, [message]);
+
+  return isSender ? (
     <div className="messageContainer justifyEnd">
       <p className="sentText pr-10">sender</p>
       <div className="messageBox backgroundBlue">
