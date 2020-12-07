@@ -1,10 +1,18 @@
 .messageBox {
     background: #F3F3F3;
     border-radius: 20px;
-    padding: 5px 20px;
+    padding: 5px 8px;
     color: white;
     display: inline-block;
     max-width: 80%;
+    margin-bottom: 5px;
+  }
+
+  .your-message {
+    border-radius: 10px 10px 0 10px;
+  }
+  .other-message {
+    border-radius: 10px 10px 10px 0;
   }
   
   .messageText {
@@ -59,10 +67,36 @@
   }
   
   .backgroundBlue {
-    background: #2979FF;
+    background: rgb(63,71,113);
   }
   
   .backgroundLight {
-    background: #F3F3F3;
+    background: rgb(231,237,228);
+  }
+
+  .backgroundGreen {
+    background-color: #00008B;
+  }
+
+  .name {
+    padding-bottom: 5px;
+  }
+
+  .seller-title {
+    font-style: italic;
+    color: rgb(148, 100, 100) !important;
+    font-weight: 900 !important;
+  }
+
+  .title {
+    font-style: italic;
+    color: rgb(162, 167, 159);
+  }
+
+  .time {
+    float: right;
+    font-style: italic;
+    color: rgb(162, 167, 159);
+    font-size: small;
   }
   

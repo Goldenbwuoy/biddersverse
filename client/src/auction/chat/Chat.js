@@ -67,7 +67,11 @@ function Chat({ auction }) {
       <ScrollToBottom className="chat__messages">
         {chatMessages &&
           chatMessages.map((message) => (
-            <Message key={message._id} message={message} />
+            <Message
+              key={message._id}
+              message={message}
+              seller={auction.seller}
+            />
           ))}
       </ScrollToBottom>
 

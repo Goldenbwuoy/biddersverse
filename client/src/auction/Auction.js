@@ -210,15 +210,10 @@ function Auction({ match }) {
               </Grid>
             </Grid>
           </Card>
-          {/* <Chat
-            auction={auction}
-            justEnded={justEnded}
-            updateBids={updateBids}
-          /> */}
+          {auth.isAuthenticated() && <Chat auction={auction} />}
         </Grid>
         <Grid item xs={4} sm={4}>
-          {/* <Suggestions auctions={relatedAuctions} title="Related Auctions" /> */}
-          <Chat auction={auction} />
+          <Suggestions auctions={relatedAuctions} title="Related Auctions" />
         </Grid>
       </Grid>
     </div>

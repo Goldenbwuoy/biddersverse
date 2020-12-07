@@ -1,22 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import auth from "../../auth/auth-helper";
+import moment from "moment";
 
 import "./Message.css";
 
-const Message = ({ message }) => {
+const Message = ({ message, seller }) => {
+  console.log(message.sender);
+  console.log(seller._id);
   return auth.isAuthenticated().user?._id === message.sender ? (
     <div className="messageContainer justifyEnd">
-      <p className="sentText pr-10">sender</p>
-      <div className="messageBox backgroundBlue">
+      <div className="messageBox your-message backgroundBlue">
         <p className="messageText colorWhite">{message.message}</p>
+        <span className="time">{moment(message.time).fromNow()}</span>
       </div>
     </div>
   ) : (
     <div className="messageContainer justifyStart">
-      <div className="messageBox backgroundLight">
-        <p className="messageText colorDark">{message.message}</p>
+      <div className="messageBox other-message backgroundLight">
+        <span></span>
+        <p className="name">
+          {message.sender === seller._id ? (
+            <span className="seller-title">Seller</span>
+          ) : (
+            <span className="title">{message.sender}</span>
+          )}{" "}
+        </p>
+        <span className="messageText colorDark">{message.message}</span>
+        <span className="time">{moment(message.time).fromNow()}</span>
       </div>
-      <p className="sentText pl-10 ">sender</p>
     </div>
   );
 };
