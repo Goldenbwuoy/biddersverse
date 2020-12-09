@@ -5,8 +5,6 @@ import moment from "moment";
 import "./Message.css";
 
 const Message = ({ message, seller }) => {
-  console.log(message.sender);
-  console.log(seller._id);
   return auth.isAuthenticated().user?._id === message.sender ? (
     <div className="messageContainer justifyEnd">
       <div className="messageBox your-message backgroundBlue">

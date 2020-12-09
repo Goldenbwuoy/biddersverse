@@ -5,6 +5,8 @@ import auth from "../auth/auth-helper";
 import { makeStyles } from "@material-ui/core/styles";
 import SocketIOClient from "socket.io-client";
 import BidHistory from "./BidHistory";
+import { Typography } from "@material-ui/core";
+import { Link } from "react-router-dom";
 const endpoint = "http://127.0.0.1:5000";
 
 const useStyles = makeStyles((theme) => ({
@@ -19,6 +21,10 @@ const useStyles = makeStyles((theme) => ({
   marginBtn: {
     margin: "8px 16px 16px",
   },
+
+  message: {
+    padding: "5px",
+  },
 }));
 
 let socket;
@@ -27,6 +33,7 @@ function Bidding(props) {
   const classes = useStyles();
   const [bid, setBid] = useState("");
   const { user } = auth.isAuthenticated();
+  const isSeller = user?._id === props.auction.seller._id;
 
   useEffect(() => {
     socket = SocketIOClient(endpoint);
@@ -71,33 +78,87 @@ function Bidding(props) {
       ? props.auction.bids[0].bid
       : props.auction.startingBid;
 
+  console.log(isSeller);
+
   return (
     <div>
-      {!props.justEnded && new Date() < new Date(props.auction.bidEnd) && (
-        <div className={classes.placeForm}>
-          <TextField
-            id="bid"
-            label="Your Bid ($)"
-            value={bid}
-            onChange={handleChange}
-            type="number"
-            margin="normal"
-            helperText={`Enter $${Number(minBid) + 1} or more`}
-            className={classes.marginInput}
-          />
-          <br />
-          <Button
-            variant="contained"
-            className={classes.marginBtn}
-            color="secondary"
-            disabled={bid < minBid + 1}
-            onClick={placeBid}
-          >
-            Place Bid
-          </Button>
-          <br />
-        </div>
-      )}
+      {!props.justEnded &&
+        new Date() < new Date(props.auction.bidEnd) &&
+        !isSeller && (
+          <div className={classes.placeForm}>
+            <TextField
+              id="bid"
+              label="Your Bid ($)"
+              value={bid}
+              onChange={handleChange}
+              type="number"
+              margin="normal"
+              helperText={`Enter $${Number(minBid) + 1} or more`}
+              className={classes.marginInput}
+            />
+            <br />
+            <Button
+              variant="contained"
+              className={classes.marginBtn}
+              color="secondary"
+              disabled={bid < minBid + 1}
+              onClick={placeBid}
+            >
+              Place Bid
+            </Button>
+            <br />
+          </div>
+        )}
+
+      {/* At the end of the auction, if there are any bids placed, the seller should be able to see the winning bidder and the bid history */}
+      {props.justEnded &&
+        new Date() > new Date(props.auction.bidEnd) &&
+        isSeller && (
+          <div className={classes.placeForm}>
+            {props.auction.bids.length > 0 ? (
+              <>
+                <Typography className={classes.message}>
+                  The winner of this auction is{" "}
+                  {props.auction.bids[0].bidder.firstName}
+                </Typography>
+              </>
+            ) : (
+              <Typography className={classes.message}>
+                The Auction has ended and no bids have been placed, you can
+                extend the Bid end time to bring it back Live
+              </Typography>
+            )}
+          </div>
+        )}
+
+      {/* At the end of the auction, if there are any bids placed, the seller should be able to see the winning bidder and the bid history */}
+
+      {props.justEnded &&
+        new Date() > new Date(props.auction.bidEnd) &&
+        !isSeller && (
+          <div className={classes.placeForm}>
+            {props.auction.bids.length > 0 ? (
+              <div>
+                {user._id === props.auction.bids[0].bidder._id && (
+                  <>
+                    <Typography className={classes.message}>
+                      Congratulations!!!! You have won this Auction. You must
+                      Pay for the item within 72 hours. Click the button below
+                      to proceed to checkout
+                    </Typography>
+                    <Link className={classes.marginBtn} to="#">
+                      Proceed to checkout
+                    </Link>
+                  </>
+                )}
+              </div>
+            ) : (
+              <Typography>
+                The Auction has ended and No bids have been placed!!!
+              </Typography>
+            )}
+          </div>
+        )}
       {props.auction.bids.length > 0 && (
         <BidHistory bids={props.auction.bids} />
       )}

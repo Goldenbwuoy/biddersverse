@@ -78,7 +78,6 @@ function Chat({ auction }) {
     setOpenChats(!openChats);
   };
 
-  console.log(chatMessages);
   return (
     <div>
       <Button
