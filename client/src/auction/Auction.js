@@ -4,6 +4,7 @@ import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
+import { ExpandMore, ExpandLess } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { listRelated, read } from "./api-auction.js";
 import { Link, Redirect } from "react-router-dom";
@@ -14,6 +15,7 @@ import AuctionSettingsMenu from "./AuctionSettingsMenu";
 import { getAuctionImage } from "../helpers/auction-helper.js";
 import Suggestions from "./Suggestions.js";
 import Chat from "./chat/Chat.js";
+import { Button, Icon } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,6 +69,12 @@ const useStyles = makeStyles((theme) => ({
     color: "#303030",
     margin: "16px",
   },
+  rightIcon: {
+    marginLeft: "12px",
+  },
+  toggleChatsButton: {
+    marginTop: "25px",
+  },
 }));
 
 function Auction({ match }) {
@@ -76,6 +84,7 @@ function Auction({ match }) {
   const [relatedAuctions, setRelatedAuctions] = useState([]);
   const [justEnded, setJustEnded] = useState(false);
   const [redirectToMyAuctions, setRedirectToMyAuctions] = useState(false);
+  const [openChats, setOpenChats] = useState(false);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -113,6 +122,10 @@ function Auction({ match }) {
 
   const updateBids = (updatedAuction) => {
     setAuction(updatedAuction);
+  };
+
+  const toggleChats = () => {
+    setOpenChats(!openChats);
   };
 
   const update = () => {
@@ -210,7 +223,20 @@ function Auction({ match }) {
               </Grid>
             </Grid>
           </Card>
-          {auth.isAuthenticated() && <Chat auction={auction} />}
+          <Button
+            className={classes.toggleChatsButton}
+            color="primary"
+            variant="contained"
+            onClick={toggleChats}
+          >
+            Chat messages{" "}
+            {openChats ? (
+              <ExpandLess className={classes.rightIcon} />
+            ) : (
+              <ExpandMore className={classes.rightIcon} />
+            )}
+          </Button>
+          {auth.isAuthenticated() && openChats && <Chat auction={auction} />}
         </Grid>
         <Grid item xs={4} sm={4}>
           <Suggestions auctions={relatedAuctions} title="Related Auctions" />
