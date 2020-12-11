@@ -12,6 +12,7 @@ import PrivateRoute from "./auth/PrivateRoute";
 import SignIn from "./auth/SignIn";
 import Home from "./core/Home";
 import Navbar from "./core/Navbar";
+import Sidebar from "./core/sidebar/Sidebar";
 import EditProfile from "./user/EditProfile";
 import Profile from "./user/Profile";
 import Signup from "./user/Signup";
@@ -19,7 +20,8 @@ import Signup from "./user/Signup";
 function MainRouter() {
   return (
     <div>
-      <Navbar />
+      {/* <Navbar /> */}
+      <Sidebar />
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/signup" component={Signup} />
