@@ -3,8 +3,9 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import auth from "./../auth/auth-helper";
+import auth from "../auth/auth-helper";
 import { Link, withRouter } from "react-router-dom";
+import MyBidsMenu from "./MyBidsMenu";
 
 const styles = {
   icon: {
@@ -13,6 +14,9 @@ const styles = {
   links: {
     textDecoration: "none",
     color: "white",
+  },
+  nav: {
+    display: "flex",
   },
 };
 
@@ -42,7 +46,7 @@ const Menu = withRouter(({ history }) => (
       )}
 
       {auth.isAuthenticated() && (
-        <span>
+        <span style={styles.nav}>
           {auth.isAuthenticated().user.seller && (
             <>
               <Link style={styles.links} to="/myauctions">
@@ -50,6 +54,9 @@ const Menu = withRouter(({ history }) => (
               </Link>
             </>
           )}
+
+          <MyBidsMenu />
+
           <Link
             style={styles.links}
             to={"/user/" + auth.isAuthenticated().user._id}

@@ -19,6 +19,8 @@ function AuctionSettingsMenu({ auction, SetRedirect }) {
   return (
     <div>
       <Settings
+        color="primary"
+        style={{ cursor: "pointer" }}
         aria-controls="simple-menu"
         aria-haspopup="true"
         onClick={handleClick}

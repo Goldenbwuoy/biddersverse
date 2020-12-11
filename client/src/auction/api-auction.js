@@ -108,6 +108,60 @@ const listBySeller = async (params, credentials, signal) => {
   }
 };
 
+const listByBidder = async (params, credentials, signal) => {
+  try {
+    let response = await fetch(
+      `${BASE_URL}/api/auctions/bid/${params.userId}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${credentials.token}`,
+        },
+      }
+    );
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const listLiveByBidder = async (params, credentials, signal) => {
+  try {
+    let response = await fetch(
+      `${BASE_URL}/api/auctions/bid/live/${params.userId}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${credentials.token}`,
+        },
+      }
+    );
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const listWonByBidder = async (params, credentials, signal) => {
+  try {
+    let response = await fetch(
+      `${BASE_URL}/api/auctions/bid/won/${params.userId}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${credentials.token}`,
+        },
+      }
+    );
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const deleteAuction = async (params, credentials) => {
   try {
     let response = await fetch(`${BASE_URL}/api/auctions/${params.auctionId}`, {
@@ -144,6 +198,9 @@ export {
   listBySeller,
   read,
   listOpenByCategory,
+  listByBidder,
+  listLiveByBidder,
+  listWonByBidder,
   listLatest,
   deleteAuction,
   updateAuction,

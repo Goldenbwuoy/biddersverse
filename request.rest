@@ -9,6 +9,15 @@ Content-Type: application/json
 ###
 GET http://localhost:5000/api/users
 
+### sign in
+POST http://localhost:5000/api/signin
+Content-Type: application/json
+
+{
+    "email": "test@testing.com",
+    "password": "test"
+}
+
 ###
 GET http://localhost:5000/api/users/5fa7923a09b8e73d940ced5c
 
@@ -44,3 +53,15 @@ GET http://localhost:5000/api/auctions/added/latest
 
 ### search auctions
 GET http://localhost:5000/api/auctions?search=xbox&category=All
+
+### retrieve auctions by bidder (all)
+GET http://localhost:5000/api/auctions/bid/5fc1f0330c400d4094ad3fce
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmMxZjAzMzBjNDAwZDQwOTRhZDNmY2UiLCJpYXQiOjE2MDc0OTU3NTB9.u8qMt-6gwaJ5wBOSJl2KAwwTYmNPXDZguLdcCDg5Nwc
+
+### retrieve auctions by bidder (live)
+GET http://localhost:5000/api/auctions/bid/live/5fc1f0330c400d4094ad3fce
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmMxZjAzMzBjNDAwZDQwOTRhZDNmY2UiLCJpYXQiOjE2MDc0OTU3NTB9.u8qMt-6gwaJ5wBOSJl2KAwwTYmNPXDZguLdcCDg5Nwc
+
+### retrieve auctions by bidder (won)
+GET http://localhost:5000/api/auctions/bid/won/5fc1f0330c400d4094ad3fce
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmMxZjAzMzBjNDAwZDQwOTRhZDNmY2UiLCJpYXQiOjE2MDc0OTU3NTB9.u8qMt-6gwaJ5wBOSJl2KAwwTYmNPXDZguLdcCDg5Nwc

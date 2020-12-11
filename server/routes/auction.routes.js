@@ -28,7 +28,17 @@ router
   .delete(authCtrl.requireSignin, auctionCtrl.isSeller, auctionCtrl.remove)
   .put(authCtrl.requireSignin, auctionCtrl.isSeller, auctionCtrl.update);
 
-router.route("/api/auctions/bid/:userId").get(auctionCtrl.listByBidder);
+router
+  .route("/api/auctions/bid/:userId")
+  .get(authCtrl.requireSignin, auctionCtrl.listByBidder);
+
+router
+  .route("/api/auctions/bid/live/:userId")
+  .get(authCtrl.requireSignin, auctionCtrl.listOpenByBidder);
+
+router
+  .route("/api/auctions/bid/won/:userId")
+  .get(authCtrl.requireSignin, auctionCtrl.listWonByBidder);
 
 router.route("/api/auction/:auctionId").get(auctionCtrl.read);
 
