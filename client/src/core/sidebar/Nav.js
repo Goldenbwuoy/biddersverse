@@ -79,34 +79,47 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "red",
   },
   list: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-    justifyContent: "center",
+    marginLeft: "25px",
   },
   listItem: {
     marginTop: "5px",
     marginBottom: "5px",
     marginLeft: "45px",
+    "&:hover": {
+      fontWeight: "bold",
+    },
+  },
+  drawerLinks: {
+    textDecoration: "none",
+    cursor: "pointer",
+    color: "black",
+  },
+  drawerLinksHover: {
+    fontWeight: "bold",
+  },
+  drawerTitles: {
+    fontSize: "16px",
+    fontWeight: "800",
   },
 }));
 
 const Sidebar = ({ history }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const { user } = auth.isAuthenticated();
   const [open, setOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const [myAuctions, setMyAuctions] = useState([
-    { title: "All" },
-    { title: "Live Auctions" },
-    { title: "Sold Auctions" },
-    { title: "Orders" },
+    { title: "All", path: "/myauctions" },
+    { title: "Live Auctions", path: "/myauctions" },
+    { title: "Sold Auctions", path: "/myauctions" },
+    { title: "Orders", path: "/myauctions" },
   ]);
   const [myBids, setMyBids] = useState([
-    { title: "All Bids" },
-    { title: "Live Bids" },
-    { title: "Won Bids" },
-    { title: "Orders" },
+    { title: "All Bids", path: `/auctions/all/bids/${user?._id}` },
+    { title: "Live Bids", path: `/auctions/live/bids/${user?._id}` },
+    { title: "Won Bids", path: `/auctions/won/bids/${user?._id}` },
+    { title: "Orders", path: `/auctions/all/bids/${user?._id}` },
   ]);
 
   useEffect(() => {
@@ -124,8 +137,6 @@ const Sidebar = ({ history }) => {
       abortController.abort();
     };
   }, []);
-
-  console.log(categories);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -174,16 +185,6 @@ const Sidebar = ({ history }) => {
 
           {auth.isAuthenticated() && (
             <span className={classes.toolbarRight}>
-              {auth.isAuthenticated().user.seller && (
-                <>
-                  <Link className={classes.links} to="/myauctions">
-                    <Button color="inherit">My Auctions</Button>
-                  </Link>
-                </>
-              )}
-
-              <MyBidsMenu />
-
               <Link
                 className={classes.links}
                 to={"/user/" + auth.isAuthenticated().user._id}
@@ -226,53 +227,95 @@ const Sidebar = ({ history }) => {
           <>
             <ListItem button onClick={handleDrawerClose}>
               <ListItemText>
-                <Typography variant="h6">Home</Typography>
+                <Link className={classes.drawerLinks} to="/">
+                  <Typography className={classes.drawerTitles}>Home</Typography>
+                </Link>
               </ListItemText>
             </ListItem>
             <Divider />
-            <ListItem button onClick={handleDrawerClose}>
+            <ListItem button>
               <ListItemText>
-                <Typography variant="h6">Auctions By Category</Typography>
+                <Typography className={classes.drawerTitles}>
+                  Auctions By Category
+                </Typography>
               </ListItemText>
             </ListItem>
             <Divider />
             <div className={classes.list}>
-              {categories?.map((category) => (
-                <Typography className={classes.listItem} key={category._id}>
-                  {category.categoryName}
-                </Typography>
-              ))}
+              <List>
+                {categories?.map((category) => (
+                  <Link
+                    className={classes.drawerLinks}
+                    to={{
+                      pathname: `/auctions/categories/${category._id}`,
+                      state: { title: category.categoryName },
+                    }}
+                  >
+                    <ListItem button onClick={handleDrawerClose}>
+                      <ListItemText primary={category.categoryName} />
+                    </ListItem>
+                  </Link>
+                ))}
+              </List>
             </div>
 
             <Divider />
-            <ListItem button onClick={handleDrawerClose}>
-              <ListItemText>
-                <Typography variant="h6">My Auctions</Typography>
-              </ListItemText>
-            </ListItem>
-            <Divider />
-            <div className={classes.list}>
-              {myAuctions?.map((item) => (
-                <Typography className={classes.listItem} key={item.title}>
-                  {item.title}
-                </Typography>
-              ))}
-            </div>
-            <Divider />
-            <ListItem button onClick={handleDrawerClose}>
-              <ListItemText>
-                <Typography variant="h6">My Bids</Typography>
-              </ListItemText>
-            </ListItem>
-            <Divider />
-            <div className={classes.list}>
-              {myBids?.map((item) => (
-                <Typography className={classes.listItem} key={item.title}>
-                  {item.title}
-                </Typography>
-              ))}
-            </div>
-            <Divider className={classes.divider} />
+            {auth.isAuthenticated() && (
+              <>
+                {auth.isAuthenticated().user.seller && (
+                  <>
+                    <ListItem button>
+                      <ListItemText>
+                        <Typography className={classes.drawerTitles}>
+                          My Auctions
+                        </Typography>
+                      </ListItemText>
+                    </ListItem>
+                    <Divider />
+                    <div className={classes.list}>
+                      <List>
+                        {myAuctions?.map((item) => (
+                          <Link
+                            key={item.title}
+                            className={classes.drawerLinks}
+                            to={item.path}
+                          >
+                            <ListItem button onClick={handleDrawerClose}>
+                              <ListItemText primary={item.title} />
+                            </ListItem>
+                          </Link>
+                        ))}
+                      </List>
+                    </div>
+                    <Divider />
+                  </>
+                )}
+                <ListItem button>
+                  <ListItemText>
+                    <Typography className={classes.drawerTitles}>
+                      My Bids
+                    </Typography>
+                  </ListItemText>
+                </ListItem>
+                <Divider />
+                <div className={classes.list}>
+                  <List>
+                    {myBids?.map((item) => (
+                      <Link
+                        key={item.title}
+                        className={classes.drawerLinks}
+                        to={item.path}
+                      >
+                        <ListItem button onClick={handleDrawerClose}>
+                          <ListItemText primary={item.title} />
+                        </ListItem>
+                      </Link>
+                    ))}
+                  </List>
+                </div>
+                <Divider className={classes.divider} />
+              </>
+            )}
           </>
         </List>
       </Drawer>

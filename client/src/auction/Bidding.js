@@ -78,8 +78,6 @@ function Bidding(props) {
       ? props.auction.bids[0].bid
       : props.auction.startingBid;
 
-  console.log(isSeller);
-
   return (
     <div>
       {!props.justEnded &&

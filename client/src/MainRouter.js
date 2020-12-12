@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import Auction from "./auction/Auction";
+import AuctionsByCategory from "./auction/AuctionsByCategory";
 import EditAuction from "./auction/EditAuction";
 import MyAuctions from "./auction/MyAuctions";
 import MyBids from "./auction/MyBids";
@@ -37,6 +38,10 @@ function MainRouter() {
         />
         <PrivateRoute path="/auctions/won/bids/:userId" component={MyWonBids} />
         <Route path="/auctions/all" component={OpenAuctions} />
+        <Route
+          path="/auctions/categories/:categoryId"
+          component={AuctionsByCategory}
+        />
         <Route path="/auction/:auctionId" component={Auction} />
         <Route path="/user/:userId" component={Profile} />
       </Switch>

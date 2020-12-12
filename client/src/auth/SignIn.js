@@ -47,7 +47,8 @@ function SignIn(props) {
     redirectToRefer: false,
   });
 
-  const clickSubmit = () => {
+  const clickSubmit = (e) => {
+    e.preventDefault();
     const user = {
       email: values.email || undefined,
       password: values.password || undefined,
@@ -83,43 +84,45 @@ function SignIn(props) {
         <Typography variant="h6" className={classes.title}>
           Sign In
         </Typography>
-        <TextField
-          id="email"
-          type="email"
-          label="Email"
-          className={classes.textField}
-          value={values.email}
-          onChange={handleChange("email")}
-          margin="normal"
-        />
-        <br />
-        <TextField
-          id="password"
-          type="password"
-          label="Password"
-          className={classes.textField}
-          value={values.password}
-          onChange={handleChange("password")}
-          margin="normal"
-        />
-        <br />{" "}
-        {values.error && (
-          <Typography component="p" color="error">
-            <Icon color="error" className={classes.error}></Icon>
-            {values.error}
-          </Typography>
-        )}
+        <form onSubmit={clickSubmit}>
+          <TextField
+            id="email"
+            type="email"
+            label="Email"
+            className={classes.textField}
+            value={values.email}
+            onChange={handleChange("email")}
+            margin="normal"
+          />
+          <br />
+          <TextField
+            id="password"
+            type="password"
+            label="Password"
+            className={classes.textField}
+            value={values.password}
+            onChange={handleChange("password")}
+            margin="normal"
+          />
+          <br />{" "}
+          {values.error && (
+            <Typography component="p" color="error">
+              <Icon color="error" className={classes.error}></Icon>
+              {values.error}
+            </Typography>
+          )}
+          <CardActions>
+            <Button
+              color="primary"
+              type="submit"
+              variant="contained"
+              className={classes.submit}
+            >
+              Submit
+            </Button>
+          </CardActions>
+        </form>
       </CardContent>
-      <CardActions>
-        <Button
-          color="primary"
-          variant="contained"
-          onClick={clickSubmit}
-          className={classes.submit}
-        >
-          Submit
-        </Button>
-      </CardActions>
     </Card>
   );
 }
