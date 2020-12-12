@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -13,16 +13,14 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import { Link, useHistory } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { Box, Button } from "@material-ui/core";
 import auth from "../../auth/auth-helper";
 import MyBidsMenu from "../MyBidsMenu";
+import { listCategories } from "../../category/api-category";
 
-const drawerWidth = 240;
+const drawerWidth = 340;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: drawerWidth,
+    background: "#CDD6DA",
   },
   drawerHeader: {
     display: "flex",
@@ -76,13 +75,57 @@ const useStyles = makeStyles((theme) => ({
   toolbarRight: {
     display: "flex",
   },
+  dividerColor: {
+    backgroundColor: "red",
+  },
+  list: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    justifyContent: "center",
+  },
+  listItem: {
+    marginTop: "5px",
+    marginBottom: "5px",
+    marginLeft: "45px",
+  },
 }));
 
-export default function Sidebar() {
+const Sidebar = ({ history }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-  const history = useHistory();
+  const [open, setOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [myAuctions, setMyAuctions] = useState([
+    { title: "All" },
+    { title: "Live Auctions" },
+    { title: "Sold Auctions" },
+    { title: "Orders" },
+  ]);
+  const [myBids, setMyBids] = useState([
+    { title: "All Bids" },
+    { title: "Live Bids" },
+    { title: "Won Bids" },
+    { title: "Orders" },
+  ]);
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    listCategories(signal).then((data) => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        setCategories(data);
+      }
+    });
+    return function cleanup() {
+      abortController.abort();
+    };
+  }, []);
+
+  console.log(categories);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -163,6 +206,7 @@ export default function Sidebar() {
         className={classes.drawer}
         variant="persistent"
         anchor="left"
+        color="black"
         open={open}
         classes={{
           paper: classes.drawerPaper,
@@ -179,27 +223,61 @@ export default function Sidebar() {
         </div>
         <Divider />
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem button key={text} onClick={handleDrawerClose}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
+          <>
+            <ListItem button onClick={handleDrawerClose}>
+              <ListItemText>
+                <Typography variant="h6">Home</Typography>
+              </ListItemText>
             </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
+            <Divider />
+            <ListItem button onClick={handleDrawerClose}>
+              <ListItemText>
+                <Typography variant="h6">Auctions By Category</Typography>
+              </ListItemText>
             </ListItem>
-          ))}
+            <Divider />
+            <div className={classes.list}>
+              {categories?.map((category) => (
+                <Typography className={classes.listItem} key={category._id}>
+                  {category.categoryName}
+                </Typography>
+              ))}
+            </div>
+
+            <Divider />
+            <ListItem button onClick={handleDrawerClose}>
+              <ListItemText>
+                <Typography variant="h6">My Auctions</Typography>
+              </ListItemText>
+            </ListItem>
+            <Divider />
+            <div className={classes.list}>
+              {myAuctions?.map((item) => (
+                <Typography className={classes.listItem} key={item.title}>
+                  {item.title}
+                </Typography>
+              ))}
+            </div>
+            <Divider />
+            <ListItem button onClick={handleDrawerClose}>
+              <ListItemText>
+                <Typography variant="h6">My Bids</Typography>
+              </ListItemText>
+            </ListItem>
+            <Divider />
+            <div className={classes.list}>
+              {myBids?.map((item) => (
+                <Typography className={classes.listItem} key={item.title}>
+                  {item.title}
+                </Typography>
+              ))}
+            </div>
+            <Divider className={classes.divider} />
+          </>
         </List>
       </Drawer>
     </div>
   );
-}
+};
+
+export default withRouter(Sidebar);

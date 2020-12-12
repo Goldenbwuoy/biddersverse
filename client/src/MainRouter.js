@@ -12,7 +12,7 @@ import PrivateRoute from "./auth/PrivateRoute";
 import SignIn from "./auth/SignIn";
 import Home from "./core/Home";
 import Navbar from "./core/Navbar";
-import Sidebar from "./core/sidebar/Sidebar";
+import Sidebar from "./core/sidebar/Nav";
 import EditProfile from "./user/EditProfile";
 import Profile from "./user/Profile";
 import Signup from "./user/Signup";
