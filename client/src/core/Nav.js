@@ -14,11 +14,12 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { Link, withRouter } from "react-router-dom";
-import { Box, Button } from "@material-ui/core";
-import auth from "../../auth/auth-helper";
-import MyBidsMenu from "../MyBidsMenu";
-import { listCategories } from "../../category/api-category";
+import { Box, Button, Tooltip } from "@material-ui/core";
+import auth from "../auth/auth-helper";
+import { listCategories } from "../category/api-category";
 
 const drawerWidth = 340;
 
@@ -94,32 +95,43 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
     color: "black",
   },
-  drawerLinksHover: {
-    fontWeight: "bold",
-  },
   drawerTitles: {
     fontSize: "16px",
     fontWeight: "800",
   },
+  authButton: {
+    textTransform: "capitalize",
+  },
 }));
 
-const Sidebar = ({ history }) => {
+const Nav = ({ history }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const { user } = auth.isAuthenticated();
   const [open, setOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const [myAuctions, setMyAuctions] = useState([
-    { title: "All", path: "/myauctions" },
-    { title: "Live Auctions", path: "/myauctions" },
-    { title: "Sold Auctions", path: "/myauctions" },
-    { title: "Orders", path: "/myauctions" },
+    {
+      title: "All Auctions",
+      path: "/auctions/all/by-seller",
+      status: "all",
+    },
+    {
+      title: "Live Auctions",
+      path: "/auctions/live/by-seller",
+      status: "live",
+    },
+    {
+      title: "Sold Auctions",
+      path: "/auctions/sold/by-seller",
+      status: "sold",
+    },
+    { title: "Orders", path: "/auctions/all/by-seller", status: "all" },
   ]);
   const [myBids, setMyBids] = useState([
-    { title: "All Bids", path: `/auctions/all/bids/${user?._id}` },
-    { title: "Live Bids", path: `/auctions/live/bids/${user?._id}` },
-    { title: "Won Bids", path: `/auctions/won/bids/${user?._id}` },
-    { title: "Orders", path: `/auctions/all/bids/${user?._id}` },
+    { title: "All Placed Bids", path: `/auctions/all/bids`, status: "all" },
+    { title: "Live Bids", path: `/auctions/live/bids`, status: "live" },
+    { title: "Won Bids", path: `/auctions/won/bids`, status: "won" },
+    { title: "Orders", path: `/auctions/all/bids`, status: "all" },
   ]);
 
   useEffect(() => {
@@ -175,10 +187,14 @@ const Sidebar = ({ history }) => {
           {!auth.isAuthenticated() && (
             <span>
               <Link className={classes.links} to="/signup">
-                <Button color="inherit">Sign Up</Button>
+                <Button className={classes.authButton} color="inherit">
+                  Sign Up
+                </Button>
               </Link>
               <Link className={classes.links} to="/signin">
-                <Button color="inherit">Sign In</Button>
+                <Button className={classes.authButton} color="inherit">
+                  Sign In
+                </Button>
               </Link>
             </span>
           )}
@@ -189,16 +205,23 @@ const Sidebar = ({ history }) => {
                 className={classes.links}
                 to={"/user/" + auth.isAuthenticated().user._id}
               >
-                <Button color="inherit">Profile</Button>
+                <Tooltip title="Profile">
+                  <Button color="inherit">
+                    <AccountCircleIcon />
+                  </Button>
+                </Tooltip>
               </Link>
-              <Button
-                color="inherit"
-                onClick={() => {
-                  auth.clearJWT(() => history.push("/"));
-                }}
-              >
-                Sign out
-              </Button>
+              {/* Logout Icon button */}
+              <Tooltip title="Signout">
+                <Button
+                  color="inherit"
+                  onClick={() => {
+                    auth.clearJWT(() => history.push("/"));
+                  }}
+                >
+                  <ExitToAppIcon />
+                </Button>
+              </Tooltip>
             </span>
           )}
         </Toolbar>
@@ -236,7 +259,7 @@ const Sidebar = ({ history }) => {
             <ListItem button>
               <ListItemText>
                 <Typography className={classes.drawerTitles}>
-                  Auctions By Category
+                  Open Auctions By Category
                 </Typography>
               </ListItemText>
             </ListItem>
@@ -245,6 +268,7 @@ const Sidebar = ({ history }) => {
               <List>
                 {categories?.map((category) => (
                   <Link
+                    key={category._id}
                     className={classes.drawerLinks}
                     to={{
                       pathname: `/auctions/categories/${category._id}`,
@@ -278,7 +302,13 @@ const Sidebar = ({ history }) => {
                           <Link
                             key={item.title}
                             className={classes.drawerLinks}
-                            to={item.path}
+                            to={{
+                              pathname: item.path,
+                              state: {
+                                title: item.title,
+                                status: item.status,
+                              },
+                            }}
                           >
                             <ListItem button onClick={handleDrawerClose}>
                               <ListItemText primary={item.title} />
@@ -304,7 +334,13 @@ const Sidebar = ({ history }) => {
                       <Link
                         key={item.title}
                         className={classes.drawerLinks}
-                        to={item.path}
+                        to={{
+                          pathname: item.path,
+                          state: {
+                            title: item.title,
+                            status: item.status,
+                          },
+                        }}
                       >
                         <ListItem button onClick={handleDrawerClose}>
                           <ListItemText primary={item.title} />
@@ -323,4 +359,4 @@ const Sidebar = ({ history }) => {
   );
 };
 
-export default withRouter(Sidebar);
+export default withRouter(Nav);

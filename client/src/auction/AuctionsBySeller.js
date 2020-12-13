@@ -31,10 +31,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MyAuctions() {
+function AuctionsBySeller({ location }) {
   const classes = useStyles();
   const [auctions, setAuctions] = useState([]);
   const { user, token } = auth.isAuthenticated();
+  const { status, title } = location?.state;
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -42,6 +43,7 @@ function MyAuctions() {
     listBySeller(
       {
         userId: user._id,
+        status: status,
       },
       { token: token },
       signal
@@ -55,12 +57,12 @@ function MyAuctions() {
     return function cleanup() {
       abortController.abort();
     };
-  }, []);
+  }, [user._id, status]);
   return (
     <div>
       <Paper className={classes.root} elevation={4}>
         <Typography type="title" className={classes.title}>
-          Your Auctions
+          {title}
           <span className={classes.addButton}>
             <Link to="/auction/new">
               <Button color="primary" variant="contained">
@@ -75,4 +77,4 @@ function MyAuctions() {
   );
 }
 
-export default MyAuctions;
+export default AuctionsBySeller;

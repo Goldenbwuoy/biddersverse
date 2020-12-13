@@ -171,9 +171,42 @@ const photo = (req, res, next) => {
   next();
 };
 
-const listBySeller = async (req, res) => {
+const listAllBySeller = async (req, res) => {
   try {
     let auctions = await Auction.find({ seller: req.profile._id })
+      .populate("seller", "_id firstName lastName")
+      .populate("bids.bidder", "_id firstName lastName");
+    res.json(auctions);
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
+  }
+};
+
+const listOpenBySeller = async (req, res) => {
+  try {
+    let auctions = await Auction.find({
+      seller: req.profile._id,
+      bidEnd: { $gt: new Date() },
+    })
+      .populate("seller", "_id firstName lastName")
+      .populate("bids.bidder", "_id firstName lastName");
+    res.json(auctions);
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
+  }
+};
+
+const listSoldBySeller = async (req, res) => {
+  try {
+    let auctions = await Auction.find({
+      seller: req.profile._id,
+      bidEnd: { $lt: new Date() },
+      $where: "this.bids.length > 0",
+    })
       .populate("seller", "_id firstName lastName")
       .populate("bids.bidder", "_id firstName lastName");
     res.json(auctions);
@@ -254,7 +287,9 @@ module.exports = {
   create,
   listOpen,
   listByBidder,
-  listBySeller,
+  listAllBySeller,
+  listOpenBySeller,
+  listSoldBySeller,
   auctionByID,
   photo,
   read,

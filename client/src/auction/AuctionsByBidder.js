@@ -4,7 +4,7 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import auth from "../auth/auth-helper";
 import AuctionsGrid from "./AuctionsGrid";
-import { listWonByBidder } from "./api-auction";
+import { listByBidder } from "./api-auction";
 
 const useStyles = makeStyles((theme) => ({
   root: theme.mixins.gutters({
@@ -28,17 +28,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MyWonBids({ match }) {
+function AuctionsByBidder({ location }) {
   const classes = useStyles();
   const [auctions, setAuctions] = useState([]);
-  const { token } = auth.isAuthenticated();
+  const { token, user } = auth.isAuthenticated();
+  const { status, title } = location.state;
 
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
-    listWonByBidder(
+
+    listByBidder(
       {
-        userId: match.params.userId,
+        userId: user._id,
+        status: status,
       },
       { token: token },
       signal
@@ -52,12 +55,12 @@ function MyWonBids({ match }) {
     return function cleanup() {
       abortController.abort();
     };
-  }, []);
+  }, [user.id, status]);
   return (
     <div>
       <Paper className={classes.root} elevation={4}>
         <Typography type="title" className={classes.title}>
-          Your Won Bids
+          {title}
         </Typography>
         <AuctionsGrid products={auctions} searched={false} />
       </Paper>
@@ -65,4 +68,4 @@ function MyWonBids({ match }) {
   );
 }
 
-export default MyWonBids;
+export default AuctionsByBidder;

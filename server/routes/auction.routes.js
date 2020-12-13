@@ -10,7 +10,7 @@ router.route("/api/auctions/related/:auctionId").get(auctionCtrl.listRelated);
 
 router.route("/api/auctions").get(auctionCtrl.search);
 router
-  .route("/api/auctions/by/:userId")
+  .route("/api/auctions/all/by/:userId")
   .post(
     authCtrl.requireSignin,
     authCtrl.hasAuthorization,
@@ -20,7 +20,23 @@ router
   .get(
     authCtrl.requireSignin,
     authCtrl.hasAuthorization,
-    auctionCtrl.listBySeller
+    auctionCtrl.listAllBySeller
+  );
+
+router
+  .route("/api/auctions/live/by/:userId")
+  .get(
+    authCtrl.requireSignin,
+    authCtrl.hasAuthorization,
+    auctionCtrl.listOpenBySeller
+  );
+
+router
+  .route("/api/auctions/sold/by/:userId")
+  .get(
+    authCtrl.requireSignin,
+    authCtrl.hasAuthorization,
+    auctionCtrl.listSoldBySeller
   );
 
 router
@@ -29,7 +45,7 @@ router
   .put(authCtrl.requireSignin, auctionCtrl.isSeller, auctionCtrl.update);
 
 router
-  .route("/api/auctions/bid/:userId")
+  .route("/api/auctions/bid/all/:userId")
   .get(authCtrl.requireSignin, auctionCtrl.listByBidder);
 
 router
