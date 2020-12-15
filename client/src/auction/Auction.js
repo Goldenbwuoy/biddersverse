@@ -188,7 +188,7 @@ function Auction({ match }) {
                         variant="subtitle1"
                         className={classes.lastBid}
                       >
-                        {` Last bid: $ ${auction.bids[0].bid}`}
+                        {` Current highest bid: $ ${auction.bids[0].bid}`}
                       </Typography>
                     )}
                     {!auth.isAuthenticated() && (

@@ -128,7 +128,7 @@ function NewAuction() {
   };
 
   if (values.redirect) {
-    return <Redirect to={"/"} />;
+    return <Redirect to={"/auctions/all/by-seller"} />;
   }
 
   return (

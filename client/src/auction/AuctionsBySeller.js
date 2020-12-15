@@ -35,7 +35,7 @@ function AuctionsBySeller({ location }) {
   const classes = useStyles();
   const [auctions, setAuctions] = useState([]);
   const { user, token } = auth.isAuthenticated();
-  const { status, title } = location?.state;
+  const status = location.pathname.split("/")[2];
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -62,7 +62,11 @@ function AuctionsBySeller({ location }) {
     <div>
       <Paper className={classes.root} elevation={4}>
         <Typography type="title" className={classes.title}>
-          {title}
+          {status && status === "all"
+            ? "All Auctions"
+            : status === "live"
+            ? "Live Auctions"
+            : "Sold Auctions"}
           <span className={classes.addButton}>
             <Link to="/auction/new">
               <Button color="primary" variant="contained">

@@ -125,7 +125,12 @@ function Chat({ auction }) {
               value={text}
               onChange={handleChange}
             />
-            <IconButton type="submit" color="primary" variant="contained">
+            <IconButton
+              disabled={!text}
+              type="submit"
+              color="primary"
+              variant="contained"
+            >
               <SendIcon />
             </IconButton>
           </form>

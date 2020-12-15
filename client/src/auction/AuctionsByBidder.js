@@ -32,7 +32,7 @@ function AuctionsByBidder({ location }) {
   const classes = useStyles();
   const [auctions, setAuctions] = useState([]);
   const { token, user } = auth.isAuthenticated();
-  const { status, title } = location.state;
+  const status = location.pathname.split("/")[2];
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -60,7 +60,11 @@ function AuctionsByBidder({ location }) {
     <div>
       <Paper className={classes.root} elevation={4}>
         <Typography type="title" className={classes.title}>
-          {title}
+          {status && status === "all"
+            ? "All Placed Bids"
+            : status === "live"
+            ? "Live Bids"
+            : "Won Bids"}
         </Typography>
         <AuctionsGrid products={auctions} searched={false} />
       </Paper>
