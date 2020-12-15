@@ -3,6 +3,7 @@ import auth from "../../auth/auth-helper";
 import moment from "moment";
 
 import "./Message.css";
+import maskIds from "../../helpers/user-helper";
 
 const Message = ({ message, seller }) => {
   return auth.isAuthenticated().user?._id === message.sender ? (
@@ -20,7 +21,7 @@ const Message = ({ message, seller }) => {
           {message.sender === seller._id ? (
             <span className="seller-title">Seller</span>
           ) : (
-            <span className="title">{message.sender}</span>
+            <span className="title">{maskIds(message.sender)}</span>
           )}{" "}
         </p>
         <span className="messageText colorDark">{message.message}</span>

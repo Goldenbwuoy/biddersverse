@@ -2,7 +2,7 @@ import queryString from "querystring";
 const BASE_URL = "http://localhost:5000";
 
 const create = (params, credentials, auction) => {
-  return fetch(`${BASE_URL}/api/auctions/by/${params.userId}`, {
+  return fetch(`${BASE_URL}/api/auctions/all/by/${params.userId}`, {
     method: "POST",
     headers: {
       Accept: "application/json",

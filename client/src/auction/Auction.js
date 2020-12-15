@@ -126,7 +126,7 @@ function Auction({ match }) {
   };
 
   if (redirectToMyAuctions) {
-    return <Redirect to="/myauctions" />;
+    return <Redirect to="/auctions/all/by-seller" />;
   }
 
   const currentDate = new Date();

@@ -1,3 +1,4 @@
+const { outbidNotification } = require("../helpers/emailNotificationsHandler");
 const Auction = require("../models/auction.model");
 
 module.exports = (server) => {
@@ -36,11 +37,12 @@ module.exports = (server) => {
         { $push: { bids: { $each: [bid], $position: 0 } } },
         { new: true }
       )
-        .populate("bids.bidder", "_id name")
-        .populate("seller", "_id name")
+        .populate("bids.bidder", "_id firstName lastName email")
+        .populate("seller", "_id firstName lastName email")
         .exec();
 
       io.to(auction).emit("new bid", result);
+      // if (result.bids.length > 1) outbidNotification(result);
     } catch (err) {
       console.log(err);
     }

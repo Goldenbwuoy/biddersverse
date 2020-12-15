@@ -84,27 +84,37 @@ function Bidding(props) {
         new Date() < new Date(props.auction.bidEnd) &&
         !isSeller && (
           <div className={classes.placeForm}>
-            <TextField
-              id="bid"
-              label="Your Bid ($)"
-              value={bid}
-              onChange={handleChange}
-              type="number"
-              margin="normal"
-              helperText={`Enter $${Number(minBid) + 1} or more`}
-              className={classes.marginInput}
-            />
-            <br />
-            <Button
-              variant="contained"
-              className={classes.marginBtn}
-              color="secondary"
-              disabled={bid < minBid + 1}
-              onClick={placeBid}
-            >
-              Place Bid
-            </Button>
-            <br />
+            {props.auction.bids.length &&
+            props.auction.bids[0].bidder?._id === user._id ? (
+              <Typography className={classes.message}>
+                You are the highest bidder in this Auction. You will be notified
+                if another bidder outbids you.
+              </Typography>
+            ) : (
+              <>
+                <TextField
+                  id="bid"
+                  label="Your Bid ($)"
+                  value={bid}
+                  onChange={handleChange}
+                  type="number"
+                  margin="normal"
+                  helperText={`Enter $${Number(minBid) + 1} or more`}
+                  className={classes.marginInput}
+                />
+                <br />
+                <Button
+                  variant="contained"
+                  className={classes.marginBtn}
+                  color="secondary"
+                  disabled={bid < minBid + 1}
+                  onClick={placeBid}
+                >
+                  Place Bid
+                </Button>
+                <br />
+              </>
+            )}
           </div>
         )}
 
@@ -129,7 +139,7 @@ function Bidding(props) {
           </div>
         )}
 
-      {/* At the end of the auction, if there are any bids placed, the seller should be able to see the winning bidder and the bid history */}
+      {/* At the end of the auction, if there are any bids placed, the winning bidder should see a congratulations messages and button to checkout and pay */}
 
       {props.justEnded &&
         new Date() > new Date(props.auction.bidEnd) &&

@@ -1,8 +1,10 @@
 const formidable = require("formidable");
 const Auction = require("../models/auction.model");
 const errorHandler = require("../helpers/dbErrorHandler");
+const schedule = require("node-schedule");
 const fs = require("fs");
 const { extend } = require("lodash");
+const notificationHandler = require("../helpers/emailNotificationsHandler");
 
 const create = (req, res) => {
   let form = new formidable.IncomingForm();
@@ -22,6 +24,7 @@ const create = (req, res) => {
     }
     try {
       let result = await auction.save();
+      // notificationHandler.scheduleNotification(result);
       res.status(200).json(result);
     } catch (err) {
       return res.status(400).json({

@@ -9,6 +9,8 @@ import {
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import React, { useState } from "react";
+import auth from "../auth/auth-helper";
+import maskIds from "../helpers/user-helper";
 
 const useStyles = makeStyles((theme) => ({
   bidHistory: {
@@ -99,9 +101,15 @@ function BidHistory({ bids }) {
                   </Typography>
                 </Grid>
                 <Grid item xs={4} sm={4}>
-                  <Typography variant="body2">
-                    {maskIds(item.bidder._id)}
-                  </Typography>
+                  {item.bidder._id === auth?.isAuthenticated().user._id ? (
+                    <Typography style={{ color: "#3F4771", fontWeight: "700" }}>
+                      You
+                    </Typography>
+                  ) : (
+                    <Typography variant="body2">
+                      {maskIds(item.bidder._id)}
+                    </Typography>
+                  )}
                 </Grid>
               </Grid>
             );
@@ -111,16 +119,5 @@ function BidHistory({ bids }) {
     </div>
   );
 }
-
-const maskIds = (id) => {
-  const strLen = id?.length;
-  if (strLen > 4) {
-    return (
-      id.substr(0, 3) +
-      id.substr(3, strLen - 3).replace(/\w/g, "*") +
-      id.substr(strLen - 3, strLen)
-    );
-  }
-};
 
 export default BidHistory;
