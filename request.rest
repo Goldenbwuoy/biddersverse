@@ -14,21 +14,20 @@ POST http://localhost:5000/api/signin
 Content-Type: application/json
 
 {
-    "email": "test@testing.com",
-    "password": "test"
+    "email": "goldentmc@163.com",
+    "password": "password"
 }
 
 ###
 GET http://localhost:5000/api/users/5fa7923a09b8e73d940ced5c
 
 ###
-PUT http://localhost:5000/api/users/5fa7923a09b8e73d940ced5c
+PUT http://localhost:5000/api/users/5fdb0d92de035e3cb883c38b
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmRiMGQ5MmRlMDM1ZTNjYjg4M2MzOGIiLCJpYXQiOjE2MDgxOTczOTN9.zikyGAZOg6tgFPckOsJlDLGU2Z1r6397iyyMMhmx15o
 Content-Type: application/json
 
 {
-    "name": "Mark seven",
-    "email": "mark@mail.com",
-    "password": "12345678"
+    "lastName": "Chidzambwa"
 }
 
 ###

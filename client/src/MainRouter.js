@@ -14,6 +14,7 @@ import Nav from "./core/Nav";
 import EditProfile from "./user/EditProfile";
 import Profile from "./user/Profile";
 import Signup from "./user/Signup";
+import StripeConnect from "./user/StripeConnect";
 
 function MainRouter() {
   return (
@@ -23,6 +24,7 @@ function MainRouter() {
         <Route exact path="/" component={Home} />
         <Route path="/signup" component={Signup} />
         <Route path="/signin" component={SignIn} />
+        <Route path="/seller/stripe/connect" component={StripeConnect} />
         <PrivateRoute path="/user/edit/:userId" component={EditProfile} />
         <PrivateRoute path="/auction/new" component={NewAuction} />
         <PrivateRoute path="/auction/edit/:auctionId" component={EditAuction} />

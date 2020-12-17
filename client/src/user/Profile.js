@@ -17,6 +17,9 @@ import auth from "./../auth/auth-helper";
 import { read } from "./api-user.js";
 import { Redirect, Link } from "react-router-dom";
 import defaultImage from "../assets/images/profile-pic.png";
+import stripeButton from "../assets/images/stripeButton.png";
+import client_config from "../config/client_config";
+import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: theme.mixins.gutters({
@@ -33,6 +36,13 @@ const useStyles = makeStyles((theme) => ({
     width: 60,
     height: 60,
     margin: 10,
+  },
+  stripe_connect: {
+    marginRight: "10px",
+  },
+  stripe_connected: {
+    verticalAlign: "super",
+    marginRight: "10px",
   },
 }));
 
@@ -64,11 +74,6 @@ function Profile({ match }) {
       abortController.abort();
     };
   }, [match.params.userId]);
-  const url = "http://localhost:5000";
-
-  const photoUrl = user._id
-    ? `${url}/api/users/photo/${user._id}?${new Date().getTime()}`
-    : defaultImage;
 
   if (redirectToSignin) {
     return <Redirect to="/signin" />;
@@ -81,7 +86,7 @@ function Profile({ match }) {
       <List dense>
         <ListItem>
           <ListItemAvatar>
-            <Avatar src={photoUrl} className={classes.bigAvatar} />
+            <Avatar className={classes.bigAvatar} />
           </ListItemAvatar>
           <ListItemText
             primary={`${user.firstName} ${user.lastName}`}
@@ -90,6 +95,28 @@ function Profile({ match }) {
           {auth.isAuthenticated().user &&
             auth.isAuthenticated().user._id === user._id && (
               <ListItemSecondaryAction>
+                {user.seller && user.stripe_seller && (
+                  <Button
+                    variant="contained"
+                    disabled
+                    className={classes.stripe_connected}
+                  >
+                    Stripe connected
+                  </Button>
+                )}
+
+                {user.seller && !user.stripe_seller && (
+                  <a
+                    href={
+                      "https://connect.stripe.com/oauth/authorize?response_type=code&client_id=" +
+                      client_config.stripe_connect_test_client_id +
+                      "&scope=read_write"
+                    }
+                    className={classes.stripe_connected}
+                  >
+                    <img src={stripeButton} alt="stripe_button" />
+                  </a>
+                )}
                 <Link to={"/user/edit/" + user._id}>
                   <IconButton aria-label="Edit" color="primary">
                     <Edit />

@@ -60,14 +60,11 @@ function EditProfile({ match }) {
   const [values, setValues] = useState({
     firstName: "",
     lastName: "",
-    about: "",
-    photo: "",
     password: "",
     email: "",
     phoneNumber: "",
     seller: false,
     error: "",
-    id: "",
     redirectToProfile: false,
   });
   const jwt = auth.isAuthenticated();
@@ -88,12 +85,10 @@ function EditProfile({ match }) {
       } else {
         setValues({
           ...values,
-          id: data._id,
           firstName: data.firstName,
           lastName: data.lastName,
           email: data.email,
           phoneNumber: data.phoneNumber,
-          about: data.about,
           seller: data.seller,
         });
       }
@@ -104,15 +99,14 @@ function EditProfile({ match }) {
   }, [match.params.userId]);
 
   const clickSubmit = () => {
-    let userData = new FormData();
-    values.firstName && userData.append("firstName", values.firstName);
-    values.lastName && userData.append("lastName", values.lastName);
-    values.email && userData.append("email", values.email);
-    values.phoneNumber && userData.append("phoneNumber", values.phoneNumber);
-    values.passoword && userData.append("passoword", values.passoword);
-    values.about && userData.append("about", values.about);
-    values.seller && userData.append("seller", values.seller);
-    values.photo && userData.append("photo", values.photo);
+    const user = {
+      firstName: values.firstName || undefined,
+      lastName: values.lastName || undefined,
+      email: values.email || undefined,
+      phoneNumber: values.phoneNumber,
+      password: values.password || undefined,
+      seller: values.seller || undefined,
+    };
     update(
       {
         userId: match.params.userId,
@@ -120,7 +114,7 @@ function EditProfile({ match }) {
       {
         token: jwt.token,
       },
-      userData
+      user
     ).then((data) => {
       if (data && data.error) {
         setValues({ ...values, error: data.error });
@@ -132,18 +126,12 @@ function EditProfile({ match }) {
     });
   };
   const handleChange = (name) => (event) => {
-    const value = name === "photo" ? event.target.files[0] : event.target.value;
-    setValues({ ...values, [name]: value });
+    setValues({ ...values, [name]: event.target.value });
   };
 
   const handleCheck = (event, checked) => {
     setValues({ ...values, seller: checked });
   };
-
-  const url = "http://localhost:5000";
-  const photoUrl = values.id
-    ? `${url}/api/users/photo/${values.id}?${new Date().getTime()}`
-    : defaultImage;
 
   if (values.redirectToProfile) {
     return <Redirect to={"/user/" + values.userId} />;
@@ -154,25 +142,6 @@ function EditProfile({ match }) {
         <Typography variant="h6" className={classes.title}>
           Edit Profile
         </Typography>
-        <Avatar src={photoUrl} className={classes.bigAvatar} />
-        <br />
-        <input
-          accept="image/*"
-          onChange={handleChange("photo")}
-          className={classes.input}
-          id="icon-button-file"
-          type="file"
-        />
-        <label htmlFor="icon-button-file">
-          <Button variant="contained" color="default" component="span">
-            Upload
-            <FileUpload />
-          </Button>
-        </label>
-        <span className={classes.filename}>
-          {values.photo ? values.photo.name : ""}
-        </span>
-        <br />
         <TextField
           id="firstName"
           label="First Name"
@@ -188,16 +157,6 @@ function EditProfile({ match }) {
           value={values.lastName}
           onChange={handleChange("lastName")}
           margin="normal"
-        />
-        <br />
-        <TextField
-          id="multiline-flexible"
-          label="About"
-          className={classes.textField}
-          multiline
-          rows="2"
-          value={values.about}
-          onChange={handleChange("about")}
         />
         <br />
         <TextField

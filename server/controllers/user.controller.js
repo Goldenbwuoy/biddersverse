@@ -3,6 +3,8 @@ const errorHandler = require("../helpers/dbErrorHandler.js");
 const extend = require("lodash/extend");
 const formidable = require("formidable");
 const fs = require("fs");
+const request = require("request");
+const config = require("../config/config.js");
 
 const create = async (req, res) => {
   const user = new User(req.body);
@@ -49,33 +51,19 @@ const read = async (req, res) => {
   req.profile.password = undefined;
   return res.json(req.profile);
 };
+
 const update = async (req, res) => {
-  let form = new formidable.IncomingForm();
-  form.keepExtensions = true;
-  form.parse(req, async (err, fields, files) => {
-    console.log(fields, files);
-    if (err) {
-      console.log(err.message);
-      return res.status(400).json({
-        error: "Photo could not be uploaded",
-      });
-    }
+  try {
     let user = req.profile;
-    user = extend(user, fields);
-    if (files.photo) {
-      user.photo.data = fs.readFileSync(files.photo.path);
-      user.photo.contentType = files.photo.type;
-    }
-    try {
-      await user.save();
-      user.password = undefined;
-      res.json(user);
-    } catch (err) {
-      return res.status(400).json({
-        error: errorHandler.getErrorMessage(err),
-      });
-    }
-  });
+    user = extend(user, req.body);
+    await user.save();
+    user.password = undefined;
+    res.json(user);
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
+  }
 };
 const remove = async (req, res) => {
   try {
@@ -108,6 +96,31 @@ const isSeller = (req, res, next) => {
   next();
 };
 
+const stripe_auth = (req, res, next) => {
+  request(
+    {
+      url: "https://connect.stripe.com/oauth/token",
+      method: "POST",
+      json: true,
+      body: {
+        client_secret: config.stripe_test_secret_key,
+        code: req.body.stripe,
+        grant_type: "authorization_code",
+      },
+    },
+    (error, response, body) => {
+      if (body.error) {
+        return res.status(400).json({
+          error: body.error_description,
+        });
+      }
+      console.log(body);
+      req.body.stripe_seller = body;
+      next();
+    }
+  );
+};
+
 module.exports = {
   create,
   userByID,
@@ -117,4 +130,5 @@ module.exports = {
   update,
   photo,
   isSeller,
+  stripe_auth,
 };

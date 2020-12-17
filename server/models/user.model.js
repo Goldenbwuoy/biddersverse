@@ -33,6 +33,8 @@ const UserSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    stripe_seller: {},
+    stripe_customer: {},
     password: {
       type: String,
       required: "Password is required",
