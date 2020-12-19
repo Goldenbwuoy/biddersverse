@@ -1,6 +1,10 @@
 import { Button, Icon, makeStyles, Typography } from "@material-ui/core";
 import React, { useState } from "react";
-import { CardElement } from "react-stripe-elements";
+import PropTypes from "prop-types";
+import { CardElement, injectStripe } from "react-stripe-elements";
+import auth from "../auth/auth-helper";
+import { create } from "../order/api-order";
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   subheading: {
@@ -30,14 +34,43 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function PlaceOrder() {
+function PlaceOrder(props) {
   const classes = useStyles();
+  const { token, user } = auth.isAuthenticated();
   const [values, setValues] = useState({
     order: {},
     error: "",
     redirect: false,
     orderId: "",
   });
+
+  const placeOrder = () => {
+    props.stripe.createToken().then((payload) => {
+      if (payload.error) {
+        setValues({ ...values, error: payload.error });
+      } else {
+        create(
+          { userId: user._id },
+          { token: token },
+          props.checkoutDetails,
+          payload.token.id
+        ).then((data) => {
+          console.log(data);
+          if (data && data.error) {
+            setValues({ ...values, error: data.error });
+          } else {
+            console.log(data);
+            setValues({ ...values, orderId: data._id, redirect: true });
+          }
+        });
+      }
+    });
+  };
+
+  if (values.redirect) {
+    return <Redirect to="/order" />;
+  }
+  console.log(props.checkoutDetails);
   return (
     <span>
       <Typography
@@ -74,7 +107,7 @@ function PlaceOrder() {
             {values.error}
           </Typography>
         )}
-        <Button color="secondary" variant="contained">
+        <Button color="secondary" variant="contained" onClick={placeOrder}>
           Place Order
         </Button>
       </div>
@@ -82,4 +115,8 @@ function PlaceOrder() {
   );
 }
 
-export default PlaceOrder;
+// PlaceOrder.propTypes = {
+//   checkoutDetails: PropTypes.isRequired,
+// };
+
+export default injectStripe(PlaceOrder);

@@ -43,12 +43,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Checkout() {
+function Checkout({ auction }) {
   const classes = useStyles();
+
   const { user } = auth.isAuthenticated();
-  console.log(user);
+  const product = { auction: auction, seller: auction.seller };
   const [values, setValues] = useState({
     checkoutDetails: {
+      product: product,
       first_name: user.firstName,
       last_name: user.lastName,
       email: user.email,
@@ -169,7 +171,7 @@ function Checkout() {
       )}
       <div>
         <Elements>
-          <PlaceOrder />
+          <PlaceOrder checkoutDetails={values.checkoutDetails} />
         </Elements>
       </div>
     </Card>

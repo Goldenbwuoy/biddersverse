@@ -225,7 +225,7 @@ function Auction({ match }) {
           {justEnded &&
           auth.isAuthenticated().user._id === auction.bids[0].bidder._id ? (
             <StripeProvider apiKey={client_config.stripe_test_api_key}>
-              <Checkout />
+              <Checkout auction={auction} />
             </StripeProvider>
           ) : (
             <Suggestions auctions={relatedAuctions} title="Related Auctions" />
