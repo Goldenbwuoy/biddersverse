@@ -7,6 +7,16 @@ router
   .route("/api/orders/:userId")
   .post(authCtrl.requireSignin, userCtrl.stipeCustomer, orderCtrl.create);
 
+router
+  .route("/api/orders/seller/:userId")
+  .get(authCtrl.requireSignin, orderCtrl.listBySeller);
+
+router
+  .route("/api/orders/buyer/:userId")
+  .get(authCtrl.requireSignin, orderCtrl.listByBuyer);
+
+router.route("/api/order/status_values").get(orderCtrl.getStatusValues);
+
 router.param("userId", userCtrl.userByID);
 
 module.exports = router;

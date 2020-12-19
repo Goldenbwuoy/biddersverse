@@ -16,6 +16,7 @@ import Profile from "./user/Profile";
 import Signup from "./user/Signup";
 import StripeConnect from "./user/StripeConnect";
 import Order from "./order/Order";
+import SellerOrders from "./order/SellerOrders";
 
 function MainRouter() {
   return (
@@ -45,6 +46,7 @@ function MainRouter() {
         <PrivateRoute path="/auctions/live/bids" component={AuctionsByBidder} />
         <PrivateRoute path="/auctions/won/bids" component={AuctionsByBidder} />
         <PrivateRoute path="/order" component={Order} />
+        <PrivateRoute path="/seller/orders" component={SellerOrders} />
         <Route path="/auctions/all" component={OpenAuctions} />
         <Route
           path="/auctions/categories/:categoryId"

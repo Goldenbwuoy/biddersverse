@@ -14,4 +14,35 @@ const create = async (req, res) => {
   }
 };
 
-module.exports = { create };
+const listBySeller = async (req, res) => {
+  try {
+    let orders = await Order.find({ "product.seller": req.profile._id })
+      .populate("product.auction", "_id itemName bids")
+      .sort("-createAt")
+      .exec();
+    res.json(orders);
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
+  }
+};
+
+const listByBuyer = async (req, res) => {
+  try {
+    let orders = await Order.find({ user: req.profile._id })
+      .sort("-createAt")
+      .exec();
+    res.json(orders);
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
+  }
+};
+
+const getStatusValues = (req, res) => {
+  res.json(AuctionItem.schema.path("status").enumValues);
+};
+
+module.exports = { create, listBySeller, listByBuyer, getStatusValues };

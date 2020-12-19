@@ -14,7 +14,7 @@ POST http://localhost:5000/api/signin
 Content-Type: application/json
 
 {
-    "email": "goldentmc@163.com",
+    "email": "golden@mail.com",
     "password": "password"
 }
 
@@ -64,3 +64,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmMxZjAzM
 ### retrieve auctions by bidder (won)
 GET http://localhost:5000/api/auctions/bid/won/5fc1f0330c400d4094ad3fce
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmMxZjAzMzBjNDAwZDQwOTRhZDNmY2UiLCJpYXQiOjE2MDc0OTU3NTB9.u8qMt-6gwaJ5wBOSJl2KAwwTYmNPXDZguLdcCDg5Nwc
+
+### Retrieve orders by seller
+GET http://localhost:5000/api/orders/seller/5fc1f0330c400d4094ad3fce
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmMxZjAzMzBjNDAwZDQwOTRhZDNmY2UiLCJpYXQiOjE2MDgzNTQ4MjJ9.-xPA83TTCiDlFDPT7E0Zbdp4yRPpPPR5zFEElNJFVm8
+
+### Retrieve orders by buyer
+GET http://localhost:5000/api/orders/buyer/5fc0d0588f7e4e3f7cb94342
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmMwZDA1ODhmN2U0ZTNmN2NiOTQzNDIiLCJpYXQiOjE2MDgzNTUyMDN9.aXd-FdKjKPDvOfQEHQee276Ptuogq91vs3XRMRBNYc4
+
+###
+GET http://localhost:5000/api/order/status_values
+
+
