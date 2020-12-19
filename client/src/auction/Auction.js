@@ -14,6 +14,9 @@ import AuctionSettingsMenu from "./AuctionSettingsMenu";
 import { getAuctionImage } from "../helpers/auction-helper.js";
 import Suggestions from "./Suggestions.js";
 import Chat from "./chat/Chat.js";
+import { StripeProvider } from "react-stripe-elements";
+import Checkout from "../checkout/Checkout";
+import client_config from "../config/client_config";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -219,7 +222,14 @@ function Auction({ match }) {
           {auth.isAuthenticated() && <Chat auction={auction} />}
         </Grid>
         <Grid item xs={4} sm={4}>
-          <Suggestions auctions={relatedAuctions} title="Related Auctions" />
+          {justEnded &&
+          auth.isAuthenticated().user._id === auction.bids[0].bidder._id ? (
+            <StripeProvider apiKey={client_config.stripe_test_api_key}>
+              <Checkout />
+            </StripeProvider>
+          ) : (
+            <Suggestions auctions={relatedAuctions} title="Related Auctions" />
+          )}
         </Grid>
       </Grid>
     </div>
