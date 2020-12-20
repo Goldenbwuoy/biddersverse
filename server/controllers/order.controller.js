@@ -41,8 +41,36 @@ const listByBuyer = async (req, res) => {
   }
 };
 
-const getStatusValues = (req, res) => {
-  res.json(AuctionItem.schema.path("status").enumValues);
+const OrderById = async (req, res, next, id) => {
+  try {
+    const order = await Order.findById(id)
+      .populate("product.auction", "_id itemName bids")
+      .exec();
+    if (!order) {
+      return res.status(400).json({ error: "Order not found" });
+    }
+    req.order = order;
+    next();
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
+  }
 };
 
-module.exports = { create, listBySeller, listByBuyer, getStatusValues };
+const read = (req, res) => {
+  return res.json(req.order);
+};
+
+const getStatusValues = (req, res) => {
+  res.json(Order.schema.path("product.status").enumValues);
+};
+
+module.exports = {
+  create,
+  listBySeller,
+  listByBuyer,
+  getStatusValues,
+  OrderById,
+  read,
+};

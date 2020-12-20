@@ -24,6 +24,7 @@ const listBySeller = async (params, credentials, signal) => {
           Accept: "application/json",
           Authorization: `Bearer ${credentials.token}`,
         },
+        signal,
       }
     );
     return response.json();
@@ -32,9 +33,44 @@ const listBySeller = async (params, credentials, signal) => {
   }
 };
 
+const listByBuyer = async (params, credentials, signal) => {
+  try {
+    let response = await fetch(
+      `${BASE_URL}/api/orders/buyer/${params.userId}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${credentials.token}`,
+        },
+        signal,
+      }
+    );
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const read = async (params, credentials, signal) => {
+  try {
+    let response = await fetch(`${BASE_URL}/api/order/${params.orderId}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${credentials.token}`,
+      },
+      signal,
+    });
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const getStatusValues = async (signal) => {
   try {
-    let response = await fetch(`${BASE_URL}/api/order/status_values`, {
+    let response = await fetch(`${BASE_URL}/api/orders/status_values`, {
       method: "GET",
       signal: signal,
     });
@@ -44,4 +80,4 @@ const getStatusValues = async (signal) => {
   }
 };
 
-export { create, listBySeller, getStatusValues };
+export { create, listBySeller, getStatusValues, listByBuyer, read };

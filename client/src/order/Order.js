@@ -1,11 +1,269 @@
-import { Typography } from "@material-ui/core";
-import React from "react";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Divider,
+  Grid,
+  makeStyles,
+  Typography,
+} from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import auth from "../auth/auth-helper";
+import { getAuctionImage } from "../helpers/auction-helper";
+import { read } from "./api-order";
 
-function Order() {
+const useStyles = makeStyles((theme) => ({
+  card: {
+    textAlign: "center",
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(2),
+    flexGrow: 1,
+    margin: 30,
+  },
+  cart: {
+    textAlign: "left",
+    width: "100%",
+    display: "inline-flex",
+  },
+  details: {
+    display: "inline-block",
+    width: "100%",
+    padding: "4px",
+  },
+  content: {
+    flex: "1 0 auto",
+    padding: "16px 8px 0px",
+  },
+  cover: {
+    width: 160,
+    height: 125,
+    margin: "8px",
+  },
+  info: {
+    color: "rgba(83, 170, 146, 0.82)",
+    fontSize: "0.95rem",
+    display: "inline",
+  },
+  thanks: {
+    color: "rgb(136, 183, 107)",
+    fontSize: "0.9rem",
+    fontStyle: "italic",
+  },
+  innerCardItems: {
+    textAlign: "left",
+    margin: "24px 10px 24px 24px",
+    padding: "24px 20px 40px 20px",
+    backgroundColor: "#80808017",
+  },
+  innerCard: {
+    textAlign: "left",
+    margin: "24px 24px 24px 10px",
+    padding: "30px 45px 40px 45px",
+    backgroundColor: "#80808017",
+  },
+  title: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+    color: theme.palette.protectedTitle,
+    fontSize: "1.2em",
+  },
+  subheading: {
+    marginTop: theme.spacing(1),
+    color: theme.palette.openTitle,
+  },
+  productTitle: {
+    fontSize: "1.15em",
+    marginBottom: "5px",
+  },
+  itemTotal: {
+    float: "right",
+    marginRight: "40px",
+    fontSize: "1.5em",
+    color: "rgb(72, 175, 148)",
+  },
+  itemShop: {
+    display: "block",
+    fontSize: "1em",
+    color: "#78948f",
+  },
+  checkout: {
+    float: "right",
+    margin: "24px",
+  },
+  total: {
+    fontSize: "1.2em",
+    color: "rgb(53, 97, 85)",
+    marginRight: "16px",
+    fontWeight: "600",
+    verticalAlign: "bottom",
+  },
+}));
+
+function Order({ match }) {
+  const classes = useStyles();
+  const { token } = auth.isAuthenticated();
+  const [order, setOrder] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    read(
+      {
+        orderId: match.params.orderId,
+      },
+      { token: token },
+      signal
+    ).then((data) => {
+      if (data && data.error) {
+        console.log(data.error);
+      } else {
+        console.log(data);
+        setOrder(data);
+        setLoading(false);
+      }
+    });
+    return function cleanup() {
+      abortController.abort();
+    };
+  }, [match.params.orderId, token]);
+
+  const getWinningBid = () => {
+    return order?.product.auction.bids[0].bid;
+  };
+
   return (
-    <div>
-      <Typography>Order places successfully</Typography>
-    </div>
+    <Card className={classes.card}>
+      <Typography type="headline" component="h2" className={classes.title}>
+        Order Details
+      </Typography>
+      {!loading && (
+        <>
+          <Typography
+            type="subheading"
+            component="h2"
+            className={classes.subheading}
+          >
+            Order Code: <strong>{order._id}</strong> <br /> Placed on{" "}
+            {new Date(order.createdAt).toDateString()}
+          </Typography>
+          <br />
+          <Grid container spacing={4}>
+            <Grid item xs={7} sm={7}>
+              <Card className={classes.innerCardItems}>
+                <span>
+                  <Card className={classes.cart}>
+                    <CardMedia
+                      className={classes.cover}
+                      image={getAuctionImage(order.product.auction)}
+                      title={order.product.auction.itemName}
+                    />
+                    <div className={classes.details}>
+                      <CardContent className={classes.content}>
+                        <Typography
+                          type="title"
+                          component="h3"
+                          className={classes.productTitle}
+                          color="primary"
+                        >
+                          <strong>{order.product.auction.itemName}</strong>
+                        </Typography>
+
+                        <Typography
+                          type="subheading"
+                          component="h3"
+                          color={
+                            order.status === "Cancelled" ? "error" : "primary"
+                          }
+                        >
+                          Status: {order.product.status}
+                        </Typography>
+                      </CardContent>
+                    </div>
+                  </Card>
+                  <Divider />
+                </span>
+                <div className={classes.checkout}>
+                  <span className={classes.total}>
+                    Winning Bid: ${getWinningBid()}
+                  </span>
+                </div>
+              </Card>
+            </Grid>
+            <Grid item xs={5} sm={5}>
+              <Card className={classes.innerCard}>
+                <Typography
+                  type="subheading"
+                  component="h2"
+                  className={classes.productTitle}
+                  color="primary"
+                >
+                  Deliver to:
+                </Typography>
+                <Typography
+                  type="subheading"
+                  component="h3"
+                  className={classes.info}
+                  color="primary"
+                >
+                  <strong>{`${order.first_name} ${order.last_name}`}</strong>
+                </Typography>
+                <br />
+                <Typography
+                  type="subheading"
+                  component="h3"
+                  className={classes.info}
+                  color="primary"
+                >
+                  {order.email}
+                </Typography>
+                <br />
+                <br />
+                <Divider />
+                <br />
+                <Typography
+                  type="subheading"
+                  component="h3"
+                  className={classes.itemShop}
+                  color="primary"
+                >
+                  {order.delivery_address.street}
+                </Typography>
+                <Typography
+                  type="subheading"
+                  component="h3"
+                  className={classes.itemShop}
+                  color="primary"
+                >
+                  {order.delivery_address.city},{" "}
+                  {order.delivery_address.province}{" "}
+                  {order.delivery_address.zipcode}
+                </Typography>
+                <Typography
+                  type="subheading"
+                  component="h3"
+                  className={classes.itemShop}
+                  color="primary"
+                >
+                  {order.delivery_address.country}
+                </Typography>
+                <br />
+                <Typography
+                  type="subheading"
+                  component="h3"
+                  className={classes.thanks}
+                  color="primary"
+                >
+                  Thank you for shopping with us! <br />
+                  You can track the status of your purchased items on this page.
+                </Typography>
+              </Card>
+            </Grid>
+          </Grid>
+        </>
+      )}
+    </Card>
   );
 }
 

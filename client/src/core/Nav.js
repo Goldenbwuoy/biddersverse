@@ -125,13 +125,11 @@ const Nav = ({ history }) => {
       path: "/auctions/sold/by-seller",
       status: "sold",
     },
-    { title: "Orders", path: "/auctions/all/by-seller", status: "all" },
   ]);
   const [myBids, setMyBids] = useState([
     { title: "All Placed Bids", path: `/auctions/all/bids`, status: "all" },
     { title: "Live Bids", path: `/auctions/live/bids`, status: "live" },
     { title: "Won Bids", path: `/auctions/won/bids`, status: "won" },
-    { title: "Orders", path: `/auctions/all/bids`, status: "all" },
   ]);
 
   useEffect(() => {
@@ -315,6 +313,14 @@ const Nav = ({ history }) => {
                             </ListItem>
                           </Link>
                         ))}
+                        <Link
+                          className={classes.drawerLinks}
+                          to="/seller/orders"
+                        >
+                          <ListItem button onClick={handleDrawerClose}>
+                            <ListItemText primary="Orders" />
+                          </ListItem>
+                        </Link>
                       </List>
                     </div>
                     <Divider />
@@ -347,6 +353,11 @@ const Nav = ({ history }) => {
                         </ListItem>
                       </Link>
                     ))}
+                    <Link className={classes.drawerLinks} to="/buyer/orders">
+                      <ListItem button onClick={handleDrawerClose}>
+                        <ListItemText primary="Orders" />
+                      </ListItem>
+                    </Link>
                   </List>
                 </div>
                 <Divider className={classes.divider} />

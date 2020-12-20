@@ -65,7 +65,7 @@ function OrderUpdate({ order }) {
     };
   }, []);
 
-  console.log(order.product[0].status);
+  console.log(order);
 
   return (
     <div>
@@ -83,10 +83,10 @@ function OrderUpdate({ order }) {
               <div>
                 <img
                   className={classes.listImg}
-                  src={getAuctionImage(order.product[0].auction)}
+                  src={getAuctionImage(order.product.auction)}
                 />
                 <div className={classes.listDetails}>
-                  {order.product[0].auction.itemName}
+                  {order.product.auction.itemName}
                 </div>
               </div>
             }
@@ -96,7 +96,7 @@ function OrderUpdate({ order }) {
             select
             label="Update Status"
             className={classes.textField}
-            value={order.product[0].status}
+            value={order.product.status}
             // onChange={handleStatusChange(index)}
             SelectProps={{
               MenuProps: {

@@ -15,8 +15,11 @@ router
   .route("/api/orders/buyer/:userId")
   .get(authCtrl.requireSignin, orderCtrl.listByBuyer);
 
-router.route("/api/order/status_values").get(orderCtrl.getStatusValues);
+router.route("/api/order/:orderId").get(authCtrl.requireSignin, orderCtrl.read);
+
+router.route("/api/orders/status_values").get(orderCtrl.getStatusValues);
 
 router.param("userId", userCtrl.userByID);
+router.param("orderId", orderCtrl.OrderById);
 
 module.exports = router;
