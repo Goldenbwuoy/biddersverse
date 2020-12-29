@@ -149,14 +149,20 @@ function Bidding(props) {
               <div>
                 {user._id === props.auction.bids[0].bidder._id && (
                   <>
-                    <Typography className={classes.message}>
-                      Congratulations!!!! You have won this Auction. You must
-                      Pay for the item within 72 hours. Click the button below
-                      to proceed to checkout
-                    </Typography>
-                    <Link className={classes.marginBtn} to="#">
-                      Proceed to checkout
-                    </Link>
+                    {props.auction.purchased ? (
+                      <Typography className={classes.message}>
+                        You have paid for the auction won, to check track your
+                        orders <Link to="/buyer/orders">Click here</Link>. Thank
+                        you for bidding with Biddersverse 🚀
+                      </Typography>
+                    ) : (
+                      <Typography className={classes.message}>
+                        Congratulations!!!! You have won this Auction. Winners
+                        are required to pay for the won items within 72 hours.
+                        Enter your checkout details to place your order. Thank
+                        you for bidding with Biddersverse 🚀
+                      </Typography>
+                    )}
                   </>
                 )}
               </div>

@@ -68,7 +68,7 @@ function PlaceOrder(props) {
   };
 
   if (values.redirect) {
-    return <Redirect to="/order" />;
+    return <Redirect to={`/order/${values.orderId}`} />;
   }
   console.log(props.checkoutDetails);
   return (

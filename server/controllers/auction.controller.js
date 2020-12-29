@@ -286,6 +286,18 @@ const remove = async (req, res) => {
   }
 };
 
+const setPurchased = async (req, res, next) => {
+  try {
+    const auctionId = req.body.order.product.auction._id;
+    await Auction.findOneAndUpdate({ _id: auctionId }, { purchased: true });
+    next();
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
+  }
+};
+
 module.exports = {
   create,
   listOpen,
@@ -305,4 +317,5 @@ module.exports = {
   search,
   listOpenByBidder,
   listWonByBidder,
+  setPurchased,
 };

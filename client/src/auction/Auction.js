@@ -223,7 +223,8 @@ function Auction({ match }) {
         </Grid>
         <Grid item xs={4} sm={4}>
           {justEnded &&
-          auth.isAuthenticated().user._id === auction.bids[0].bidder._id ? (
+          !auction.purchased &&
+          auth.isAuthenticated().user._id === auction.bids[0]?.bidder._id ? (
             <StripeProvider apiKey={client_config.stripe_test_api_key}>
               <Checkout auction={auction} />
             </StripeProvider>

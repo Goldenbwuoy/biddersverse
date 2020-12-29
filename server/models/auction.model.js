@@ -50,6 +50,10 @@ const AuctionSchema = new mongoose.Schema(
         time: Date,
       },
     ],
+    purchased: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

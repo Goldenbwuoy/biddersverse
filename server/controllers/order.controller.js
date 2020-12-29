@@ -31,6 +31,7 @@ const listBySeller = async (req, res) => {
 const listByBuyer = async (req, res) => {
   try {
     let orders = await Order.find({ user: req.profile._id })
+      .populate("product.auction", "_id itemName bids")
       .sort("-createAt")
       .exec();
     res.json(orders);
@@ -62,6 +63,16 @@ const read = (req, res) => {
   return res.json(req.order);
 };
 
+const isWinner = async (req, res, next) => {
+  const isWinner = req.order && req.auth && req.order.user == req.auth._id;
+  if (!isWinner) {
+    return res.status("403").json({
+      error: "Not authorized to view this order",
+    });
+  }
+  next();
+};
+
 const getStatusValues = (req, res) => {
   res.json(Order.schema.path("product.status").enumValues);
 };
@@ -73,4 +84,5 @@ module.exports = {
   getStatusValues,
   OrderById,
   read,
+  isWinner,
 };

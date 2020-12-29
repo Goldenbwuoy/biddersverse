@@ -47,6 +47,7 @@ function MyOrders() {
       if (data && data.error) {
         console.log(data.error);
       } else {
+        console.log(data);
         setOrders(data);
       }
     });
@@ -66,7 +67,7 @@ function MyOrders() {
             <Link className={classes.link} to={`/order/${order._id}`}>
               <ListItem button>
                 <ListItemText
-                  primary={<strong>{`Order # ${order._id}`}</strong>}
+                  primary={<strong>{order.product.auction.itemName}</strong>}
                   secondary={new Date(order.createdAt).toDateString()}
                 />
               </ListItem>
