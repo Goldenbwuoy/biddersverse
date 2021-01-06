@@ -80,4 +80,13 @@ GET http://localhost:5000/api/orders/status_values
 GET http://localhost:5000/api/order/5fde93d2971a0910608e2077
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmMxZjAzMzBjNDAwZDQwOTRhZDNmY2UiLCJpYXQiOjE2MDgzNTQ4MjJ9.-xPA83TTCiDlFDPT7E0Zbdp4yRPpPPR5zFEElNJFVm8
 
+###
+POST http://localhost:5000/api/admin 
+Content-Type: application/json
+
+{
+    "name": "admin",
+    "password": "admin"
+}
+
 
