@@ -1,4 +1,12 @@
-import { Button, makeStyles, Menu, MenuItem } from "@material-ui/core";
+import {
+  Button,
+  Icon,
+  makeStyles,
+  Menu,
+  MenuItem,
+  Tooltip,
+} from "@material-ui/core";
+import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import React from "react";
 import { Link } from "react-router-dom";
 import auth from "../auth/auth-helper";
@@ -13,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 function MyBidsMenu() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const user = auth.isAuthenticated().user;
+  const { user } = auth.isAuthenticated();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -25,14 +33,17 @@ function MyBidsMenu() {
 
   return (
     <div>
-      <Button
-        aria-controls="bids-menu"
-        aria-haspopup="true"
-        color="inherit"
-        onClick={handleClick}
-      >
-        My Bids
-      </Button>
+      <Tooltip title="Orders">
+        <Button
+          color="inherit"
+          aria-controls="bids-menu"
+          aria-haspopup="true"
+          color="inherit"
+          onClick={handleClick}
+        >
+          <ShoppingBasketIcon />
+        </Button>
+      </Tooltip>
 
       <Menu
         id="bids-menu"
@@ -41,19 +52,17 @@ function MyBidsMenu() {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
+        {user.seller && (
+          <MenuItem onClick={handleClose}>
+            <Link className={classes.link} to="/seller/orders">
+              Sold Items
+            </Link>{" "}
+          </MenuItem>
+        )}
+
         <MenuItem onClick={handleClose}>
-          <Link className={classes.link} to={`/auctions/all/bids/${user._id}`}>
-            All bids
-          </Link>{" "}
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Link className={classes.link} to={`/auctions/live/bids/${user._id}`}>
-            Live bids
-          </Link>
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Link className={classes.link} to={`/auctions/won/bids/${user._id}`}>
-            Won bids
+          <Link className={classes.link} to="/buyer/orders">
+            Bought Items
           </Link>
         </MenuItem>
       </Menu>

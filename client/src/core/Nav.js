@@ -20,6 +20,7 @@ import { Link, withRouter } from "react-router-dom";
 import { Box, Button, Tooltip } from "@material-ui/core";
 import auth from "../auth/auth-helper";
 import { listCategories } from "../category/api-category";
+import MyBidsMenu from "./MyBidsMenu";
 
 const drawerWidth = 340;
 
@@ -75,6 +76,7 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbarRight: {
     display: "flex",
+    alignItems: "center",
   },
   dividerColor: {
     backgroundColor: "red",
@@ -199,6 +201,8 @@ const Nav = ({ history }) => {
 
           {auth.isAuthenticated() && (
             <span className={classes.toolbarRight}>
+              <MyBidsMenu />
+
               <Link
                 className={classes.links}
                 to={"/user/" + auth.isAuthenticated().user._id}
@@ -313,14 +317,6 @@ const Nav = ({ history }) => {
                             </ListItem>
                           </Link>
                         ))}
-                        <Link
-                          className={classes.drawerLinks}
-                          to="/seller/orders"
-                        >
-                          <ListItem button onClick={handleDrawerClose}>
-                            <ListItemText primary="Orders" />
-                          </ListItem>
-                        </Link>
                       </List>
                     </div>
                     <Divider />
@@ -353,11 +349,6 @@ const Nav = ({ history }) => {
                         </ListItem>
                       </Link>
                     ))}
-                    <Link className={classes.drawerLinks} to="/buyer/orders">
-                      <ListItem button onClick={handleDrawerClose}>
-                        <ListItemText primary="Orders" />
-                      </ListItem>
-                    </Link>
                   </List>
                 </div>
                 <Divider className={classes.divider} />
