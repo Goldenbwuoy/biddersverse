@@ -80,7 +80,7 @@ GET http://localhost:5000/api/orders/status_values
 GET http://localhost:5000/api/order/5fde93d2971a0910608e2077
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmMxZjAzMzBjNDAwZDQwOTRhZDNmY2UiLCJpYXQiOjE2MDgzNTQ4MjJ9.-xPA83TTCiDlFDPT7E0Zbdp4yRPpPPR5zFEElNJFVm8
 
-###
+### create admin
 POST http://localhost:5000/api/admin 
 Content-Type: application/json
 
@@ -89,4 +89,27 @@ Content-Type: application/json
     "password": "admin"
 }
 
+### list all admins
+GET http://localhost:5000/api/admin 
+
+### admin login
+POST http://localhost:5000/api/admin/signin
+Content-Type: application/json
+
+{
+    "name": "admin",
+    "password": "admin"
+}
+
+### list all users
+GET http://localhost:5000/api/admin/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDAyNjNhOTc0MTU1YjIwN2M5NmMzM2UiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTA3NzI0NDd9.pYjBLnvw2WsvXXPOSZl4FXlAVu2oY7Qn-dn66mB509U
+
+### list all auctions
+GET http://localhost:5000/api/admin/auctions
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDAyNjNhOTc0MTU1YjIwN2M5NmMzM2UiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTA3NzI0NDd9.pYjBLnvw2WsvXXPOSZl4FXlAVu2oY7Qn-dn66mB509U
+
+### list all orders
+GET http://localhost:5000/api/admin/orders
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDAyNjNhOTc0MTU1YjIwN2M5NmMzM2UiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTA3NzI0NDd9.pYjBLnvw2WsvXXPOSZl4FXlAVu2oY7Qn-dn66mB509U
 

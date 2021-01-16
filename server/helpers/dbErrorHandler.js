@@ -23,14 +23,11 @@ const getErrorMessage = (err) => {
 const getUniqueErrorMessage = (err) => {
   let output;
   try {
-    let fieldName = err.message.substring(
-      err.message.lastIndexOf(".$") | +2,
-      err.message.lastIndexOf("_1")
-    );
-    output =
-      fieldName.charAt(0).toUpperCase() +
-      fieldName.slice(1) +
-      " already exists";
+    const regex = /index\:\ (?:.*\.)?\$?(?:([_a-z0-9]*)(?:_\d*)|([_a-z0-9]*))\s*dup key/i,
+      match = err.message.match(regex),
+      indexName = match[1] || match[2];
+
+    output = indexName + " already exists";
   } catch (ex) {
     output = "unique field already exists";
   }

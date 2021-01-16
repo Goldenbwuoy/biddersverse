@@ -2,6 +2,7 @@ const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 const config = require("./../config/config");
+const Admin = require("../models/admin.model");
 
 const signin = async (req, res) => {
   try {
@@ -52,4 +53,44 @@ const hasAuthorization = (req, res, next) => {
   next();
 };
 
-module.exports = { signin, signout, requireSignin, hasAuthorization };
+const adminSignin = async (req, res) => {
+  try {
+    let admin = await Admin.findOne({ name: req.body.name });
+    if (!admin) return res.status(401).json({ error: "Admin not found" });
+
+    const authenticated = await admin.authenticate(req.body.password);
+    if (!authenticated) {
+      return res.status(401).json({ error: "Invalid password" });
+    }
+    const token = jwt.sign({ _id: admin._id, isAdmin: true }, config.jwtSecret);
+    return res.json({
+      token,
+      admin: {
+        _id: admin._id,
+        name: admin.name,
+      },
+    });
+  } catch (err) {
+    console.log(err.message);
+    return res.status(400).json({ error: "Could not sign in" });
+  }
+};
+
+const isAdmin = (req, res, next) => {
+  const authorized = req.auth && req.auth.isAdmin;
+  if (!authorized) {
+    return res.status(403).json({
+      error: "Authorization failed. Only the Admin is Authorized",
+    });
+  }
+  next();
+};
+
+module.exports = {
+  signin,
+  signout,
+  requireSignin,
+  hasAuthorization,
+  adminSignin,
+  isAdmin,
+};

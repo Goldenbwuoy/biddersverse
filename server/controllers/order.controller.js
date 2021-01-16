@@ -1,4 +1,4 @@
-const { Order, AuctionItem } = require("../models/order.model");
+const Order = require("../models/order.model");
 const errorHandler = require("../helpers/dbErrorHandler");
 
 const create = async (req, res) => {
