@@ -7,7 +7,7 @@ import EditAuction from "./auction/EditAuction";
 import AuctionsBySeller from "./auction/AuctionsBySeller";
 import NewAuction from "./auction/NewAuction";
 import OpenAuctions from "./auction/OpenAuctions";
-import PrivateRoute from "./auth/PrivateRoute";
+import UserRoute from "./auth/UserRoute";
 import SignIn from "./auth/SignIn";
 import Home from "./core/Home";
 import Nav from "./core/Nav";
@@ -20,47 +20,49 @@ import SellerOrders from "./order/SellerOrders";
 import MyOrders from "./order/MyOrders";
 import AdminSignIn from "./auth/AdminSignIn";
 import Dashboard from "./admin/dashboard/Dashboard";
+import PublicRoute from "./auth/PublicRoute";
+import AdminRoute from "./auth/AdminRoute";
 
 function MainRouter() {
   return (
     <div>
-      <Nav />
+      {/* <Nav /> */}
       <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path="/signup" component={Signup} />
-        <Route path="/signin" component={SignIn} />
-        <Route path="/adminLogin" component={AdminSignIn} />
-        <Route path="/seller/stripe/connect" component={StripeConnect} />
-        <PrivateRoute path="/user/edit/:userId" component={EditProfile} />
-        <PrivateRoute path="/auction/new" component={NewAuction} />
-        <PrivateRoute path="/auction/edit/:auctionId" component={EditAuction} />
-        <PrivateRoute
+        <PublicRoute exact path="/" component={Home} />
+        <PublicRoute path="/signup" component={Signup} />
+        <PublicRoute path="/signin" component={SignIn} />
+        <PublicRoute path="/adminLogin" component={AdminSignIn} />
+        <UserRoute path="/seller/stripe/connect" component={StripeConnect} />
+        <UserRoute path="/user/edit/:userId" component={EditProfile} />
+        <UserRoute path="/auction/new" component={NewAuction} />
+        <UserRoute path="/auction/edit/:auctionId" component={EditAuction} />
+        <UserRoute
           path="/auctions/all/by-seller"
           component={AuctionsBySeller}
         />
-        <PrivateRoute
+        <UserRoute
           path="/auctions/live/by-seller"
           component={AuctionsBySeller}
         />
-        <PrivateRoute
+        <UserRoute
           path="/auctions/sold/by-seller"
           component={AuctionsBySeller}
         />
-        <PrivateRoute path="/auctions/all/bids" component={AuctionsByBidder} />
-        <PrivateRoute path="/auctions/live/bids" component={AuctionsByBidder} />
-        <PrivateRoute path="/auctions/won/bids" component={AuctionsByBidder} />
-        <PrivateRoute path="/order/:orderId" component={Order} />
-        <PrivateRoute path="/seller/orders" component={SellerOrders} />
-        <PrivateRoute path="/buyer/orders" component={MyOrders} />
-        <Route path="/auctions/all" component={OpenAuctions} />
-        <Route
+        <UserRoute path="/auctions/all/bids" component={AuctionsByBidder} />
+        <UserRoute path="/auctions/live/bids" component={AuctionsByBidder} />
+        <UserRoute path="/auctions/won/bids" component={AuctionsByBidder} />
+        <UserRoute path="/order/:orderId" component={Order} />
+        <UserRoute path="/seller/orders" component={SellerOrders} />
+        <UserRoute path="/buyer/orders" component={MyOrders} />
+        <PublicRoute path="/auctions/all" component={OpenAuctions} />
+        <PublicRoute
           path="/auctions/categories/:categoryId"
           component={AuctionsByCategory}
         />
-        <Route path="/auction/:auctionId" component={Auction} />
-        <Route path="/user/:userId" component={Profile} />
+        <PublicRoute path="/auction/:auctionId" component={Auction} />
+        <PublicRoute path="/user/:userId" component={Profile} />
 
-        <Route path="/admin/dashboard" component={Dashboard} />
+        <AdminRoute path="/admin/dashboard" component={Dashboard} />
       </Switch>
     </div>
   );

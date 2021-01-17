@@ -1,13 +1,17 @@
 import React, { Component } from "react";
 import { Route, Redirect } from "react-router-dom";
+import Nav from "../core/Nav";
 import auth from "./auth-helper";
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
+const UserRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={(props) =>
       auth.isAuthenticated() ? (
-        <Component {...props} />
+        <>
+          <Nav />
+          <Component {...props} />
+        </>
       ) : (
         <Redirect
           to={{
@@ -20,4 +24,4 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
   />
 );
 
-export default PrivateRoute;
+export default UserRoute;

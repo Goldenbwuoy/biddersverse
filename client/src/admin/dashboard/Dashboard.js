@@ -14,11 +14,15 @@ import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import Link from "@material-ui/core/Link";
+import { Link } from "react-router-dom";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { mainListItems, secondaryListItems } from "./listItems";
+import { Button, Tooltip } from "@material-ui/core";
+import auth from "../../auth/auth-helper";
 // import Chart from './Chart';
 // import Deposits from './Deposits';
 // import Orders from './Orders';
@@ -27,8 +31,12 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      <Link
+        style={{ textDecoration: "none" }}
+        color="inherit"
+        to="/admin/dashboard"
+      >
+        Biddersverse
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -115,9 +123,13 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  links: {
+    textDecoration: "none",
+    color: "white",
+  },
 }));
 
-export default function Dashboard() {
+export default function Dashboard({ history }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -155,13 +167,31 @@ export default function Dashboard() {
             noWrap
             className={classes.title}
           >
-            Dashboard
+            Biddersverse Admin Dashboard
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
               <NotificationsIcon />
             </Badge>
           </IconButton>
+          <Link className={classes.links} to="#">
+            <Tooltip title="Profile">
+              <Button color="inherit">
+                <AccountCircleIcon />
+              </Button>
+            </Tooltip>
+          </Link>
+          {/* Logout Icon button */}
+          <Tooltip title="Signout">
+            <Button
+              color="inherit"
+              onClick={() => {
+                auth.clearAdminJWT(() => history.push("/"));
+              }}
+            >
+              <ExitToAppIcon />
+            </Button>
+          </Tooltip>
         </Toolbar>
       </AppBar>
       <Drawer
