@@ -15,6 +15,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import OpenInBrowserIcon from "@material-ui/icons/OpenInBrowser";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { Link, withRouter } from "react-router-dom";
 import { Box, Button, Tooltip } from "@material-ui/core";
@@ -185,16 +186,13 @@ const Nav = ({ history }) => {
             </Typography>
           </Box>
           {!auth.isAuthenticated() && (
-            <span>
-              <Link className={classes.links} to="/signup">
-                <Button className={classes.authButton} color="inherit">
-                  Sign Up
-                </Button>
-              </Link>
+            <span className={classes.toolbarRight}>
               <Link className={classes.links} to="/signin">
-                <Button className={classes.authButton} color="inherit">
-                  Sign In
-                </Button>
+                <Tooltip title="Login">
+                  <Button color="inherit">
+                    <OpenInBrowserIcon />
+                  </Button>
+                </Tooltip>
               </Link>
             </span>
           )}
