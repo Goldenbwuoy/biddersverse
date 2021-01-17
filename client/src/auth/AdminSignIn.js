@@ -9,8 +9,8 @@ import Typography from "@material-ui/core/Typography";
 import Icon from "@material-ui/core/Icon";
 import { makeStyles } from "@material-ui/core/styles";
 import auth from "./../auth/auth-helper";
-import { Link, Redirect } from "react-router-dom";
-import { signin } from "./api-auth.js";
+import { Redirect } from "react-router-dom";
+import { adminSignin } from "./api-auth.js";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -36,36 +36,31 @@ const useStyles = makeStyles((theme) => ({
     margin: "auto",
     marginBottom: theme.spacing(2),
   },
-  links: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 300,
-    textDecoration: "none",
-  },
 }));
 
-function SignIn(props) {
+function AdminSignIn(props) {
   const classes = useStyles();
   const [values, setValues] = useState({
-    email: "",
+    name: "",
     password: "",
     error: "",
-    redirectToRefer: false,
+    redirectToDashboard: false,
   });
 
   const clickSubmit = (e) => {
     e.preventDefault();
-    const user = {
-      email: values.email || undefined,
+    const admin = {
+      name: values.name || undefined,
       password: values.password || undefined,
     };
 
-    signin(user).then((data) => {
+    adminSignin(admin).then((data) => {
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
-        auth.authenticate(data, () => {
-          setValues({ ...values, error: "", redirectToReferrer: true });
+        console.log(data);
+        auth.authenticateAdmin(data, () => {
+          setValues({ ...values, error: "", redirectToDashboard: true });
         });
       }
     });
@@ -75,29 +70,24 @@ function SignIn(props) {
     setValues({ ...values, [name]: event.target.value });
   };
 
-  const { from } = props.location.state || {
-    from: {
-      pathname: "/",
-    },
-  };
-  const { redirectToReferrer } = values;
-  if (redirectToReferrer) {
-    return <Redirect to={from} />;
+  const { redirectToDashboard } = values;
+  if (redirectToDashboard) {
+    return <Redirect to="/admin/dashboard" />;
   }
   return (
     <Card className={classes.card}>
       <CardContent>
         <Typography variant="h6" className={classes.title}>
-          Sign In
+          Administrator Sign In
         </Typography>
         <form onSubmit={clickSubmit}>
           <TextField
-            id="email"
-            type="email"
-            label="Email"
+            id="name"
+            type="name"
+            label="Name"
             className={classes.textField}
-            value={values.email}
-            onChange={handleChange("email")}
+            value={values.name}
+            onChange={handleChange("name")}
             margin="normal"
           />
           <br />
@@ -128,12 +118,9 @@ function SignIn(props) {
             </Button>
           </CardActions>
         </form>
-        <Link className={classes.links} to="/adminLogin">
-          Are you the admin? Go to Admin Sign In
-        </Link>
       </CardContent>
     </Card>
   );
 }
 
-export default SignIn;
+export default AdminSignIn;

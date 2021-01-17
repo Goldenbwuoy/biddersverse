@@ -1,4 +1,5 @@
 const auth = {
+  // User authentication functions
   authenticate(jwt, callback) {
     if (typeof window !== "undefined") {
       sessionStorage.setItem("jwt", JSON.stringify(jwt));
@@ -27,6 +28,28 @@ const auth = {
         cb();
       }
     }
+  },
+
+  // Admin authentication functions
+
+  authenticateAdmin(jwt, callback) {
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("admin-jwt", JSON.stringify(jwt));
+    }
+    callback();
+  },
+
+  isAdminAuthenticated() {
+    if (typeof window === "undefined") return false;
+
+    if (sessionStorage.getItem("admin-jwt"))
+      return JSON.parse(sessionStorage.getItem("admin-jwt"));
+    else return false;
+  },
+
+  clearAdminJWT(callback) {
+    if (typeof window !== "undefined") sessionStorage.removeItem("admin-jwt");
+    callback();
   },
 };
 

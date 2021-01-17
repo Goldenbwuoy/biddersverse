@@ -18,6 +18,8 @@ import StripeConnect from "./user/StripeConnect";
 import Order from "./order/Order";
 import SellerOrders from "./order/SellerOrders";
 import MyOrders from "./order/MyOrders";
+import AdminSignIn from "./auth/AdminSignIn";
+import Dashboard from "./admin/dashboard/Dashboard";
 
 function MainRouter() {
   return (
@@ -27,6 +29,7 @@ function MainRouter() {
         <Route exact path="/" component={Home} />
         <Route path="/signup" component={Signup} />
         <Route path="/signin" component={SignIn} />
+        <Route path="/adminLogin" component={AdminSignIn} />
         <Route path="/seller/stripe/connect" component={StripeConnect} />
         <PrivateRoute path="/user/edit/:userId" component={EditProfile} />
         <PrivateRoute path="/auction/new" component={NewAuction} />
@@ -56,6 +59,8 @@ function MainRouter() {
         />
         <Route path="/auction/:auctionId" component={Auction} />
         <Route path="/user/:userId" component={Profile} />
+
+        <Route path="/admin/dashboard" component={Dashboard} />
       </Switch>
     </div>
   );

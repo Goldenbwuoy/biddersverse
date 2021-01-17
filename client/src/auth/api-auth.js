@@ -17,4 +17,20 @@ const signin = async (user) => {
   }
 };
 
-export { signin };
+const adminSignin = async (admin) => {
+  try {
+    let response = await fetch(`${BASE_URL}/api/admin/signin`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(admin),
+    });
+    return await response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export { signin, adminSignin };
