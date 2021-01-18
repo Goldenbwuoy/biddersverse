@@ -22,6 +22,7 @@ import AdminSignIn from "./auth/AdminSignIn";
 import Dashboard from "./admin/dashboard/Dashboard";
 import PublicRoute from "./auth/PublicRoute";
 import AdminRoute from "./auth/AdminRoute";
+import AdminHome from "./admin/dashboard/Home";
 
 function MainRouter() {
   return (
@@ -62,7 +63,7 @@ function MainRouter() {
         <PublicRoute path="/auction/:auctionId" component={Auction} />
         <PublicRoute path="/user/:userId" component={Profile} />
 
-        <AdminRoute path="/admin/dashboard" component={Dashboard} />
+        <AdminRoute path="/admin/home" component={AdminHome} />
       </Switch>
     </div>
   );

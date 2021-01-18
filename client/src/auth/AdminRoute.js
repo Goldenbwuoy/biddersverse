@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Route, Redirect } from "react-router-dom";
+import Dashboard from "../admin/dashboard/Dashboard";
 import auth from "./auth-helper";
 
 const AdminRoute = ({ component: Component, ...rest }) => (
@@ -7,7 +8,10 @@ const AdminRoute = ({ component: Component, ...rest }) => (
     {...rest}
     render={(props) =>
       auth.isAdminAuthenticated() ? (
-        <Component {...props} />
+        <>
+          <Dashboard />
+          <Component {...props} />
+        </>
       ) : (
         <Redirect
           to={{

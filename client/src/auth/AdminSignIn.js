@@ -72,7 +72,7 @@ function AdminSignIn(props) {
 
   const { redirectToDashboard } = values;
   if (redirectToDashboard) {
-    return <Redirect to="/admin/dashboard" />;
+    return <Redirect to="/admin/home" />;
   }
   return (
     <Card className={classes.card}>
