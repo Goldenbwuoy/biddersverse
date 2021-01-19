@@ -1,6 +1,7 @@
 const express = require("express");
 const adminCtrl = require("../controllers/admin.controller");
 const authCtrl = require("../controllers/auth.controller");
+const categoryCtrl = require("../controllers/category.controller");
 const router = express.Router();
 
 router.route("/api/admin").post(adminCtrl.create).get(adminCtrl.list);
@@ -18,5 +19,9 @@ router
 router
   .route("/api/admin/orders")
   .get(authCtrl.requireSignin, authCtrl.isAdmin, adminCtrl.listOrders);
+
+router
+  .route("/api/admin/categories")
+  .get(authCtrl.requireSignin, authCtrl.isAdmin, categoryCtrl.list);
 
 module.exports = router;

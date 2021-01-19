@@ -44,7 +44,8 @@ const listAuctions = async (req, res) => {
   try {
     const auctions = await Auction.find({})
       .select("-image")
-      .populate("seller", "_id firstName lastName");
+      .populate("seller", "_id firstName lastName")
+      .populate("category", "_id categoryName");
     return res.status(200).json(auctions);
   } catch (err) {
     return res.status(400).json({
@@ -57,6 +58,7 @@ const listOrders = async (req, res) => {
   try {
     const orders = await Order.find({})
       .populate("product.seller", "_id firstName lastName")
+      .populate("product.auction", "_id itemName bids")
       .populate("user", "_id firstName lastName");
     return res.status(200).json(orders);
   } catch (err) {

@@ -23,6 +23,10 @@ import Dashboard from "./admin/dashboard/Dashboard";
 import PublicRoute from "./auth/PublicRoute";
 import AdminRoute from "./auth/AdminRoute";
 import AdminHome from "./admin/dashboard/Home";
+import Users from "./admin/users/Users";
+import Auctions from "./admin/auctions/Auctions";
+import Categories from "./admin/categories/Categories";
+import Orders from "./admin/orders/Orders";
 
 function MainRouter() {
   return (
@@ -64,6 +68,10 @@ function MainRouter() {
         <PublicRoute path="/user/:userId" component={Profile} />
 
         <AdminRoute path="/admin/home" component={AdminHome} />
+        <AdminRoute path="/admin/users" component={Users} />
+        <AdminRoute path="/admin/auctions" component={Auctions} />
+        <AdminRoute path="/admin/categories" component={Categories} />
+        <AdminRoute path="/admin/orders" component={Orders} />
       </Switch>
     </div>
   );

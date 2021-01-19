@@ -1,8 +1,6 @@
-import { Box, Container, Grid, makeStyles, Paper } from "@material-ui/core";
+import { Container, Grid, makeStyles, Paper } from "@material-ui/core";
 import React from "react";
 import clsx from "clsx";
-
-const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   content: {

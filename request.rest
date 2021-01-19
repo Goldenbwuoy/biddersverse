@@ -113,3 +113,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDAyNjNhO
 GET http://localhost:5000/api/admin/orders
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDAyNjNhOTc0MTU1YjIwN2M5NmMzM2UiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTA3NzI0NDd9.pYjBLnvw2WsvXXPOSZl4FXlAVu2oY7Qn-dn66mB509U
 
+### list all categories
+GET http://localhost:5000/api/admin/categories
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDAyNjNhOTc0MTU1YjIwN2M5NmMzM2UiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTA3NzI0NDd9.pYjBLnvw2WsvXXPOSZl4FXlAVu2oY7Qn-dn66mB509U
+

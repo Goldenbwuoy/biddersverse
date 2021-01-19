@@ -17,26 +17,20 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import { mainListItems, secondaryListItems } from "./listItems";
-import { Button, Tooltip } from "@material-ui/core";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import PeopleIcon from "@material-ui/icons/People";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import LayersIcon from "@material-ui/icons/Layers";
+import ShopTwoIcon from "@material-ui/icons/ShopTwo";
+import { secondaryListItems } from "./listItems";
+import {
+  Button,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Tooltip,
+} from "@material-ui/core";
 import auth from "../../auth/auth-helper";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link
-        style={{ textDecoration: "none" }}
-        color="inherit"
-        to="/admin/dashboard"
-      >
-        Biddersverse
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
 
 const drawerWidth = 240;
 
@@ -106,6 +100,11 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
     color: "white",
   },
+
+  sidebarLinks: {
+    textDecoration: "none",
+    color: "black",
+  },
 }));
 
 const Dashboard = ({ history }) => {
@@ -114,7 +113,7 @@ const Dashboard = ({ history }) => {
   const handleDrawerOpen = () => {
     setOpen(true);
   };
-  console.log(history);
+
   const handleDrawerClose = () => {
     setOpen(false);
   };
@@ -188,7 +187,49 @@ const Dashboard = ({ history }) => {
           </IconButton>
         </div>
         <Divider />
-        <List>{mainListItems}</List>
+        <List>
+          {/* {mainListItems} */}
+          <Link className={classes.sidebarLinks} to="/admin/home">
+            <ListItem button>
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" />
+            </ListItem>
+          </Link>
+          <Link className={classes.sidebarLinks} to="/admin/users">
+            <ListItem button>
+              <ListItemIcon>
+                <PeopleIcon />
+              </ListItemIcon>
+              <ListItemText primary="Users" />
+            </ListItem>
+          </Link>
+          <Link className={classes.sidebarLinks} to="/admin/auctions">
+            <ListItem button>
+              <ListItemIcon>
+                <ShopTwoIcon />
+              </ListItemIcon>
+              <ListItemText primary="Auctions" />
+            </ListItem>
+          </Link>
+          <Link className={classes.sidebarLinks} to="/admin/orders">
+            <ListItem button>
+              <ListItemIcon>
+                <ShoppingCartIcon />
+              </ListItemIcon>
+              <ListItemText primary="Orders" />
+            </ListItem>
+          </Link>
+          <Link className={classes.sidebarLinks} to="/admin/categories">
+            <ListItem button>
+              <ListItemIcon>
+                <LayersIcon />
+              </ListItemIcon>
+              <ListItemText primary="Auction Categories" />
+            </ListItem>
+          </Link>
+        </List>
         <Divider />
         <List>{secondaryListItems}</List>
       </Drawer>
