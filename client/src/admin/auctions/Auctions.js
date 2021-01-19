@@ -15,8 +15,9 @@ import {
 } from "@material-ui/core";
 import auth from "../../auth/auth-helper";
 import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
 import { listAuctions } from "../api-admin";
+import DeleteAuction from "./DeleteAuction";
+import ViewBids from "./ViewBids";
 
 const useStyles = makeStyles((theme) => ({
   root: theme.mixins.gutters({
@@ -30,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
     )}px`,
     color: theme.palette.protectedTitle,
     fontSize: "1.2em",
+  },
+  rightIcon: {
+    marginLeft: "10px",
   },
 }));
 
@@ -88,8 +92,19 @@ function Auctions() {
         setAuctions(data);
       }
     });
-  }, []);
-  console.log(auctions);
+
+    return function cleanup() {
+      abortController.abort();
+    };
+  }, [token]);
+
+  const removeAuction = (auction) => {
+    const updatedAuctions = [...auctions];
+    const index = updatedAuctions.indexOf(auction);
+    updatedAuctions.splice(index, 1);
+    setAuctions(updatedAuctions);
+  };
+
   return (
     <div>
       <Paper className={classes.root} elevation={4}>
@@ -113,7 +128,7 @@ function Auctions() {
             {auctions.map((auction) => (
               <StyledTableRow key={auction._id}>
                 <StyledTableCell>{auction.itemName}</StyledTableCell>
-                <StyledTableCell>{`${auction.seller.firstName} ${auction.seller.lastName}`}</StyledTableCell>
+                <StyledTableCell>{`${auction.seller?.firstName} ${auction.seller?.lastName}`}</StyledTableCell>
                 <StyledTableCell>
                   {new Date(auction.bidStart).toLocaleString()}
                 </StyledTableCell>
@@ -121,23 +136,25 @@ function Auctions() {
                   {new Date(auction.bidEnd).toLocaleString()}
                 </StyledTableCell>
                 <StyledTableCell>{getStatus(auction)}</StyledTableCell>
-                <StyledTableCell>{auction.bids.length}</StyledTableCell>
+                <StyledTableCell>
+                  {/* View bid history button */}
+                  <ViewBids auction={auction} />
+                </StyledTableCell>
                 <StyledTableCell>
                   <span style={{ display: "flex" }}>
                     <Tooltip title="Edit">
-                      <IconButton size="small" color="primary">
+                      <IconButton
+                        style={{ marginRight: "15px" }}
+                        size="small"
+                        color="primary"
+                      >
                         <EditIcon />
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title="Delete">
-                      <IconButton
-                        style={{ marginLeft: "15px" }}
-                        size="small"
-                        color="secondary"
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </Tooltip>
+                    <DeleteAuction
+                      auction={auction}
+                      removeAuction={removeAuction}
+                    />
                   </span>
                 </StyledTableCell>
               </StyledTableRow>

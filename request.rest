@@ -117,3 +117,24 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDAyNjNhO
 GET http://localhost:5000/api/admin/categories
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDAyNjNhOTc0MTU1YjIwN2M5NmMzM2UiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTA3NzI0NDd9.pYjBLnvw2WsvXXPOSZl4FXlAVu2oY7Qn-dn66mB509U
 
+### delete user
+DELETE http://localhost:5000/api/admin/users/5fc1efd30c400d4094ad3fcc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDAyNjNhOTc0MTU1YjIwN2M5NmMzM2UiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTA3NzI0NDd9.pYjBLnvw2WsvXXPOSZl4FXlAVu2oY7Qn-dn66mB509U
+
+### delete auction
+DELETE http://localhost:5000/api/admin/auctions/5fc466ef5c6f911990867e70
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDAyNjNhOTc0MTU1YjIwN2M5NmMzM2UiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTA3NzI0NDd9.pYjBLnvw2WsvXXPOSZl4FXlAVu2oY7Qn-dn66mB509U
+
+### add a category
+POST http://localhost:5000/api/admin/categories
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDAyNjNhOTc0MTU1YjIwN2M5NmMzM2UiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTA3NzI0NDd9.pYjBLnvw2WsvXXPOSZl4FXlAVu2oY7Qn-dn66mB509U
+Content-Type: application/json
+
+{
+    "categoryName": "Some Bullshit"
+}
+
+### delete a category
+DELETE http://localhost:5000/api/admin/categories/60064e33cabf40382413ac07
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDAyNjNhOTc0MTU1YjIwN2M5NmMzM2UiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTA3NzI0NDd9.pYjBLnvw2WsvXXPOSZl4FXlAVu2oY7Qn-dn66mB509U
+

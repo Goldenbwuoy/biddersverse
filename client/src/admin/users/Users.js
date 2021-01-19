@@ -19,7 +19,7 @@ import { listUsers } from "../api-admin";
 import { Link } from "react-router-dom";
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
+import DeleteUser from "./DeleteUser";
 
 const useStyles = makeStyles((theme) => ({
   root: theme.mixins.gutters({
@@ -82,7 +82,13 @@ function Users() {
       abortController.abort();
     };
   }, [token]);
-  console.log(users);
+
+  const removeUser = (user) => {
+    const updatedUsers = [...users];
+    const index = updatedUsers.indexOf(user);
+    updatedUsers.splice(index, 1);
+    setUsers(updatedUsers);
+  };
 
   return (
     <div>
@@ -119,19 +125,16 @@ function Users() {
                 <StyledTableCell>{user.seller ? "Yes" : "No"}</StyledTableCell>
                 <StyledTableCell>
                   <Tooltip title="Edit">
-                    <IconButton size="small" color="primary">
+                    <IconButton
+                      style={{ marginRight: "15px" }}
+                      size="small"
+                      color="primary"
+                    >
                       <EditIcon />
                     </IconButton>
                   </Tooltip>
-                  <Tooltip title="Delete">
-                    <IconButton
-                      style={{ marginLeft: "15px" }}
-                      size="small"
-                      color="secondary"
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Tooltip>
+
+                  <DeleteUser user={user} removeUser={removeUser} />
                 </StyledTableCell>
               </StyledTableRow>
             ))}

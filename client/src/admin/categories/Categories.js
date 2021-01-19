@@ -20,6 +20,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import auth from "../../auth/auth-helper";
 import { listCategories } from "../api-admin";
+import DeleteCategory from "./DeleteCategory";
 
 const useStyles = makeStyles((theme) => ({
   root: theme.mixins.gutters({
@@ -81,7 +82,14 @@ function Categories() {
       abortController.abort();
     };
   }, [token]);
-  console.log(categories);
+
+  const removeCategory = (category) => {
+    const updatedCategories = [...categories];
+    const index = updatedCategories.indexOf(category);
+    updatedCategories.splice(index, 1);
+    setCategories(updatedCategories);
+  };
+
   return (
     <div>
       <Paper className={classes.root} elevation={4}>
@@ -109,19 +117,18 @@ function Categories() {
                 <StyledTableCell>{category.categoryName}</StyledTableCell>
                 <StyledTableCell>
                   <Tooltip title="Edit">
-                    <IconButton size="small" color="primary">
+                    <IconButton
+                      style={{ marginRight: "15px" }}
+                      size="small"
+                      color="primary"
+                    >
                       <EditIcon />
                     </IconButton>
                   </Tooltip>
-                  <Tooltip title="Delete">
-                    <IconButton
-                      style={{ marginLeft: "15px" }}
-                      size="small"
-                      color="secondary"
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Tooltip>
+                  <DeleteCategory
+                    category={category}
+                    removeCategory={removeCategory}
+                  />
                 </StyledTableCell>
               </StyledTableRow>
             ))}

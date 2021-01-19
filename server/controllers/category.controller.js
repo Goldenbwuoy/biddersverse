@@ -35,4 +35,16 @@ const categoryById = async (req, res, next, id) => {
   } catch (err) {}
 };
 
-module.exports = { create, list, categoryById };
+const remove = async (req, res) => {
+  try {
+    let category = req.category;
+    await category.remove();
+    return res.status(200).json({ message: "Category deleted successfully" });
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
+  }
+};
+
+module.exports = { create, list, categoryById, remove };

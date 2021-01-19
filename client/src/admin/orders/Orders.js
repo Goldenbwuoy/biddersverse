@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 1450,
     margin: "auto",
     padding: theme.spacing(1),
-    // marginTop: theme.spacing(2),
   }),
   title: {
     margin: `${theme.spacing(3)}px 0 ${theme.spacing(3)}px ${theme.spacing(
@@ -72,8 +71,6 @@ function Orders() {
       }
     });
   }, [token]);
-
-  console.log(orders);
 
   return (
     <div>
