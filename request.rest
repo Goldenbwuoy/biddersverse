@@ -163,3 +163,12 @@ Content-Type: application/json
 {
     "firstName": "Jonso"
 }
+
+### update/edit a category
+PUT http://localhost:5000/api/admin/categories/600797e8af1e433f48dc99a4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDAyNjNhOTc0MTU1YjIwN2M5NmMzM2UiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTA3NzI0NDd9.pYjBLnvw2WsvXXPOSZl4FXlAVu2oY7Qn-dn66mB509U
+Content-Type: application/json
+
+{
+    "categoryName": "Some Category updated"
+}

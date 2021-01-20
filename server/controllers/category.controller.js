@@ -1,5 +1,6 @@
 const Category = require("../models/category.model");
 const errorHandler = require("../helpers/dbErrorHandler");
+const extend = require("lodash/extend");
 
 const create = async (req, res) => {
   const category = new Category(req.body);
@@ -35,6 +36,23 @@ const categoryById = async (req, res, next, id) => {
   } catch (err) {}
 };
 
+const read = (req, res) => {
+  return res.json(req.category);
+};
+
+const update = async (req, res) => {
+  try {
+    let category = req.category;
+    category = extend(category, req.body);
+    await category.save();
+    res.json(category);
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
+  }
+};
+
 const remove = async (req, res) => {
   try {
     let category = req.category;
@@ -47,4 +65,4 @@ const remove = async (req, res) => {
   }
 };
 
-module.exports = { create, list, categoryById, remove };
+module.exports = { create, list, categoryById, read, update, remove };

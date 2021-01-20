@@ -29,6 +29,8 @@ import Categories from "./admin/categories/Categories";
 import Orders from "./admin/orders/Orders";
 import NewUser from "./admin/users/NewUser";
 import EditUser from "./admin/users/EditUser";
+import NewCategory from "./admin/categories/NewCategory";
+import EditCategory from "./admin/categories/EditCategory";
 
 function MainRouter() {
   return (
@@ -75,6 +77,11 @@ function MainRouter() {
         <AdminRoute path="/admin/edit/user/:userId" component={EditUser} />
         <AdminRoute path="/admin/auctions" component={Auctions} />
         <AdminRoute path="/admin/categories" component={Categories} />
+        <AdminRoute path="/admin/create/category" component={NewCategory} />
+        <AdminRoute
+          path="/admin/edit/category/:categoryId"
+          component={EditCategory}
+        />
         <AdminRoute path="/admin/orders" component={Orders} />
       </Switch>
     </div>

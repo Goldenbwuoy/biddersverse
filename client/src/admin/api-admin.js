@@ -149,6 +149,62 @@ const listCategories = async (credentials, signal) => {
   }
 };
 
+const createCategory = async (credentials, category) => {
+  try {
+    const response = await fetch(`${BASE_URL}/admin/categories`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${credentials.token}`,
+      },
+      body: JSON.stringify(category),
+    });
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const readCategory = async (params, credentials, signal) => {
+  try {
+    const response = await fetch(
+      `${BASE_URL}/admin/categories/${params.categoryId}`,
+      {
+        method: "GET",
+        signal: signal,
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${credentials.token}`,
+        },
+      }
+    );
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const updateCategory = async (params, credentials, category) => {
+  try {
+    const response = await fetch(
+      `${BASE_URL}/admin/categories/${params.categoryId}`,
+      {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${credentials.token}`,
+        },
+        body: JSON.stringify(category),
+      }
+    );
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const deleteCategory = async (params, credentials, signal) => {
   try {
     const response = await fetch(
@@ -178,5 +234,8 @@ export {
   deleteAuction,
   listOrders,
   listCategories,
+  createCategory,
+  readCategory,
+  updateCategory,
   deleteCategory,
 };

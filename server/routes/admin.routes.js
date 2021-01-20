@@ -40,7 +40,9 @@ router
 
 router
   .route("/api/admin/categories/:categoryId")
-  .delete(authCtrl.requireSignin, authCtrl.isAdmin, categoryCtrl.remove);
+  .delete(authCtrl.requireSignin, authCtrl.isAdmin, categoryCtrl.remove)
+  .put(authCtrl.requireSignin, authCtrl.isAdmin, categoryCtrl.update)
+  .get(authCtrl.requireSignin, authCtrl.isAdmin, categoryCtrl.read);
 
 router.param("userId", userCtrl.userByID);
 router.param("auctionId", auctionCtrl.auctionByID);

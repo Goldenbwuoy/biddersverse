@@ -17,7 +17,6 @@ import {
 import { Link } from "react-router-dom";
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
 import auth from "../../auth/auth-helper";
 import { listCategories } from "../api-admin";
 import DeleteCategory from "./DeleteCategory";
@@ -96,7 +95,7 @@ function Categories() {
         <Typography type="title" className={classes.title}>
           Product Categories
           <span className={classes.addButton}>
-            <Link to="#">
+            <Link to="/admin/create/category">
               <Button color="primary" variant="contained">
                 <AddIcon className={classes.leftIcon}></AddIcon> New Category
               </Button>
@@ -117,13 +116,15 @@ function Categories() {
                 <StyledTableCell>{category.categoryName}</StyledTableCell>
                 <StyledTableCell>
                   <Tooltip title="Edit">
-                    <IconButton
-                      style={{ marginRight: "15px" }}
-                      size="small"
-                      color="primary"
-                    >
-                      <EditIcon />
-                    </IconButton>
+                    <Link to={`/admin/edit/category/${category._id}`}>
+                      <IconButton
+                        style={{ marginRight: "15px" }}
+                        size="small"
+                        color="primary"
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </Link>
                   </Tooltip>
                   <DeleteCategory
                     category={category}
