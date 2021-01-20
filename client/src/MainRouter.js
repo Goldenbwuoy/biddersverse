@@ -27,6 +27,8 @@ import Users from "./admin/users/Users";
 import Auctions from "./admin/auctions/Auctions";
 import Categories from "./admin/categories/Categories";
 import Orders from "./admin/orders/Orders";
+import NewUser from "./admin/users/NewUser";
+import EditUser from "./admin/users/EditUser";
 
 function MainRouter() {
   return (
@@ -68,7 +70,9 @@ function MainRouter() {
         <PublicRoute path="/user/:userId" component={Profile} />
 
         <AdminRoute path="/admin/home" component={AdminHome} />
-        <AdminRoute path="/admin/users" component={Users} />
+        <AdminRoute exact path="/admin/users" component={Users} />
+        <AdminRoute path="/admin/create/user" component={NewUser} />
+        <AdminRoute path="/admin/edit/user/:userId" component={EditUser} />
         <AdminRoute path="/admin/auctions" component={Auctions} />
         <AdminRoute path="/admin/categories" component={Categories} />
         <AdminRoute path="/admin/orders" component={Orders} />

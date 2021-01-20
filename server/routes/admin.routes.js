@@ -12,11 +12,14 @@ router.route("/api/admin/signin").post(authCtrl.adminSignin);
 
 router
   .route("/api/admin/users")
-  .get(authCtrl.requireSignin, authCtrl.isAdmin, adminCtrl.listUsers);
+  .get(authCtrl.requireSignin, authCtrl.isAdmin, adminCtrl.listUsers)
+  .post(authCtrl.requireSignin, authCtrl.isAdmin, userCtrl.create);
 
 router
   .route("/api/admin/users/:userId")
-  .delete(authCtrl.requireSignin, authCtrl.isAdmin, userCtrl.remove);
+  .delete(authCtrl.requireSignin, authCtrl.isAdmin, userCtrl.remove)
+  .get(authCtrl.requireSignin, authCtrl.isAdmin, userCtrl.read)
+  .put(authCtrl.requireSignin, authCtrl.isAdmin, userCtrl.update);
 
 router
   .route("/api/admin/auctions")

@@ -57,6 +57,7 @@ function ViewBids({ auction }) {
         <ViewIcon fontSize="small" className={classes.rightIcon} />
       </IconButton>{" "}
       <Dialog
+        disableBackdropClick={true}
         fullWidth={true}
         maxWidth={"sm"}
         open={open}

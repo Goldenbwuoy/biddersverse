@@ -96,7 +96,7 @@ function Users() {
         <Typography type="title" className={classes.title}>
           Users
           <span className={classes.addButton}>
-            <Link to="#">
+            <Link to="/admin/create/user">
               <Button color="primary" variant="contained">
                 <AddIcon className={classes.leftIcon}></AddIcon> New User
               </Button>
@@ -125,13 +125,15 @@ function Users() {
                 <StyledTableCell>{user.seller ? "Yes" : "No"}</StyledTableCell>
                 <StyledTableCell>
                   <Tooltip title="Edit">
-                    <IconButton
-                      style={{ marginRight: "15px" }}
-                      size="small"
-                      color="primary"
-                    >
-                      <EditIcon />
-                    </IconButton>
+                    <Link to={`/admin/edit/user/${user._id}`}>
+                      <IconButton
+                        style={{ marginRight: "15px" }}
+                        size="small"
+                        color="primary"
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </Link>
                   </Tooltip>
 
                   <DeleteUser user={user} removeUser={removeUser} />

@@ -16,6 +16,56 @@ const listUsers = async (credentials, signal) => {
   }
 };
 
+const createUser = async (credentials, user) => {
+  try {
+    const response = await fetch(`${BASE_URL}/admin/users`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${credentials.token}`,
+      },
+      body: JSON.stringify(user),
+    });
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const readUser = async (params, credentials, signal) => {
+  try {
+    const response = await fetch(`${BASE_URL}/admin/users/${params.userId}`, {
+      method: "GET",
+      signal: signal,
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${credentials.token}`,
+      },
+    });
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const updateUser = async (params, credentials, user) => {
+  try {
+    const response = await fetch(`${BASE_URL}/admin/users/${params.userId}`, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${credentials.token}`,
+      },
+      body: JSON.stringify(user),
+    });
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const deleteUser = async (params, credentials, signal) => {
   try {
     const response = await fetch(`${BASE_URL}/admin/users/${params.userId}`, {
@@ -120,6 +170,9 @@ const deleteCategory = async (params, credentials, signal) => {
 
 export {
   listUsers,
+  createUser,
+  readUser,
+  updateUser,
   deleteUser,
   listAuctions,
   deleteAuction,
