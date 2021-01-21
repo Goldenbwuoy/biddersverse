@@ -10,7 +10,8 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { getAuctionImage } from "../helpers/auction-helper";
-import { getStatusValues } from "./api-order";
+import { getStatusValues, update, processCharge } from "./api-order";
+import auth from "../auth/auth-helper";
 
 const useStyles = makeStyles((theme) => ({
   nested: {
@@ -44,10 +45,12 @@ const useStyles = makeStyles((theme) => ({
 
 function OrderUpdate({ order }) {
   const classes = useStyles();
+  const { token, user } = auth.isAuthenticated();
   const [values, setValues] = useState({
     open: 0,
     statusValues: [],
     error: "",
+    status: "",
   });
 
   useEffect(() => {
@@ -57,7 +60,12 @@ function OrderUpdate({ order }) {
       if (data && data.error) {
         setValues({ ...values, error: "Could not get status" });
       } else {
-        setValues({ ...values, statusValues: data, error: "" });
+        setValues({
+          ...values,
+          statusValues: data,
+          error: "",
+          status: order.product.status,
+        });
       }
     });
     return function cleanup() {
@@ -65,7 +73,32 @@ function OrderUpdate({ order }) {
     };
   }, []);
 
-  console.log(order);
+  const handleStatusChange = (event) => {
+    setValues({ ...values, status: event.target.value });
+
+    if (event.target.value === "Processing") {
+      processCharge(
+        { orderId: order._id, userId: user._id },
+        { token: token },
+        {
+          status: event.target.value,
+          amount: order.product.auction.bids[0].bid,
+        }
+      );
+    } else {
+      update(
+        { orderId: order._id },
+        { token: token },
+        { status: event.target.value }
+      ).then((data) => {
+        if (data && data.error) {
+          setValues({ ...values, error: data.error });
+        } else {
+          console.log("Updated");
+        }
+      });
+    }
+  };
 
   return (
     <div>
@@ -96,8 +129,8 @@ function OrderUpdate({ order }) {
             select
             label="Update Status"
             className={classes.textField}
-            value={order.product.status}
-            // onChange={handleStatusChange(index)}
+            value={values.status}
+            onChange={handleStatusChange}
             SelectProps={{
               MenuProps: {
                 className: classes.menu,

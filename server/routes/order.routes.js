@@ -18,12 +18,20 @@ router
   .get(authCtrl.requireSignin, orderCtrl.listBySeller);
 
 router
+  .route("/api/order/status/:orderId")
+  .put(authCtrl.requireSignin, orderCtrl.isSeller, orderCtrl.update);
+
+router
   .route("/api/orders/buyer/:userId")
   .get(authCtrl.requireSignin, orderCtrl.listByBuyer);
 
 router
   .route("/api/order/:orderId")
   .get(authCtrl.requireSignin, orderCtrl.isWinner, orderCtrl.read);
+
+router
+  .route("/api/order/:orderId/charge/:userId")
+  .put(authCtrl.requireSignin, orderCtrl.isSeller, orderCtrl.update);
 
 router.route("/api/orders/status_values").get(orderCtrl.getStatusValues);
 

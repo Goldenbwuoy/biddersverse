@@ -80,4 +80,52 @@ const getStatusValues = async (signal) => {
   }
 };
 
-export { create, listBySeller, getStatusValues, listByBuyer, read };
+const update = async (params, credentials, status) => {
+  try {
+    let response = await fetch(
+      `${BASE_URL}/api/order/status/${params.orderId}`,
+      {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${credentials.token}`,
+        },
+        body: JSON.stringify(status),
+      }
+    );
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const processCharge = async (params, credentials, order) => {
+  try {
+    let response = await fetch(
+      `${BASE_URL}/api/order/${params.orderId}/charge/${params.userId}`,
+      {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${credentials.token}`,
+        },
+        body: JSON.stringify(order),
+      }
+    );
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export {
+  create,
+  listBySeller,
+  getStatusValues,
+  listByBuyer,
+  read,
+  update,
+  processCharge,
+};

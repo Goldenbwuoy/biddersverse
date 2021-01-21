@@ -77,6 +77,32 @@ const getStatusValues = (req, res) => {
   res.json(Order.schema.path("product.status").enumValues);
 };
 
+const isSeller = (req, res, next) => {
+  console.log(req.order);
+  const isSeller =
+    req.order && req.auth && req.order.product.seller._id == req.auth._id;
+  if (!isSeller) {
+    return res.status("403").json({
+      error: "User is not authorized",
+    });
+  }
+  next();
+};
+
+const update = async (req, res) => {
+  try {
+    let order = await Order.updateOne(
+      { _id: req.order._id },
+      { "product.status": req.body.status }
+    );
+    res.json(order);
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
+  }
+};
+
 module.exports = {
   create,
   listBySeller,
@@ -85,4 +111,6 @@ module.exports = {
   OrderById,
   read,
   isWinner,
+  isSeller,
+  update,
 };
