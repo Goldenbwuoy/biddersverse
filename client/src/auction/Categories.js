@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     margin: "auto",
-    marginTop: 20,
   },
   title: {
     padding: `${theme.spacing(3)}px ${theme.spacing(2.5)}px ${theme.spacing(

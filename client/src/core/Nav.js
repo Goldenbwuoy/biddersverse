@@ -22,6 +22,7 @@ import { Box, Button, Tooltip } from "@material-ui/core";
 import auth from "../auth/auth-helper";
 import { listCategories } from "../category/api-category";
 import MyBidsMenu from "./MyBidsMenu";
+import Search from "./Search";
 
 const drawerWidth = 340;
 
@@ -185,6 +186,7 @@ const Nav = ({ history }) => {
               </Link>
             </Typography>
           </Box>
+          <Search />
           {!auth.isAuthenticated() && (
             <span className={classes.toolbarRight}>
               <Link className={classes.links} to="/signin">
