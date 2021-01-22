@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import auth from "../auth/auth-helper";
 import { getAuctionImage } from "../helpers/auction-helper";
 import { read } from "./api-order";
+import Review from "./Review";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -87,8 +88,13 @@ const useStyles = makeStyles((theme) => ({
     color: "#78948f",
   },
   checkout: {
-    float: "right",
     margin: "24px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  review: {
+    color: "rgb(53, 97, 85)",
   },
   total: {
     fontSize: "1.2em",
@@ -119,7 +125,6 @@ function Order({ match }) {
       if (data && data.error) {
         console.log(data.error);
       } else {
-        console.log(data);
         setOrder(data);
         setLoading(false);
       }
@@ -185,6 +190,10 @@ function Order({ match }) {
                   <Divider />
                 </span>
                 <div className={classes.checkout}>
+                  <span>
+                    {order.product.status === "Delivered" &&
+                      !order.reviewed && <Review order={order} />}
+                  </span>
                   <span className={classes.total}>
                     Winning Bid: ${getWinningBid()}
                   </span>

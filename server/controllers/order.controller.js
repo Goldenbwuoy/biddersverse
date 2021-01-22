@@ -103,6 +103,17 @@ const update = async (req, res) => {
   }
 };
 
+const setReviewed = async (req, res, next) => {
+  try {
+    await Order.updateOne({ _id: req.order._id }, { reviewed: true });
+    next();
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
+  }
+};
+
 module.exports = {
   create,
   listBySeller,
@@ -113,4 +124,5 @@ module.exports = {
   isWinner,
   isSeller,
   update,
+  setReviewed,
 };

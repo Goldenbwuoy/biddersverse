@@ -120,6 +120,27 @@ const processCharge = async (params, credentials, order) => {
   }
 };
 
+const submitReview = async (params, credentials, review) => {
+  try {
+    const response = await fetch(
+      `${BASE_URL}/api/order/review/${params.orderId}`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${credentials.token}`,
+        },
+        body: JSON.stringify(review),
+      }
+    );
+
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export {
   create,
   listBySeller,
@@ -128,4 +149,5 @@ export {
   read,
   update,
   processCharge,
+  submitReview,
 };

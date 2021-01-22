@@ -14,8 +14,8 @@ POST http://localhost:5000/api/signin
 Content-Type: application/json
 
 {
-    "email": "golden@mail.com",
-    "password": "password"
+    "email": "test@test.com",
+    "password": "test"
 }
 
 ###
@@ -55,8 +55,7 @@ GET http://localhost:5000/api/auctions?search=xbox&category=All
 
 ### retrieve auctions by bidder (all)
 GET http://localhost:5000/api/auctions/bid/5fc1f0330c400d4094ad3fce
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmMxZjAzMzBjNDAwZDQwOTRhZDNmY2UiLCJpYXQiOjE2MDc0OTU3NTB9.u8qMt-6gwaJ5wBOSJl2KAwwTYmNPXDZguLdcCDg5Nwc
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA5MzJlM2VjNjIzYjJiYTRmYTI3MWEiLCJpYXQiOjE2MTEyODgxMTJ9.uSyQWbiun9XsBsCEGUowQfiQupWVCC4g2kQAWR7S-cQ
 ### retrieve auctions by bidder (live)
 GET http://localhost:5000/api/auctions/bid/live/5fc1f0330c400d4094ad3fce
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmMxZjAzMzBjNDAwZDQwOTRhZDNmY2UiLCJpYXQiOjE2MDc0OTU3NTB9.u8qMt-6gwaJ5wBOSJl2KAwwTYmNPXDZguLdcCDg5Nwc
@@ -79,9 +78,8 @@ Content-Type: application/json
 }
 
 ### Retrieve orders by buyer
-GET http://localhost:5000/api/orders/buyer/5fc0d0588f7e4e3f7cb94342
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmMwZDA1ODhmN2U0ZTNmN2NiOTQzNDIiLCJpYXQiOjE2MDgzNTUyMDN9.aXd-FdKjKPDvOfQEHQee276Ptuogq91vs3XRMRBNYc4
-
+GET http://localhost:5000/api/orders/buyer/600932e3ec623b2ba4fa271a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA5MzJlM2VjNjIzYjJiYTRmYTI3MWEiLCJpYXQiOjE2MTEyODgxMTJ9.uSyQWbiun9XsBsCEGUowQfiQupWVCC4g2kQAWR7S-cQ
 ###
 GET http://localhost:5000/api/orders/status_values
 
@@ -180,4 +178,15 @@ Content-Type: application/json
 
 {
     "categoryName": "Some Category updated"
+}
+
+### write a review for an a delivered order
+POST http://localhost:5000/api/order/review/6009345cec623b2ba4fa271d
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA5MzJlM2VjNjIzYjJiYTRmYTI3MWEiLCJpYXQiOjE2MTEyODgxMTJ9.uSyQWbiun9XsBsCEGUowQfiQupWVCC4g2kQAWR7S-cQ
+Content-Type: application/json
+
+{
+    "rating": 4,
+    "anonymous": false,
+    "review": "This is good"
 }

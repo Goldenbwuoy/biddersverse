@@ -42,6 +42,10 @@ const OrderSchema = new mongoose.Schema(
     },
     payment_id: {},
     user: { type: mongoose.Schema.ObjectId, ref: "User" },
+    reviewed: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
