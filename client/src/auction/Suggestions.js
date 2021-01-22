@@ -5,12 +5,11 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import { Link } from "react-router-dom";
 import ViewIcon from "@material-ui/icons/Visibility";
-import Icon from "@material-ui/core/Icon";
 import Divider from "@material-ui/core/Divider";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
-import { getAuctionImage } from "../helpers/auction-helper";
+import { getAuctionImage, calculateTimeLeft } from "../helpers/auction-helper";
 
 const useStyles = makeStyles((theme) => ({
   root: theme.mixins.gutters({
@@ -79,6 +78,39 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Suggestions({ auctions, title }) {
+  const currentDate = new Date();
+  const showTimeLeft = (date) => {
+    let timeLeft = calculateTimeLeft(date);
+    return (
+      !timeLeft.timeEnd && (
+        <span>
+          {timeLeft.days !== 0 && `${timeLeft.days} d `}
+          {timeLeft.hours !== 0 && `${timeLeft.hours} h `}
+          {timeLeft.minutes !== 0 && `${timeLeft.minutes} m `}
+          {timeLeft.seconds !== 0 && `${timeLeft.seconds} s `} left
+        </span>
+      )
+    );
+  };
+
+  const auctionState = (auction) => {
+    return (
+      <span>
+        {currentDate < new Date(auction.bidStart) &&
+          `Auction Starts at ${new Date(auction.bidStart).toLocaleString()}`}
+        {currentDate > new Date(auction.bidStart) &&
+          currentDate < new Date(auction.bidEnd) && (
+            <>
+              {`Auction is live | ${auction.bids.length} bids |`} <br />
+              {showTimeLeft(new Date(auction.bidEnd))}
+            </>
+          )}
+        {currentDate > new Date(auction.bidStart) &&
+          auction.bids.length > 0 &&
+          ` | Last bid: $ ${auction.bids[0].bid}`}
+      </span>
+    );
+  };
   const classes = useStyles();
   return (
     <div>
@@ -108,7 +140,7 @@ function Suggestions({ auctions, title }) {
                       </Typography>
                     </Link>
                     <Typography component="p" className={classes.date}>
-                      Added on {new Date(item.createdAt).toDateString()}
+                      {auctionState(item)}
                     </Typography>
                   </CardContent>
                   <div className={classes.controls}>
