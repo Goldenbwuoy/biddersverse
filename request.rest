@@ -194,3 +194,6 @@ Content-Type: application/json
     "anonymous": false,
     "review": "This is good"
 }
+
+### list popular auctions
+GET http://localhost:5000/api/auctions/popular

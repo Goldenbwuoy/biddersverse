@@ -236,6 +236,31 @@ const listLatest = async (req, res) => {
   }
 };
 
+const listPopular = async (req, res) => {
+  try {
+    const auctions = await Auction.aggregate([
+      { $match: { bidEnd: { $gt: new Date() } } },
+      {
+        $project: {
+          itemName: 1,
+          startingBid: 1,
+          bidStart: 1,
+          bidEnd: 1,
+          bids: 1,
+          bidCount: { $size: "$bids" },
+        },
+      },
+      { $sort: { bidsCount: -1 } },
+      { $limit: 10 },
+    ]).exec();
+    res.json(auctions);
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
+  }
+};
+
 const isSeller = (req, res, next) => {
   const isSeller =
     req.auction && req.auth && req.auction.seller._id == req.auth._id;
@@ -305,6 +330,7 @@ module.exports = {
   listAllBySeller,
   listOpenBySeller,
   listSoldBySeller,
+  listPopular,
   auctionByID,
   photo,
   read,

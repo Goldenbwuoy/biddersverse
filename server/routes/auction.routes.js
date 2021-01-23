@@ -64,6 +64,8 @@ router
 
 router.route("/api/auctions/added/latest").get(auctionCtrl.listLatest);
 
+router.route("/api/auctions/popular").get(auctionCtrl.listPopular);
+
 router.route("/api/auctions/image/:auctionId").get(auctionCtrl.photo);
 
 router.param("userId", userCtrl.userByID);
