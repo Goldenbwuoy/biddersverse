@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     margin: theme.spacing(2),
-    color: theme.palette.protectedTitle,
+    color: theme.palette.openTitle,
   },
   error: {
     verticalAlign: "middle",

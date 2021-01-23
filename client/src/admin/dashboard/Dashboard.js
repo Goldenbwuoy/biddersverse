@@ -23,6 +23,7 @@ import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import LayersIcon from "@material-ui/icons/Layers";
 import ShopTwoIcon from "@material-ui/icons/ShopTwo";
 import { secondaryListItems } from "./listItems";
+import Logo from "../../assets/images/logo2.png";
 import {
   Button,
   ListItem,
@@ -66,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
     }),
   },
   menuButton: {
-    marginRight: 36,
+    marginRight: 20,
   },
   menuButtonHidden: {
     display: "none",
@@ -105,6 +106,12 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
     color: "black",
   },
+  logo: {
+    width: "100px",
+    objectFit: "contain",
+    // margin: "0 20px",
+    // marginTop: " 18px",
+  },
 }));
 
 const Dashboard = ({ history }) => {
@@ -138,15 +145,9 @@ const Dashboard = ({ history }) => {
             >
               <MenuIcon />
             </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              className={classes.title}
-            >
-              Biddersverse Admin Dashboard
-            </Typography>
+            <Link to="/admin/home">
+              <img className={classes.logo} src={Logo} alt="logo-image" />
+            </Link>
           </Box>
 
           <IconButton color="inherit">

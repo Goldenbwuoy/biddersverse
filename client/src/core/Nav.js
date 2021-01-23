@@ -23,6 +23,7 @@ import auth from "../auth/auth-helper";
 import { listCategories } from "../category/api-category";
 import MyBidsMenu from "./MyBidsMenu";
 import Search from "./Search";
+import Logo from "../assets/images/logo2.png";
 
 const drawerWidth = 340;
 
@@ -106,6 +107,12 @@ const useStyles = makeStyles((theme) => ({
   authButton: {
     textTransform: "capitalize",
   },
+  logo: {
+    width: "100px",
+    objectFit: "contain",
+    // margin: "0 20px",
+    // marginTop: " 18px",
+  },
 }));
 
 const Nav = ({ history }) => {
@@ -182,7 +189,7 @@ const Nav = ({ history }) => {
             </IconButton>
             <Typography variant="h6" noWrap>
               <Link className={classes.links} to="/">
-                Biddersverse
+                <img className={classes.logo} src={Logo} alt="" />
               </Link>
             </Typography>
           </Box>

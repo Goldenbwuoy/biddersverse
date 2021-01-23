@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     margin: `${theme.spacing(3)}px 0 ${theme.spacing(3)}px ${theme.spacing(
       1
     )}px`,
-    color: theme.palette.protectedTitle,
+    color: theme.palette.openTitle,
     fontSize: "1.2em",
   },
   subheading: {

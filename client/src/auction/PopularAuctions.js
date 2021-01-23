@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "auto",
     padding: theme.spacing(3),
     marginTop: theme.spacing(5),
+    backgroundColor: "#80808024",
   }),
   title: {
     margin: `${theme.spacing(3)}px 0 ${theme.spacing(3)}px ${theme.spacing(
