@@ -4,6 +4,7 @@ const authCtrl = require("../controllers/auth.controller");
 const categoryCtrl = require("../controllers/category.controller");
 const userCtrl = require("../controllers/user.controller");
 const auctionCtrl = require("../controllers/auction.controller");
+const orderCtrl = require("../controllers/order.controller");
 const router = express.Router();
 
 router.route("/api/admin").post(adminCtrl.create).get(adminCtrl.list);
@@ -32,6 +33,10 @@ router
 router
   .route("/api/admin/orders")
   .get(authCtrl.requireSignin, authCtrl.isAdmin, adminCtrl.listOrders);
+
+router
+  .route("/api/admin/orders/recent")
+  .get(authCtrl.requireSignin, authCtrl.isAdmin, orderCtrl.listLatest);
 
 router
   .route("/api/admin/categories")

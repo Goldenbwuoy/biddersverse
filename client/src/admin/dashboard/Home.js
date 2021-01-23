@@ -1,8 +1,23 @@
-import { Container, Grid, makeStyles, Paper } from "@material-ui/core";
+import {
+  Card,
+  CardMedia,
+  Container,
+  Grid,
+  makeStyles,
+  Paper,
+} from "@material-ui/core";
 import React from "react";
 import clsx from "clsx";
+import HomeImage from "../../assets/images/homeImage.PNG";
+import RecentOrders from "../orders/RecentOrders";
 
 const useStyles = makeStyles((theme) => ({
+  imageCard: {
+    maxWidth: 1000,
+  },
+  media: {
+    minHeight: 400,
+  },
   content: {
     flexGrow: 1,
     overflow: "auto",
@@ -34,9 +49,11 @@ function Home() {
       <div className={classes.appBarSpacer} />
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3}>
-          {/* Chart */}
+          {/* Image */}
           <Grid item xs={12} md={8} lg={9}>
-            <Paper className={fixedHeightPaper}>{/* <Chart /> */}</Paper>
+            <Card className={classes.imageCard}>
+              <CardMedia className={classes.media} image={HomeImage} />
+            </Card>
           </Grid>
           {/* Recent Deposits */}
           <Grid item xs={12} md={4} lg={3}>
@@ -44,12 +61,11 @@ function Home() {
           </Grid>
           {/* Recent Orders */}
           <Grid item xs={12}>
-            <Paper className={classes.paper}>{/* <Orders /> */}</Paper>
+            <Paper className={classes.paper}>
+              <RecentOrders />
+            </Paper>
           </Grid>
         </Grid>
-        {/* <Box pt={4}>
-          <Copyright />
-        </Box> */}
       </Container>
     </main>
   );

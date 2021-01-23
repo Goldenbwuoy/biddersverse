@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Divider, makeStyles, Paper, Typography } from "@material-ui/core";
 import auth from "../../auth/auth-helper";
-import { listOrders } from "../api-admin";
+import { listRecentOrders } from "../api-admin";
 import OrdersTable from "./OrdersTable";
 
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Orders() {
+function RecentOrders() {
   const [orders, setOrders] = useState([]);
   const { token } = auth.isAdminAuthenticated();
   const classes = useStyles();
@@ -28,7 +28,7 @@ function Orders() {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
-    listOrders({ token: token }, signal).then((data) => {
+    listRecentOrders({ token: token }, signal).then((data) => {
       if (data && data.error) {
         console.log(data.error);
       } else {
@@ -41,7 +41,7 @@ function Orders() {
     <div>
       <Paper className={classes.root} elevation={4}>
         <Typography type="title" className={classes.title}>
-          Orders
+          Recent Orders
         </Typography>
         <Divider />
         <OrdersTable orders={orders} />
@@ -50,4 +50,4 @@ function Orders() {
   );
 }
 
-export default Orders;
+export default RecentOrders;

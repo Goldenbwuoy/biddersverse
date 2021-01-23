@@ -42,6 +42,22 @@ const listByBuyer = async (req, res) => {
   }
 };
 
+const listLatest = async (req, res) => {
+  try {
+    let orders = await Order.find({})
+      .sort("-createdAt")
+      .limit(5)
+      .populate("product.seller", "_id firstName lastName")
+      .populate("product.auction", "_id itemName bids")
+      .populate("user", "_id firstName lastName");
+    res.json(orders);
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
+  }
+};
+
 const OrderById = async (req, res, next, id) => {
   try {
     const order = await Order.findById(id)
@@ -118,6 +134,7 @@ module.exports = {
   create,
   listBySeller,
   listByBuyer,
+  listLatest,
   getStatusValues,
   OrderById,
   read,
