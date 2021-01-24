@@ -9,6 +9,7 @@ import {
   TableBody,
   TableCell,
   TableHead,
+  TablePagination,
   TableRow,
   Tooltip,
   Typography,
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 600,
     margin: "auto",
     padding: theme.spacing(1),
+    marginBottom: "20px",
   }),
   title: {
     margin: `${theme.spacing(3)}px 0 ${theme.spacing(3)}px ${theme.spacing(
@@ -63,6 +65,9 @@ const StyledTableRow = withStyles((theme) => ({
 
 function Categories() {
   const [categories, setCategories] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
   const { token } = auth.isAdminAuthenticated();
   const classes = useStyles();
 
@@ -89,6 +94,18 @@ function Categories() {
     setCategories(updatedCategories);
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const emptyRows =
+    rowsPerPage - Math.min(rowsPerPage, categories.length - page * rowsPerPage);
+
   return (
     <div>
       <Paper className={classes.root} elevation={4}>
@@ -103,7 +120,7 @@ function Categories() {
           </span>
         </Typography>
         <Divider />
-        <Table>
+        <Table style={{ borderStyle: "solid" }}>
           <TableHead>
             <TableRow>
               <StyledTableCell>categoryName</StyledTableCell>
@@ -111,30 +128,46 @@ function Categories() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {categories.map((category) => (
-              <StyledTableRow key={category._id}>
-                <StyledTableCell>{category.categoryName}</StyledTableCell>
-                <StyledTableCell>
-                  <Tooltip title="Edit">
-                    <Link to={`/admin/edit/category/${category._id}`}>
-                      <IconButton
-                        style={{ marginRight: "15px" }}
-                        size="small"
-                        color="primary"
-                      >
-                        <EditIcon />
-                      </IconButton>
-                    </Link>
-                  </Tooltip>
-                  <DeleteCategory
-                    category={category}
-                    removeCategory={removeCategory}
-                  />
-                </StyledTableCell>
+            {categories
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((category) => (
+                <StyledTableRow key={category._id}>
+                  <StyledTableCell>{category.categoryName}</StyledTableCell>
+                  <StyledTableCell>
+                    <Tooltip title="Edit">
+                      <Link to={`/admin/edit/category/${category._id}`}>
+                        <IconButton
+                          style={{ marginRight: "15px" }}
+                          size="small"
+                          color="primary"
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </Link>
+                    </Tooltip>
+                    <DeleteCategory
+                      category={category}
+                      removeCategory={removeCategory}
+                    />
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            {emptyRows > 0 && (
+              <StyledTableRow style={{ height: 63 * emptyRows }}>
+                <StyledTableCell />
               </StyledTableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={categories.length}
+          page={page}
+          onChangePage={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
       </Paper>
     </div>
   );

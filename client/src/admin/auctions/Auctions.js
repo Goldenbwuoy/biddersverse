@@ -8,6 +8,7 @@ import {
   TableBody,
   TableCell,
   TableHead,
+  TablePagination,
   TableRow,
   Tooltip,
   Typography,
@@ -24,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 1450,
     margin: "auto",
     padding: theme.spacing(1),
+    marginBottom: "20px",
   }),
   title: {
     margin: `${theme.spacing(3)}px 0 ${theme.spacing(3)}px ${theme.spacing(
@@ -78,6 +80,9 @@ const getStatus = (auction) => {
 
 function Auctions() {
   const [auctions, setAuctions] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
   const classes = useStyles();
   const { token } = auth.isAdminAuthenticated();
 
@@ -105,6 +110,18 @@ function Auctions() {
     setAuctions(updatedAuctions);
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const emptyRows =
+    rowsPerPage - Math.min(rowsPerPage, auctions.length - page * rowsPerPage);
+
   return (
     <div>
       <Paper className={classes.root} elevation={4}>
@@ -112,7 +129,7 @@ function Auctions() {
           Auctions
         </Typography>
         <Divider />
-        <Table>
+        <Table style={{ borderStyle: "solid" }}>
           <TableHead>
             <TableRow>
               <StyledTableCell>Item</StyledTableCell>
@@ -125,42 +142,58 @@ function Auctions() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {auctions.map((auction) => (
-              <StyledTableRow key={auction._id}>
-                <StyledTableCell>{auction.itemName}</StyledTableCell>
-                <StyledTableCell>{`${auction.seller?.firstName} ${auction.seller?.lastName}`}</StyledTableCell>
-                <StyledTableCell>
-                  {new Date(auction.bidStart).toLocaleString()}
-                </StyledTableCell>
-                <StyledTableCell>
-                  {new Date(auction.bidEnd).toLocaleString()}
-                </StyledTableCell>
-                <StyledTableCell>{getStatus(auction)}</StyledTableCell>
-                <StyledTableCell>
-                  {/* View bid history button */}
-                  <ViewBids auction={auction} />
-                </StyledTableCell>
-                <StyledTableCell>
-                  <span style={{ display: "flex" }}>
-                    <Tooltip title="Edit">
-                      <IconButton
-                        style={{ marginRight: "15px" }}
-                        size="small"
-                        color="primary"
-                      >
-                        <EditIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <DeleteAuction
-                      auction={auction}
-                      removeAuction={removeAuction}
-                    />
-                  </span>
-                </StyledTableCell>
+            {auctions
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((auction) => (
+                <StyledTableRow key={auction._id}>
+                  <StyledTableCell>{auction.itemName}</StyledTableCell>
+                  <StyledTableCell>{`${auction.seller?.firstName} ${auction.seller?.lastName}`}</StyledTableCell>
+                  <StyledTableCell>
+                    {new Date(auction.bidStart).toLocaleString()}
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    {new Date(auction.bidEnd).toLocaleString()}
+                  </StyledTableCell>
+                  <StyledTableCell>{getStatus(auction)}</StyledTableCell>
+                  <StyledTableCell>
+                    {/* View bid history button */}
+                    <ViewBids auction={auction} />
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <span style={{ display: "flex" }}>
+                      <Tooltip title="Edit">
+                        <IconButton
+                          style={{ marginRight: "15px" }}
+                          size="small"
+                          color="primary"
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <DeleteAuction
+                        auction={auction}
+                        removeAuction={removeAuction}
+                      />
+                    </span>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            {emptyRows > 0 && (
+              <StyledTableRow style={{ height: 63 * emptyRows }}>
+                <StyledTableCell colSpan={7} />
               </StyledTableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
+        <TablePagination
+          component="div"
+          count={auctions.length}
+          rowsPerPageOptions={[5, 10, 25]}
+          page={page}
+          onChangePage={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
       </Paper>
     </div>
   );
