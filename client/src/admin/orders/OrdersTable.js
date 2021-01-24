@@ -7,6 +7,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  TextField,
   withStyles,
 } from "@material-ui/core";
 import { useState } from "react";
@@ -15,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
   table: {
     borderStyle: "solid",
     borderWidth: 0.5,
+  },
+  textField: {
+    margin: "10px 0",
   },
 }));
 
@@ -40,6 +44,7 @@ const StyledTableRow = withStyles((theme) => ({
 function OrdersTable({ orders }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [search, setSearch] = useState("");
   const classes = useStyles();
 
   const handleChangePage = (event, newPage) => {
@@ -51,10 +56,23 @@ function OrdersTable({ orders }) {
     setPage(0);
   };
 
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value);
+  };
+
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, orders.length - page * rowsPerPage);
   return (
     <div>
+      <TextField
+        className={classes.textField}
+        value={search}
+        onChange={handleSearchChange}
+        size="small"
+        id="outlined-basic"
+        label="Search"
+        variant="outlined"
+      />
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
@@ -68,6 +86,10 @@ function OrdersTable({ orders }) {
         </TableHead>
         <TableBody>
           {orders
+            .filter(
+              (order) =>
+                !search || order.product.auction.itemName.includes(search)
+            )
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((order) => (
               <StyledTableRow key={order._id}>

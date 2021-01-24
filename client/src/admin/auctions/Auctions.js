@@ -10,6 +10,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  TextField,
   Tooltip,
   Typography,
   withStyles,
@@ -36,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
   },
   rightIcon: {
     marginLeft: "10px",
+  },
+  textField: {
+    margin: "10px 0",
   },
 }));
 
@@ -82,6 +86,7 @@ function Auctions() {
   const [auctions, setAuctions] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [search, setSearch] = useState("");
 
   const classes = useStyles();
   const { token } = auth.isAdminAuthenticated();
@@ -119,6 +124,10 @@ function Auctions() {
     setPage(0);
   };
 
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value);
+  };
+
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, auctions.length - page * rowsPerPage);
 
@@ -129,6 +138,15 @@ function Auctions() {
           Auctions
         </Typography>
         <Divider />
+        <TextField
+          className={classes.textField}
+          value={search}
+          onChange={handleSearchChange}
+          size="small"
+          id="outlined-basic"
+          label="Search"
+          variant="outlined"
+        />
         <Table style={{ borderStyle: "solid" }}>
           <TableHead>
             <TableRow>
@@ -143,6 +161,7 @@ function Auctions() {
           </TableHead>
           <TableBody>
             {auctions
+              .filter((auction) => !search || auction.itemName.includes(search))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((auction) => (
                 <StyledTableRow key={auction._id}>

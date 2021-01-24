@@ -11,6 +11,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  TextField,
   Tooltip,
   Typography,
   withStyles,
@@ -42,6 +43,9 @@ const useStyles = makeStyles((theme) => ({
   leftIcon: {
     marginRight: "8px",
   },
+  textField: {
+    margin: "10px 0",
+  },
 }));
 
 const StyledTableCell = withStyles((theme) => ({
@@ -67,6 +71,7 @@ function Categories() {
   const [categories, setCategories] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [search, setSearch] = useState("");
 
   const { token } = auth.isAdminAuthenticated();
   const classes = useStyles();
@@ -103,6 +108,10 @@ function Categories() {
     setPage(0);
   };
 
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value);
+  };
+
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, categories.length - page * rowsPerPage);
 
@@ -120,6 +129,15 @@ function Categories() {
           </span>
         </Typography>
         <Divider />
+        <TextField
+          className={classes.textField}
+          value={search}
+          onChange={handleSearchChange}
+          size="small"
+          id="outlined-basic"
+          label="Search"
+          variant="outlined"
+        />
         <Table style={{ borderStyle: "solid" }}>
           <TableHead>
             <TableRow>
@@ -129,6 +147,9 @@ function Categories() {
           </TableHead>
           <TableBody>
             {categories
+              .filter(
+                (category) => !search || category.categoryName.includes(search)
+              )
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((category) => (
                 <StyledTableRow key={category._id}>

@@ -10,6 +10,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  TextField,
   Tooltip,
   Typography,
   withStyles,
@@ -42,6 +43,9 @@ const useStyles = makeStyles((theme) => ({
   leftIcon: {
     marginRight: "8px",
   },
+  textField: {
+    margin: "10px 0",
+  },
 }));
 
 const StyledTableCell = withStyles((theme) => ({
@@ -67,6 +71,7 @@ function Users() {
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [search, setSearch] = useState("");
 
   const classes = useStyles();
   const { token } = auth.isAdminAuthenticated();
@@ -95,6 +100,10 @@ function Users() {
     setUsers(updatedUsers);
   };
 
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value);
+  };
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -121,6 +130,15 @@ function Users() {
           </span>
         </Typography>
         <Divider />
+        <TextField
+          className={classes.textField}
+          value={search}
+          onChange={handleSearchChange}
+          size="small"
+          id="outlined-basic"
+          label="Search"
+          variant="outlined"
+        />
         <Table style={{ borderStyle: "solid" }}>
           <TableHead>
             <TableRow>
@@ -134,6 +152,12 @@ function Users() {
           </TableHead>
           <TableBody>
             {users
+              .filter(
+                (user) =>
+                  !search ||
+                  user.firstName.includes(search) ||
+                  user.lastName.includes(search)
+              )
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((user) => (
                 <StyledTableRow key={user._id}>
