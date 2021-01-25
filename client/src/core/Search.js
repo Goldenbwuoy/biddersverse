@@ -2,6 +2,9 @@ import React from "react";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
+import { useState } from "react";
+import Button from "@material-ui/core/Button";
+import { searchAuctions } from "../auction/api-auction";
 
 const useStyles = makeStyles((theme) => ({
   search: {
@@ -43,8 +46,39 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Search() {
+const Search = ({ history }) => {
   const classes = useStyles();
+  const [values, setValues] = useState({
+    search: "",
+    results: [],
+    redirectToResults: false,
+  });
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    searchAuctions({ search: values.search || undefined }).then((data) => {
+      if (data && data.error) {
+        console.log(data.error);
+      } else {
+        setValues({
+          ...values,
+          results: data,
+          redirectToResults: true,
+        });
+      }
+    });
+  };
+
+  if (values.redirectToResults) {
+    setValues({
+      ...values,
+      redirectToResults: false,
+    });
+    history.push({
+      pathname: `/search?query=${values.search}`,
+      state: { results: values.results },
+    });
+  }
 
   return (
     <div>
@@ -52,15 +86,26 @@ export default function Search() {
         <div className={classes.searchIcon}>
           <SearchIcon />
         </div>
-        <InputBase
-          placeholder="Search…"
-          classes={{
-            root: classes.inputRoot,
-            input: classes.inputInput,
-          }}
-          inputProps={{ "aria-label": "search" }}
-        />
+        <form onSubmit={handleSearch}>
+          <InputBase
+            placeholder="Search…"
+            classes={{
+              root: classes.inputRoot,
+              input: classes.inputInput,
+            }}
+            inputProps={{ "aria-label": "search" }}
+            value={values.search}
+            onChange={(e) => setValues({ ...values, search: e.target.value })}
+          />
+          <Button
+            disabled={!values.search}
+            type="submit"
+            style={{ display: "none" }}
+          ></Button>
+        </form>
       </div>
     </div>
   );
-}
+};
+
+export default Search;

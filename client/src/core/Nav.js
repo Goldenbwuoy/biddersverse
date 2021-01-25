@@ -193,7 +193,7 @@ const Nav = ({ history }) => {
               </Link>
             </Typography>
           </Box>
-          <Search />
+          <Search history={history} />
           {!auth.isAuthenticated() && (
             <span className={classes.toolbarRight}>
               <Link className={classes.links} to="/signin">

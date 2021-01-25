@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import Categories from "./../auction/Categories";
 import { listLatest } from "../auction/api-auction";
 import Suggestions from "../auction/Suggestions";
 import HomeImage from "../assets/images/homeImage.PNG";
