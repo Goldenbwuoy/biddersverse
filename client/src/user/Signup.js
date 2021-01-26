@@ -14,6 +14,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { Link } from "react-router-dom";
+import Loading from "../core/Loading.js";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -49,6 +50,7 @@ function Signup() {
     email: "",
     phoneNumber: "",
     password: "",
+    loading: false,
     open: false,
     error: "",
   });
@@ -59,6 +61,7 @@ function Signup() {
 
   const clickSubmit = (e) => {
     e.preventDefault();
+    setValues({ ...values, loading: true });
     const user = {
       firstName: values.firstName || undefined,
       lastName: values.lastName || undefined,
@@ -70,99 +73,109 @@ function Signup() {
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
-        setValues({ ...values, error: "", open: true });
+        setValues({ ...values, loading: false, error: "", open: true });
       }
     });
   };
   return (
     <div>
-      <Card className={classes.card}>
-        <CardContent>
-          <Typography variant="h6" className={classes.title}>
-            Sign Up
-          </Typography>
-          <form onSubmit={clickSubmit}>
-            <TextField
-              id="firstName"
-              label="First Name"
-              className={classes.textField}
-              value={values.firstName}
-              onChange={handleChange("firstName")}
-              margin="normal"
-            />
-            <br />
-            <TextField
-              id="lastName"
-              label="Last Name"
-              className={classes.textField}
-              value={values.lastName}
-              onChange={handleChange("lastName")}
-              margin="normal"
-            />
-            <br />
-            <TextField
-              id="email"
-              type="email"
-              label="Email"
-              className={classes.textField}
-              value={values.email}
-              onChange={handleChange("email")}
-              margin="normal"
-            />
-            <br />
-            <TextField
-              id="phoneNumber"
-              label="Mobile Phone"
-              className={classes.textField}
-              value={values.phoneNumber}
-              onChange={handleChange("phoneNumber")}
-              margin="normal"
-            />
-            <br />
-            <TextField
-              id="password"
-              type="password"
-              label="Password"
-              className={classes.textField}
-              value={values.password}
-              onChange={handleChange("password")}
-              margin="normal"
-            />
-            <br />{" "}
-            {values.error && (
-              <Typography component="p" color="error">
-                <Icon color="error" className={classes.error}></Icon>
-                {values.error}
+      {values.loading ? (
+        <Loading />
+      ) : (
+        <>
+          <Card className={classes.card}>
+            <CardContent>
+              <Typography variant="h6" className={classes.title}>
+                Sign Up
               </Typography>
-            )}
-            <CardActions>
-              <Button
-                color="primary"
-                variant="contained"
-                type="submit"
-                className={classes.submit}
-              >
-                Submit
-              </Button>
-            </CardActions>
-          </form>
-        </CardContent>
-      </Card>
-      <Dialog open={values.open} disableBackdropClick={true}>
-        <DialogTitle>New Account</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            New account successfully created.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Link to="/signin">
-            <Button color="primary" autoFocus="autoFocus" variant="contained">
-              Sign In
-            </Button>
-          </Link>
-        </DialogActions>
-      </Dialog>
+              <form onSubmit={clickSubmit}>
+                <TextField
+                  id="firstName"
+                  label="First Name"
+                  className={classes.textField}
+                  value={values.firstName}
+                  onChange={handleChange("firstName")}
+                  margin="normal"
+                />
+                <br />
+                <TextField
+                  id="lastName"
+                  label="Last Name"
+                  className={classes.textField}
+                  value={values.lastName}
+                  onChange={handleChange("lastName")}
+                  margin="normal"
+                />
+                <br />
+                <TextField
+                  id="email"
+                  type="email"
+                  label="Email"
+                  className={classes.textField}
+                  value={values.email}
+                  onChange={handleChange("email")}
+                  margin="normal"
+                />
+                <br />
+                <TextField
+                  id="phoneNumber"
+                  label="Mobile Phone"
+                  className={classes.textField}
+                  value={values.phoneNumber}
+                  onChange={handleChange("phoneNumber")}
+                  margin="normal"
+                />
+                <br />
+                <TextField
+                  id="password"
+                  type="password"
+                  label="Password"
+                  className={classes.textField}
+                  value={values.password}
+                  onChange={handleChange("password")}
+                  margin="normal"
+                />
+                <br />{" "}
+                {values.error && (
+                  <Typography component="p" color="error">
+                    <Icon color="error" className={classes.error}></Icon>
+                    {values.error}
+                  </Typography>
+                )}
+                <CardActions>
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    type="submit"
+                    className={classes.submit}
+                  >
+                    Submit
+                  </Button>
+                </CardActions>
+              </form>
+            </CardContent>
+          </Card>
+          <Dialog open={values.open} disableBackdropClick={true}>
+            <DialogTitle>New Account</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                New account successfully created.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Link to="/signin">
+                <Button
+                  color="primary"
+                  autoFocus="autoFocus"
+                  variant="contained"
+                >
+                  Sign In
+                </Button>
+              </Link>
+            </DialogActions>
+          </Dialog>
+        </>
+      )}
     </div>
   );
 }

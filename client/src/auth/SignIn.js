@@ -11,6 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import auth from "./../auth/auth-helper";
 import { Link, Redirect } from "react-router-dom";
 import { signin } from "./api-auth.js";
+import Loading from "../core/Loading";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -50,11 +51,13 @@ function SignIn(props) {
     email: "",
     password: "",
     error: "",
+    loading: false,
     redirectToRefer: false,
   });
 
   const clickSubmit = (e) => {
     e.preventDefault();
+    setValues({ ...values, loading: true });
     const user = {
       email: values.email || undefined,
       password: values.password || undefined,
@@ -65,7 +68,12 @@ function SignIn(props) {
         setValues({ ...values, error: data.error });
       } else {
         auth.authenticate(data, () => {
-          setValues({ ...values, error: "", redirectToReferrer: true });
+          setValues({
+            ...values,
+            loading: false,
+            error: "",
+            redirectToReferrer: true,
+          });
         });
       }
     });
@@ -85,54 +93,63 @@ function SignIn(props) {
     return <Redirect to={from} />;
   }
   return (
-    <Card className={classes.card}>
-      <CardContent>
-        <Typography variant="h6" className={classes.title}>
-          Sign In
-        </Typography>
-        <form onSubmit={clickSubmit}>
-          <TextField
-            id="email"
-            type="email"
-            label="Email"
-            className={classes.textField}
-            value={values.email}
-            onChange={handleChange("email")}
-            margin="normal"
-          />
-          <br />
-          <TextField
-            id="password"
-            type="password"
-            label="Password"
-            className={classes.textField}
-            value={values.password}
-            onChange={handleChange("password")}
-            margin="normal"
-          />
-          <br />{" "}
-          {values.error && (
-            <Typography component="p" color="error">
-              <Icon color="error" className={classes.error}></Icon>
-              {values.error}
+    <>
+      {values.loading ? (
+        <Loading />
+      ) : (
+        <Card className={classes.card}>
+          <CardContent>
+            <Typography variant="h6" className={classes.title}>
+              Sign In
             </Typography>
-          )}
-          <CardActions>
-            <Button
-              color="primary"
-              type="submit"
-              variant="contained"
-              className={classes.submit}
-            >
-              Submit
-            </Button>
-          </CardActions>
-        </form>
-        <Link className={classes.links} to="/adminLogin">
-          Are you the admin? Go to Admin Sign In
-        </Link>
-      </CardContent>
-    </Card>
+            <form onSubmit={clickSubmit}>
+              <TextField
+                id="email"
+                type="email"
+                label="Email"
+                className={classes.textField}
+                value={values.email}
+                onChange={handleChange("email")}
+                margin="normal"
+              />
+              <br />
+              <TextField
+                id="password"
+                type="password"
+                label="Password"
+                className={classes.textField}
+                value={values.password}
+                onChange={handleChange("password")}
+                margin="normal"
+              />
+              <br />{" "}
+              {values.error && (
+                <Typography component="p" color="error">
+                  <Icon color="error" className={classes.error}></Icon>
+                  {values.error}
+                </Typography>
+              )}
+              <CardActions>
+                <Button
+                  color="primary"
+                  type="submit"
+                  variant="contained"
+                  className={classes.submit}
+                >
+                  Submit
+                </Button>
+              </CardActions>
+            </form>
+            <Link className={classes.links} to="/signup">
+              Don't have an account?
+            </Link>
+            <Link className={classes.links} to="/adminLogin">
+              Are you the admin?
+            </Link>
+          </CardContent>
+        </Card>
+      )}
+    </>
   );
 }
 

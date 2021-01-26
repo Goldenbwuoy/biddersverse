@@ -11,6 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import auth from "./../auth/auth-helper";
 import { Redirect } from "react-router-dom";
 import { adminSignin } from "./api-auth.js";
+import Loading from "../core/Loading";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -44,11 +45,13 @@ function AdminSignIn(props) {
     name: "",
     password: "",
     error: "",
+    loading: false,
     redirectToDashboard: false,
   });
 
   const clickSubmit = (e) => {
     e.preventDefault();
+    setValues({ ...values, loading: true });
     const admin = {
       name: values.name || undefined,
       password: values.password || undefined,
@@ -60,7 +63,12 @@ function AdminSignIn(props) {
       } else {
         console.log(data);
         auth.authenticateAdmin(data, () => {
-          setValues({ ...values, error: "", redirectToDashboard: true });
+          setValues({
+            ...values,
+            loading: false,
+            error: "",
+            redirectToDashboard: true,
+          });
         });
       }
     });
@@ -75,51 +83,57 @@ function AdminSignIn(props) {
     return <Redirect to="/admin/home" />;
   }
   return (
-    <Card className={classes.card}>
-      <CardContent>
-        <Typography variant="h6" className={classes.title}>
-          Administrator Sign In
-        </Typography>
-        <form onSubmit={clickSubmit}>
-          <TextField
-            id="name"
-            type="name"
-            label="Name"
-            className={classes.textField}
-            value={values.name}
-            onChange={handleChange("name")}
-            margin="normal"
-          />
-          <br />
-          <TextField
-            id="password"
-            type="password"
-            label="Password"
-            className={classes.textField}
-            value={values.password}
-            onChange={handleChange("password")}
-            margin="normal"
-          />
-          <br />{" "}
-          {values.error && (
-            <Typography component="p" color="error">
-              <Icon color="error" className={classes.error}></Icon>
-              {values.error}
+    <>
+      {values.loading ? (
+        <Loading />
+      ) : (
+        <Card className={classes.card}>
+          <CardContent>
+            <Typography variant="h6" className={classes.title}>
+              Administrator Sign In
             </Typography>
-          )}
-          <CardActions>
-            <Button
-              color="primary"
-              type="submit"
-              variant="contained"
-              className={classes.submit}
-            >
-              Submit
-            </Button>
-          </CardActions>
-        </form>
-      </CardContent>
-    </Card>
+            <form onSubmit={clickSubmit}>
+              <TextField
+                id="name"
+                type="name"
+                label="Name"
+                className={classes.textField}
+                value={values.name}
+                onChange={handleChange("name")}
+                margin="normal"
+              />
+              <br />
+              <TextField
+                id="password"
+                type="password"
+                label="Password"
+                className={classes.textField}
+                value={values.password}
+                onChange={handleChange("password")}
+                margin="normal"
+              />
+              <br />{" "}
+              {values.error && (
+                <Typography component="p" color="error">
+                  <Icon color="error" className={classes.error}></Icon>
+                  {values.error}
+                </Typography>
+              )}
+              <CardActions>
+                <Button
+                  color="primary"
+                  type="submit"
+                  variant="contained"
+                  className={classes.submit}
+                >
+                  Submit
+                </Button>
+              </CardActions>
+            </form>
+          </CardContent>
+        </Card>
+      )}
+    </>
   );
 }
 
