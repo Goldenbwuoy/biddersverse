@@ -6,6 +6,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+import ErrorIcon from "@material-ui/icons/Error";
 import Icon from "@material-ui/core/Icon";
 import { makeStyles } from "@material-ui/core/styles";
 import auth from "./../auth/auth-helper";
@@ -107,6 +108,7 @@ function SignIn(props) {
                 id="email"
                 type="email"
                 label="Email"
+                variant="outlined"
                 className={classes.textField}
                 value={values.email}
                 onChange={handleChange("email")}
@@ -117,6 +119,7 @@ function SignIn(props) {
                 id="password"
                 type="password"
                 label="Password"
+                variant="outlined"
                 className={classes.textField}
                 value={values.password}
                 onChange={handleChange("password")}
@@ -125,7 +128,9 @@ function SignIn(props) {
               <br />{" "}
               {values.error && (
                 <Typography component="p" color="error">
-                  <Icon color="error" className={classes.error}></Icon>
+                  <Icon color="error" className={classes.error}>
+                    <ErrorIcon />
+                  </Icon>
                   {values.error}
                 </Typography>
               )}

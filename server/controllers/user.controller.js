@@ -6,6 +6,8 @@ const fs = require("fs");
 const request = require("request");
 const config = require("../config/config.js");
 const stripe = require("stripe");
+const jwt = require("jsonwebtoken");
+const { emailConfirmation } = require("../helpers/emailNotificationsHandler");
 
 // initialize stripe instance with the application's secret key
 const myStripe = stripe(config.stripe_test_secret_key);
@@ -13,9 +15,16 @@ const myStripe = stripe(config.stripe_test_secret_key);
 const create = async (req, res) => {
   const user = new User(req.body);
   try {
-    await user.save();
+    const savedUser = await user.save();
+
+    const emailToken = jwt.sign({ _id: savedUser._id }, config.jwtSecret, {
+      expiresIn: "1d",
+    });
+
+    emailConfirmation(req.body.email, emailToken);
+
     return res.status(200).json({
-      message: "Successfully signed up!",
+      message: emailToken,
     });
   } catch (err) {
     return res.status(400).json({
@@ -26,13 +35,24 @@ const create = async (req, res) => {
 const list = async (req, res) => {
   try {
     let users = await User.find().select(
-      "firstName lastName email createdAt updatedAt"
+      "firstName lastName email createdAt updatedAt confirmed"
     );
     res.json(users);
   } catch (err) {
     return res.status(400).json({
       error: errorHandler.getErrorMessage(err),
     });
+  }
+};
+
+const confirmEmail = async (req, res) => {
+  try {
+    const { _id } = jwt.verify(req.params.token, config.jwtSecret);
+    await User.updateOne({ _id: _id }, { confirmed: true });
+    res.status(201).json({ message: "Email confirmed" });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ error: "Confirmation failed" });
   }
 };
 const userByID = async (req, res, next, id) => {
@@ -215,4 +235,5 @@ module.exports = {
   stripe_auth,
   stipeCustomer,
   createCharge,
+  confirmEmail,
 };

@@ -13,6 +13,11 @@ const signin = async (req, res) => {
     if (!authenticated) {
       return res.status(401).json({ error: "Invalid password" });
     }
+    if (!user.confirmed) {
+      return res
+        .status(401)
+        .json({ error: "Please verify your email to login" });
+    }
     const token = jwt.sign({ _id: user._id }, config.jwtSecret);
     return res.json({
       token,

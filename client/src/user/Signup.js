@@ -92,6 +92,7 @@ function Signup() {
                 <TextField
                   id="firstName"
                   label="First Name"
+                  variant="outlined"
                   className={classes.textField}
                   value={values.firstName}
                   onChange={handleChange("firstName")}
@@ -101,6 +102,7 @@ function Signup() {
                 <TextField
                   id="lastName"
                   label="Last Name"
+                  variant="outlined"
                   className={classes.textField}
                   value={values.lastName}
                   onChange={handleChange("lastName")}
@@ -111,6 +113,7 @@ function Signup() {
                   id="email"
                   type="email"
                   label="Email"
+                  variant="outlined"
                   className={classes.textField}
                   value={values.email}
                   onChange={handleChange("email")}
@@ -120,6 +123,7 @@ function Signup() {
                 <TextField
                   id="phoneNumber"
                   label="Mobile Phone"
+                  variant="outlined"
                   className={classes.textField}
                   value={values.phoneNumber}
                   onChange={handleChange("phoneNumber")}
@@ -130,6 +134,7 @@ function Signup() {
                   id="password"
                   type="password"
                   label="Password"
+                  variant="outlined"
                   className={classes.textField}
                   value={values.password}
                   onChange={handleChange("password")}
@@ -159,17 +164,14 @@ function Signup() {
             <DialogTitle>New Account</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                New account successfully created.
+                An email has been sent to your address, check your inbox and
+                confirm your email address
               </DialogContentText>
             </DialogContent>
             <DialogActions>
               <Link to="/signin">
-                <Button
-                  color="primary"
-                  autoFocus="autoFocus"
-                  variant="contained"
-                >
-                  Sign In
+                <Button color="primary" variant="contained">
+                  Proceed to Sign In
                 </Button>
               </Link>
             </DialogActions>

@@ -32,6 +32,7 @@ import EditUser from "./admin/users/EditUser";
 import NewCategory from "./admin/categories/NewCategory";
 import EditCategory from "./admin/categories/EditCategory";
 import SearchResults from "./auction/SearchResults";
+import EmailConfirmation from "./auth/EmailConfirmation";
 
 function MainRouter() {
   return (
@@ -41,6 +42,7 @@ function MainRouter() {
         <PublicRoute exact path="/" component={Home} />
         <PublicRoute path="/signup" component={Signup} />
         <PublicRoute path="/signin" component={SignIn} />
+        <PublicRoute path="/confirm/:token" component={EmailConfirmation} />
         <PublicRoute path="/search?query=:query" component={SearchResults} />
         <PublicRoute path="/adminLogin" component={AdminSignIn} />
         <UserRoute path="/seller/stripe/connect" component={StripeConnect} />

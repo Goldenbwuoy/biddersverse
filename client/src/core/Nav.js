@@ -148,7 +148,7 @@ const Nav = ({ history }) => {
     const signal = abortController.signal;
 
     listCategories(signal).then((data) => {
-      if (data.error) {
+      if (data && data.error) {
         console.log(data.error);
       } else {
         setCategories(data);

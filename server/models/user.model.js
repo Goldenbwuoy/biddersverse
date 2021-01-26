@@ -33,6 +33,10 @@ const UserSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    confirmed: {
+      type: Boolean,
+      default: false,
+    },
     stripe_seller: {},
     stripe_customer: {},
     password: {

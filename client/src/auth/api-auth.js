@@ -33,4 +33,21 @@ const adminSignin = async (admin) => {
   }
 };
 
-export { signin, adminSignin };
+const confirmEmail = async (params) => {
+  try {
+    let response = await fetch(
+      `${BASE_URL}/api/users/confirmation/${params.token}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    );
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export { signin, adminSignin, confirmEmail };

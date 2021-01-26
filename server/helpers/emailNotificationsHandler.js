@@ -10,9 +10,23 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+const emailConfirmation = async (email, token) => {
+  const url = `http://localhost:3000/confirm/${token}`;
+  const message = `<p>Please click the link below to confirm your email: <br /> <a href="${url}">${url}</a> </p>`;
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Email Address Confirmation",
+      html: message,
+    });
+    console.log("email sent successfully");
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const outbidNotification = async (auction) => {
-  console.log("Email is" + process.env.EMAIL_USER);
-  console.log("password is" + process.env.EMAIL_PASSWORD);
   const { firstName, lastName, email } = auction.bids[1].bidder;
   const { itemName } = auction;
   const text = `Hello, ${firstName} ${lastName}, you have been outbid in the auction for ${itemName}. You can login to the system and bid again before the auction ends`;
@@ -84,4 +98,8 @@ const NotifySeller = async (auction, sold) => {
   }
 };
 
-module.exports = { outbidNotification, scheduleNotification };
+module.exports = {
+  outbidNotification,
+  scheduleNotification,
+  emailConfirmation,
+};

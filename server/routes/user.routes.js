@@ -6,6 +6,8 @@ const router = express.Router();
 
 router.route("/api/users").get(userCtrl.list).post(userCtrl.create);
 
+router.route("/api/users/confirmation/:token").get(userCtrl.confirmEmail);
+
 router
   .route("/api/users/:userId")
   .get(authCtrl.requireSignin, userCtrl.read)
