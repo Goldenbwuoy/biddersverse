@@ -96,4 +96,24 @@ const stripeUpdate = async (params, credentials, auth_code, signal) => {
   }
 };
 
-export { create, list, read, update, remove, stripeUpdate };
+const listReviews = async (params, credentials, signal) => {
+  try {
+    let response = await fetch(
+      `${BASE_URL}/api/reviews/user/${params.userId}`,
+      {
+        method: "GET",
+        signal: signal,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${credentials.token}`,
+        },
+      }
+    );
+    return await response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export { create, list, read, update, remove, stripeUpdate, listReviews };

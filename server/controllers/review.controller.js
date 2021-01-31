@@ -18,4 +18,19 @@ const create = async (req, res) => {
   }
 };
 
-module.exports = { create };
+const listBySeller = async (req, res) => {
+  try {
+    const reviews = await Review.find({ seller: req.profile._id }).populate(
+      "customer",
+      "_id firstName lastName"
+    );
+    res.status(200).json(reviews);
+  } catch (err) {
+    // console.log(err);
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
+  }
+};
+
+module.exports = { create, listBySeller };

@@ -199,3 +199,6 @@ Content-Type: application/json
 
 ### list popular auctions
 GET http://localhost:5000/api/auctions/popular
+
+### get user reviews
+GET http://localhost:5000/api/reviews/user/6009329fec623b2ba4fa2719

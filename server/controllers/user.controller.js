@@ -17,11 +17,11 @@ const create = async (req, res) => {
   try {
     const savedUser = await user.save();
 
-    const emailToken = jwt.sign({ _id: savedUser._id }, config.jwtSecret, {
-      expiresIn: "1d",
-    });
+    // const emailToken = jwt.sign({ _id: savedUser._id }, config.jwtSecret, {
+    //   expiresIn: "1d",
+    // });
 
-    emailConfirmation(req.body.email, emailToken);
+    // emailConfirmation(req.body.email, emailToken);
 
     return res.status(200).json({
       message: emailToken,

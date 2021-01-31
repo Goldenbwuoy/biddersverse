@@ -7,7 +7,7 @@ const bidding = require("./controllers/bidding.controller");
 
 mongoose.Promise = global.Promise;
 mongoose.connect(
-  config.mongoUri_remote,
+  config.mongoUri,
   {
     useNewUrlParser: true,
     useCreateIndex: true,

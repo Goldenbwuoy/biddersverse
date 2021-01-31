@@ -9,6 +9,7 @@ const auctionRoutes = require("./routes/auction.routes.js");
 const categoryRoutes = require("./routes/category.routes");
 const orderRoutes = require("./routes/order.routes");
 const adminRoutes = require("./routes/admin.routes");
+const reviewRoutes = require("./routes/review.routes");
 const morgan = require("morgan");
 
 const app = express();
@@ -28,6 +29,7 @@ app.use("/", auctionRoutes);
 app.use("/", categoryRoutes);
 app.use("/", orderRoutes);
 app.use("/", adminRoutes);
+app.use("/", reviewRoutes);
 
 /* To handle auth-related errors thrown by express-jwt when it tries to validate JWT
 tokens in incoming requests */
