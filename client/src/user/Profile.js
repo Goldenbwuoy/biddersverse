@@ -9,7 +9,6 @@ import { Redirect, Link } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import profileImage from "../assets/images/profile-pic.jpg";
 import stripeButton from "../assets/images/stripeButton.png";
-import client_config from "../config/client_config";
 import { Button, Card, Grid, Tooltip } from "@material-ui/core";
 import Reviews from "./Reviews";
 
@@ -198,7 +197,7 @@ function Profile({ match }) {
                       <a
                         href={
                           "https://connect.stripe.com/oauth/authorize?response_type=code&client_id=" +
-                          client_config.stripe_connect_test_client_id +
+                          process.env.REACT_APP_CLIENT_ID +
                           "&scope=read_write"
                         }
                         className={classes.stripe_connected}

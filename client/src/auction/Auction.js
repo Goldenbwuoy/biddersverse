@@ -16,7 +16,6 @@ import Suggestions from "./Suggestions.js";
 import Chat from "./chat/Chat.js";
 import { StripeProvider } from "react-stripe-elements";
 import Checkout from "../checkout/Checkout";
-import client_config from "../config/client_config";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -225,7 +224,7 @@ function Auction({ match }) {
           {justEnded &&
           !auction.purchased &&
           auth.isAuthenticated().user._id === auction.bids[0]?.bidder._id ? (
-            <StripeProvider apiKey={client_config.stripe_test_api_key}>
+            <StripeProvider apiKey={process.env.REACT_APP_PUBLISHABLE_KEY}>
               <Checkout auction={auction} />
             </StripeProvider>
           ) : (

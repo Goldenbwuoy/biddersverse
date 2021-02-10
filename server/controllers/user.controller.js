@@ -4,13 +4,12 @@ const extend = require("lodash/extend");
 const formidable = require("formidable");
 const fs = require("fs");
 const request = require("request");
-const config = require("../config/config.js");
 const stripe = require("stripe");
 const jwt = require("jsonwebtoken");
 const { emailConfirmation } = require("../helpers/emailNotificationsHandler");
 
 // initialize stripe instance with the application's secret key
-const myStripe = stripe(config.stripe_test_secret_key);
+const myStripe = stripe(process.env.STRIPE_TEST_SECRET_KEY);
 
 const create = async (req, res) => {
   const user = new User(req.body);
@@ -47,7 +46,7 @@ const list = async (req, res) => {
 
 const confirmEmail = async (req, res) => {
   try {
-    const { _id } = jwt.verify(req.params.token, config.jwtSecret);
+    const { _id } = jwt.verify(req.params.token, process.env.JWT_SECRET);
     await User.updateOne({ _id: _id }, { confirmed: true });
     res.status(201).json({ message: "Email confirmed" });
   } catch (err) {
@@ -127,7 +126,7 @@ const stripe_auth = (req, res, next) => {
       method: "POST",
       json: true,
       body: {
-        client_secret: config.stripe_test_secret_key,
+        client_secret: process.env.STRIPE_TEST_SECRET_KEY,
         code: req.body.stripe,
         grant_type: "authorization_code",
       },

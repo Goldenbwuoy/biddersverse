@@ -1,7 +1,6 @@
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
-const config = require("./../config/config");
 const Admin = require("../models/admin.model");
 
 const signin = async (req, res) => {
@@ -18,7 +17,7 @@ const signin = async (req, res) => {
     //     .status(401)
     //     .json({ error: "Please verify your email to login" });
     // }
-    const token = jwt.sign({ _id: user._id }, config.jwtSecret);
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
     return res.json({
       token,
       user: {
@@ -38,7 +37,7 @@ const signin = async (req, res) => {
 const signout = (req, res) => {};
 
 const requireSignin = expressJwt({
-  secret: config.jwtSecret,
+  secret: process.env.JWT_SECRET,
   algorithms: ["sha1", "RS256", "HS256"],
   userProperty: "auth",
 });
@@ -67,7 +66,10 @@ const adminSignin = async (req, res) => {
     if (!authenticated) {
       return res.status(401).json({ error: "Invalid password" });
     }
-    const token = jwt.sign({ _id: admin._id, isAdmin: true }, config.jwtSecret);
+    const token = jwt.sign(
+      { _id: admin._id, isAdmin: true },
+      process.env.JWT_SECRET
+    );
     return res.json({
       token,
       admin: {
