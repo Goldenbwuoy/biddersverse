@@ -67,7 +67,7 @@ function MyOrders() {
             <Link className={classes.link} to={`/order/${order._id}`}>
               <ListItem button>
                 <ListItemText
-                  primary={<strong>{order.product.auction.itemName}</strong>}
+                  primary={<strong>{order.auction.itemName}</strong>}
                   secondary={new Date(order.createdAt).toDateString()}
                 />
               </ListItem>

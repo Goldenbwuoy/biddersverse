@@ -58,9 +58,9 @@ const listAuctions = async (req, res) => {
 const listOrders = async (req, res) => {
   try {
     const orders = await Order.find({})
-      .populate("product.seller", "_id firstName lastName")
-      .populate("product.auction", "_id itemName bids")
-      .populate("user", "_id firstName lastName");
+      .populate("seller", "_id firstName lastName")
+      .populate("auction", "_id itemName bids")
+      .populate("buyer", "_id firstName lastName");
     return res.status(200).json(orders);
   } catch (err) {
     console.log(err);

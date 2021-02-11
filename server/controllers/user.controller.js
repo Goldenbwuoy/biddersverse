@@ -191,36 +191,40 @@ const stipeCustomer = (req, res, next) => {
 };
 
 /**Create a charge on behalf of the seller on the the bidder's credit card for the cost of the item ordered */
-const createCharge = (req, res, next) => {
-  if (!req.profile.stripe_seller) {
-    return res.status(400).json({
-      error: "Please connect your Stripe account",
-    });
-  }
-  myStripe.tokens
-    .create(
-      {
-        customer: req.order.payment_id,
-      },
-      { stripeAccount: req.profile.stripe_seller.stipe_user_id }
-    )
-    .then((token) => {
-      myStripe.charges
-        .create(
-          {
-            amount: req.body.amount * 100,
-            currency: "usd",
-            source: token.id,
-          },
-          {
-            stripeAccount: req.profile.stripe_seller.stipe_user_id,
-          }
-        )
-        .then((charge) => {
-          next();
-        });
-    });
+const createCharge = async (req, res, next) => {
+  next();
 };
+
+// const createCharge = (req, res, next) => {
+//   if (!req.profile.stripe_seller) {
+//     return res.status(400).json({
+//       error: "Please connect your Stripe account",
+//     });
+//   }
+//   myStripe.tokens
+//     .create(
+//       {
+//         customer: req.order.payment_id,
+//       },
+//       { stripeAccount: req.profile.stripe_seller.stipe_user_id }
+//     )
+//     .then((token) => {
+//       myStripe.charges
+//         .create(
+//           {
+//             amount: req.body.amount * 100,
+//             currency: "usd",
+//             source: token.id,
+//           },
+//           {
+//             stripeAccount: req.profile.stripe_seller.stipe_user_id,
+//           }
+//         )
+//         .then((charge) => {
+//           next();
+//         });
+//     });
+// };
 
 module.exports = {
   create,

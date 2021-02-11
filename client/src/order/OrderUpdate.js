@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { getAuctionImage } from "../helpers/auction-helper";
-import { getStatusValues, update, processCharge } from "./api-order";
+import { getStatusValues, update } from "./api-order";
 import auth from "../auth/auth-helper";
 
 const useStyles = makeStyles((theme) => ({
@@ -64,7 +64,7 @@ function OrderUpdate({ order }) {
           ...values,
           statusValues: data,
           error: "",
-          status: order.product.status,
+          status: order.status,
         });
       }
     });
@@ -77,12 +77,11 @@ function OrderUpdate({ order }) {
     setValues({ ...values, status: event.target.value });
 
     if (event.target.value === "Processing") {
-      processCharge(
-        { orderId: order._id, userId: user._id },
+      update(
+        { orderId: order._id },
         { token: token },
         {
           status: event.target.value,
-          amount: order.product.auction.bids[0].bid,
         }
       );
     } else {
@@ -116,10 +115,10 @@ function OrderUpdate({ order }) {
               <div>
                 <img
                   className={classes.listImg}
-                  src={getAuctionImage(order.product.auction)}
+                  src={getAuctionImage(order.auction)}
                 />
                 <div className={classes.listDetails}>
-                  {order.product.auction.itemName}
+                  {order.auction.itemName}
                 </div>
               </div>
             }

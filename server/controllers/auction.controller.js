@@ -313,7 +313,7 @@ const remove = async (req, res) => {
 
 const setPurchased = async (req, res, next) => {
   try {
-    const auctionId = req.body.order.product.auction._id;
+    const auctionId = req.body.order.auction._id;
     await Auction.findOneAndUpdate({ _id: auctionId }, { purchased: true });
     next();
   } catch (err) {

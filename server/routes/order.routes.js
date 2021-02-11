@@ -5,9 +5,12 @@ const orderCtrl = require("../controllers/order.controller");
 const auctionCtrl = require("../controllers/auction.controller");
 const reviewCtrl = require("../controllers/review.controller");
 
-router
-  .route("/api/orders/:userId")
-  .post(authCtrl.requireSignin, auctionCtrl.setPurchased, orderCtrl.create);
+router.route("/api/orders/:userId").post(
+  authCtrl.requireSignin,
+  // userCtrl.createCharge,
+  auctionCtrl.setPurchased,
+  orderCtrl.create
+);
 
 router
   .route("/api/orders/seller/:userId")
@@ -23,7 +26,7 @@ router
 
 router
   .route("/api/order/:orderId")
-  .get(authCtrl.requireSignin, orderCtrl.isWinner, orderCtrl.read);
+  .get(authCtrl.requireSignin, orderCtrl.isBuyer, orderCtrl.read);
 
 router
   .route("/api/order/:orderId/charge/:userId")
@@ -33,7 +36,7 @@ router
   .route("/api/order/review/:orderId")
   .post(
     authCtrl.requireSignin,
-    orderCtrl.isWinner,
+    orderCtrl.isBuyer,
     orderCtrl.setReviewed,
     reviewCtrl.create
   );

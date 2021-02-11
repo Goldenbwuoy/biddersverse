@@ -105,19 +105,18 @@ function SellerOrders() {
                     Deliver to:
                   </Typography>
                   <Typography type="subheading" component="h3" color="primary">
-                    <strong>{`${order.first_name} ${order.last_name}`}</strong>{" "}
+                    <strong>{`${order.buyer.firstName} ${order.buyer.lastName}`}</strong>{" "}
                     ({order.email})
                   </Typography>
                   <Typography type="subheading" component="h3" color="primary">
-                    {order.delivery_address.street}
+                    {order.shipping_address.street}
                   </Typography>
                   <Typography type="subheading" component="h3" color="primary">
-                    {order.delivery_address.city},{" "}
-                    {order.delivery_address.province}{" "}
-                    {order.delivery_address.zipcode}
+                    {order.shipping_address.city},{" "}
+                    {order.shipping_address.zipcode}
                   </Typography>
                   <Typography type="subheading" component="h3" color="primary">
-                    {order.delivery_address.country}
+                    {order.shipping_address.country}
                   </Typography>
                   <br />
                 </div>

@@ -16,6 +16,8 @@ import Suggestions from "./Suggestions.js";
 import Chat from "./chat/Chat.js";
 import { StripeProvider } from "react-stripe-elements";
 import Checkout from "../checkout/Checkout";
+import { Button } from "@material-ui/core";
+import Loading from "../core/Loading";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -84,6 +86,7 @@ function Auction({ match }) {
   const [relatedAuctions, setRelatedAuctions] = useState([]);
   const [justEnded, setJustEnded] = useState(false);
   const [redirectToMyAuctions, setRedirectToMyAuctions] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -129,6 +132,10 @@ function Auction({ match }) {
 
   if (redirectToMyAuctions) {
     return <Redirect to="/auctions/all/by-seller" />;
+  }
+
+  if (loading) {
+    return <Loading />;
   }
 
   const currentDate = new Date();
@@ -200,11 +207,22 @@ function Auction({ match }) {
                       </Typography>
                     )}
                     {auth.isAuthenticated() && (
-                      <Bidding
-                        auction={auction}
-                        justEnded={justEnded}
-                        updateBids={updateBids}
-                      />
+                      <>
+                        <Bidding
+                          auction={auction}
+                          justEnded={justEnded}
+                          updateBids={updateBids}
+                        />
+                        {justEnded &&
+                          !auction.purchased &&
+                          auth.isAuthenticated().user._id ===
+                            auction.bids[0]?.bidder._id && (
+                            <Checkout
+                              auction={auction}
+                              setLoading={setLoading}
+                            />
+                          )}
+                      </>
                     )}
                   </>
                 ) : (
@@ -221,15 +239,7 @@ function Auction({ match }) {
           {auth.isAuthenticated() && <Chat auction={auction} />}
         </Grid>
         <Grid item xs={4} sm={4}>
-          {justEnded &&
-          !auction.purchased &&
-          auth.isAuthenticated().user._id === auction.bids[0]?.bidder._id ? (
-            <StripeProvider apiKey={process.env.REACT_APP_PUBLISHABLE_KEY}>
-              <Checkout auction={auction} />
-            </StripeProvider>
-          ) : (
-            <Suggestions auctions={relatedAuctions} title="Related Auctions" />
-          )}
+          <Suggestions auctions={relatedAuctions} title="Related Auctions" />
         </Grid>
       </Grid>
     </div>

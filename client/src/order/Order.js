@@ -135,7 +135,7 @@ function Order({ match }) {
   }, [match.params.orderId, token]);
 
   const getWinningBid = () => {
-    return order?.product.auction.bids[0].bid;
+    return order?.auction.bids[0].bid;
   };
 
   return (
@@ -161,8 +161,8 @@ function Order({ match }) {
                   <Card className={classes.cart}>
                     <CardMedia
                       className={classes.cover}
-                      image={getAuctionImage(order.product.auction)}
-                      title={order.product.auction.itemName}
+                      image={getAuctionImage(order.auction)}
+                      title={order.auction.itemName}
                     />
                     <div className={classes.details}>
                       <CardContent className={classes.content}>
@@ -172,7 +172,7 @@ function Order({ match }) {
                           className={classes.productTitle}
                           color="primary"
                         >
-                          <strong>{order.product.auction.itemName}</strong>
+                          <strong>{order.auction.itemName}</strong>
                         </Typography>
 
                         <Typography
@@ -182,7 +182,7 @@ function Order({ match }) {
                             order.status === "Cancelled" ? "error" : "primary"
                           }
                         >
-                          Status: {order.product.status}
+                          Status: {order.status}
                         </Typography>
                       </CardContent>
                     </div>
@@ -191,8 +191,9 @@ function Order({ match }) {
                 </span>
                 <div className={classes.checkout}>
                   <span>
-                    {order.product.status === "Delivered" &&
-                      !order.reviewed && <Review order={order} />}
+                    {order.status === "Delivered" && !order.reviewed && (
+                      <Review order={order} />
+                    )}
                   </span>
                   <span className={classes.total}>
                     Winning Bid: ${getWinningBid()}
@@ -216,7 +217,7 @@ function Order({ match }) {
                   className={classes.info}
                   color="primary"
                 >
-                  <strong>{`${order.first_name} ${order.last_name}`}</strong>
+                  <strong>{`${order.buyer.firstName} ${order.buyer.lastName}`}</strong>
                 </Typography>
                 <br />
                 <Typography
@@ -237,7 +238,7 @@ function Order({ match }) {
                   className={classes.itemShop}
                   color="primary"
                 >
-                  {order.delivery_address.street}
+                  {order.shipping_address.street}
                 </Typography>
                 <Typography
                   type="subheading"
@@ -245,9 +246,9 @@ function Order({ match }) {
                   className={classes.itemShop}
                   color="primary"
                 >
-                  {order.delivery_address.city},{" "}
-                  {order.delivery_address.province}{" "}
-                  {order.delivery_address.zipcode}
+                  {order.shipping_address.city},{" "}
+                  {order.shipping_address.province}{" "}
+                  {order.shipping_address.zipcode}
                 </Typography>
                 <Typography
                   type="subheading"
@@ -255,7 +256,7 @@ function Order({ match }) {
                   className={classes.itemShop}
                   color="primary"
                 >
-                  {order.delivery_address.country}
+                  {order.shipping_address.country}
                 </Typography>
                 <br />
                 <Typography

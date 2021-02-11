@@ -2,8 +2,9 @@ const Order = require("../models/order.model");
 const errorHandler = require("../helpers/dbErrorHandler");
 
 const create = async (req, res) => {
+  console.log(req.body.order);
   try {
-    req.body.order.user = req.profile;
+    req.body.order.buyer = req.profile;
     const order = new Order(req.body.order);
     let result = await order.save();
     res.status(200).json(result);
@@ -16,8 +17,9 @@ const create = async (req, res) => {
 
 const listBySeller = async (req, res) => {
   try {
-    let orders = await Order.find({ "product.seller": req.profile._id })
-      .populate("product.auction", "_id itemName bids")
+    let orders = await Order.find({ seller: req.profile._id })
+      .populate("auction", "_id itemName bids")
+      .populate("buyer", "_id firstName lastName")
       .sort("-createAt")
       .exec();
     res.json(orders);
@@ -30,8 +32,8 @@ const listBySeller = async (req, res) => {
 
 const listByBuyer = async (req, res) => {
   try {
-    let orders = await Order.find({ user: req.profile._id })
-      .populate("product.auction", "_id itemName bids")
+    let orders = await Order.find({ buyer: req.profile._id })
+      .populate("auction", "_id itemName bids")
       .sort("-createAt")
       .exec();
     res.json(orders);
@@ -47,9 +49,9 @@ const listLatest = async (req, res) => {
     let orders = await Order.find({})
       .sort("-createdAt")
       .limit(5)
-      .populate("product.seller", "_id firstName lastName")
-      .populate("product.auction", "_id itemName bids")
-      .populate("user", "_id firstName lastName");
+      .populate("seller", "_id firstName lastName")
+      .populate("auction", "_id itemName bids")
+      .populate("buyer", "_id firstName lastName");
     res.json(orders);
   } catch (err) {
     return res.status(400).json({
@@ -61,7 +63,8 @@ const listLatest = async (req, res) => {
 const OrderById = async (req, res, next, id) => {
   try {
     const order = await Order.findById(id)
-      .populate("product.auction", "_id itemName bids")
+      .populate("auction", "_id itemName bids")
+      .populate("buyer", "_id firstName lastName")
       .exec();
     if (!order) {
       return res.status(400).json({ error: "Order not found" });
@@ -79,8 +82,8 @@ const read = (req, res) => {
   return res.json(req.order);
 };
 
-const isWinner = async (req, res, next) => {
-  const isWinner = req.order && req.auth && req.order.user == req.auth._id;
+const isBuyer = async (req, res, next) => {
+  const isWinner = req.order && req.auth && req.order.buyer._id == req.auth._id;
   if (!isWinner) {
     return res.status("403").json({
       error: "Not authorized to view this order",
@@ -90,13 +93,12 @@ const isWinner = async (req, res, next) => {
 };
 
 const getStatusValues = (req, res) => {
-  res.json(Order.schema.path("product.status").enumValues);
+  res.json(Order.schema.path("status").enumValues);
 };
 
 const isSeller = (req, res, next) => {
   console.log(req.order);
-  const isSeller =
-    req.order && req.auth && req.order.product.seller._id == req.auth._id;
+  const isSeller = req.order && req.auth && req.order.seller == req.auth._id;
   if (!isSeller) {
     return res.status("403").json({
       error: "User is not authorized",
@@ -109,7 +111,7 @@ const update = async (req, res) => {
   try {
     let order = await Order.updateOne(
       { _id: req.order._id },
-      { "product.status": req.body.status }
+      { status: req.body.status }
     );
     res.json(order);
   } catch (err) {
@@ -138,7 +140,7 @@ module.exports = {
   getStatusValues,
   OrderById,
   read,
-  isWinner,
+  isBuyer,
   isSeller,
   update,
   setReviewed,

@@ -87,24 +87,19 @@ function OrdersTable({ orders }) {
         <TableBody>
           {orders
             .filter(
-              (order) =>
-                !search || order.product.auction.itemName.includes(search)
+              (order) => !search || order.auction.itemName.includes(search)
             )
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((order) => (
               <StyledTableRow key={order._id}>
-                <StyledTableCell>
-                  {order.product.auction.itemName}
-                </StyledTableCell>
-                <StyledTableCell>{`${order.product.seller.firstName} ${order.product.seller.lastName}`}</StyledTableCell>
-                <StyledTableCell>{`${order.user.firstName} ${order.user.lastName}`}</StyledTableCell>
-                <StyledTableCell>
-                  $ {order.product.auction.bids[0].bid}
-                </StyledTableCell>
+                <StyledTableCell>{order.auction.itemName}</StyledTableCell>
+                <StyledTableCell>{`${order.seller.firstName} ${order.seller.lastName}`}</StyledTableCell>
+                <StyledTableCell>{`${order.buyer.firstName} ${order.buyer.lastName}`}</StyledTableCell>
+                <StyledTableCell>$ {order.auction.bids[0].bid}</StyledTableCell>
                 <StyledTableCell>
                   {new Date(order.createdAt).toLocaleString()}
                 </StyledTableCell>
-                <StyledTableCell>{order.product.status}</StyledTableCell>
+                <StyledTableCell>{order.status}</StyledTableCell>
               </StyledTableRow>
             ))}
           {emptyRows > 0 && (
