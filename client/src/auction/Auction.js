@@ -86,7 +86,9 @@ function Auction({ match }) {
   const [relatedAuctions, setRelatedAuctions] = useState([]);
   const [justEnded, setJustEnded] = useState(false);
   const [redirectToMyAuctions, setRedirectToMyAuctions] = useState(false);
+  const [redirectToOrder, setRedirectToOrder] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [orderId, setOrderId] = useState("");
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -132,6 +134,10 @@ function Auction({ match }) {
 
   if (redirectToMyAuctions) {
     return <Redirect to="/auctions/all/by-seller" />;
+  }
+
+  if (redirectToOrder) {
+    return <Redirect to={`/order/${orderId}`} />;
   }
 
   if (loading) {
@@ -220,6 +226,8 @@ function Auction({ match }) {
                             <Checkout
                               auction={auction}
                               setLoading={setLoading}
+                              setRedirectToOrder={setRedirectToOrder}
+                              setOrderId={setOrderId}
                             />
                           )}
                       </>

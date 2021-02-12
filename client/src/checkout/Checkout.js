@@ -11,13 +11,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Checkout({ auction, setLoading }) {
+function Checkout({ auction, setLoading, setRedirectToOrder, setOrderId }) {
   const classes = useStyles();
-  const [values, setValues] = useState({
-    error: "",
-    orderId: "",
-    redirectToOrders: false,
-  });
 
   const { user } = auth.isAuthenticated();
   const amount = auction.bids[0].bid * 100;
@@ -59,11 +54,8 @@ function Checkout({ auction, setLoading }) {
         config
       );
       setLoading(false);
-      setValues({
-        ...values,
-        orderId: response.data._id,
-        redirectToOrders: true,
-      });
+      setOrderId(response.data._id);
+      setRedirectToOrder(true);
     } catch (err) {
       console.log(err);
     }
