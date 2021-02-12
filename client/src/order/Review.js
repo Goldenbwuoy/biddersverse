@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Review({ order }) {
+function Review({ order, setReviewed }) {
   const [open, setOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
@@ -70,6 +70,7 @@ function Review({ order }) {
           console.log(data.error);
         } else {
           console.log("review created");
+          setReviewed(true);
           setOpen(false);
         }
       }

@@ -62,7 +62,7 @@ function Reviews({ userId }) {
       {reviews.length ? (
         <>
           {reviews.map((review) => (
-            <>
+            <div key={review._id}>
               <Card className={classes.reviewContainer}>
                 <div>
                   <div className={classes.reviewHeader}>
@@ -86,7 +86,7 @@ function Reviews({ userId }) {
                 </div>
               </Card>
               <Divider />
-            </>
+            </div>
           ))}
         </>
       ) : (

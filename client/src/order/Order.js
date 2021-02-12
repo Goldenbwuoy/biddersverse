@@ -110,6 +110,7 @@ function Order({ match }) {
   const { token } = auth.isAuthenticated();
   const [order, setOrder] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [reviewed, setReviewed] = useState(false);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -126,6 +127,7 @@ function Order({ match }) {
         console.log(data.error);
       } else {
         setOrder(data);
+        setReviewed(data.reviewed);
         setLoading(false);
       }
     });
@@ -191,8 +193,8 @@ function Order({ match }) {
                 </span>
                 <div className={classes.checkout}>
                   <span>
-                    {order.status === "Delivered" && !order.reviewed && (
-                      <Review order={order} />
+                    {order.status === "Delivered" && !reviewed && (
+                      <Review order={order} setReviewed={setReviewed} />
                     )}
                   </span>
                   <span className={classes.total}>

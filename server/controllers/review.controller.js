@@ -5,8 +5,8 @@ const create = async (req, res) => {
   const review = new Review(req.body);
   try {
     review.order = req.order;
-    review.customer = req.order.user;
-    review.seller = req.order.product.seller;
+    review.customer = req.order.buyer;
+    review.seller = req.order.seller;
     await review.save();
     return res.status(200).json({
       message: "Review created",
