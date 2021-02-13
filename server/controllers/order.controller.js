@@ -2,7 +2,6 @@ const Order = require("../models/order.model");
 const errorHandler = require("../helpers/dbErrorHandler");
 
 const create = async (req, res) => {
-  console.log(req.body.order);
   try {
     req.body.order.buyer = req.profile;
     const order = new Order(req.body.order);

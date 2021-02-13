@@ -5,12 +5,15 @@ const orderCtrl = require("../controllers/order.controller");
 const auctionCtrl = require("../controllers/auction.controller");
 const reviewCtrl = require("../controllers/review.controller");
 
-router.route("/api/orders/:userId").post(
-  authCtrl.requireSignin,
-  // userCtrl.createCharge,
-  auctionCtrl.setPurchased,
-  orderCtrl.create
-);
+router
+  .route("/api/orders/:userId")
+  .post(
+    authCtrl.requireSignin,
+    userCtrl.createCustomer,
+    userCtrl.createCharge,
+    auctionCtrl.setPurchased,
+    orderCtrl.create
+  );
 
 router
   .route("/api/orders/seller/:userId")

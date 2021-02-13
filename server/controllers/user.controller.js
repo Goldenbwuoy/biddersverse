@@ -147,84 +147,59 @@ const stripe_auth = (req, res, next) => {
 /**The function receives a card token from the frontend and uses it to either
  * create a new Stripe Customer or update an existing one
  */
-const stipeCustomer = (req, res, next) => {
+const createCustomer = async (req, res, next) => {
   if (req.profile.stripe_customer) {
-    // update stripe customer
-    myStripe.customers.update(
-      req.profile.stripe_customer,
-      {
-        source: req.body.token,
-      },
-      (err, customer) => {
-        if (err) {
-          return res.status(400).send({
-            error: "Could not update the charge details",
-          });
-        }
-        req.body.order.payment_id = customer.id;
-        next();
-      }
-    );
+    next();
   } else {
-    // create a new stripe customer
-    myStripe.customers
-      .create({
+    // create a new stripe customer and update the user with the new customer id
+    try {
+      const customer = await myStripe.customers.create({
         email: req.profile.email,
-        source: req.body.token,
-      })
-      .then((customer) => {
-        User.update(
-          { _id: req.profile._id },
-          { $set: { stripe_customer: customer.id } },
-          (err, order) => {
-            if (err) {
-              return res.status(400).send({
-                error: errorHandler.getErrorMessage(err),
-              });
-            }
-            req.body.order.payment_id = customer.id;
-            next();
-          }
-        );
       });
+      try {
+        const user = await User.findOneAndUpdate(
+          { _id: req.profile._id },
+          { stripe_customer: customer.id },
+          { new: true }
+        );
+        req.profile = user;
+        next();
+      } catch (err) {
+        return res.status(400).send({
+          error: errorHandler.getErrorMessage(err),
+        });
+      }
+    } catch (err) {
+      return res.status(400).send({
+        error: err.message,
+      });
+    }
   }
 };
 
 /**Create a charge on behalf of the seller on the the bidder's credit card for the cost of the item ordered */
 const createCharge = async (req, res, next) => {
-  next();
-};
+  console.log(req.body.order);
+  console.log(req.body.token);
+  console.log(req.profile);
 
-// const createCharge = (req, res, next) => {
-//   if (!req.profile.stripe_seller) {
-//     return res.status(400).json({
-//       error: "Please connect your Stripe account",
-//     });
-//   }
-//   myStripe.tokens
-//     .create(
-//       {
-//         customer: req.order.payment_id,
-//       },
-//       { stripeAccount: req.profile.stripe_seller.stipe_user_id }
-//     )
-//     .then((token) => {
-//       myStripe.charges
-//         .create(
-//           {
-//             amount: req.body.amount * 100,
-//             currency: "usd",
-//             source: token.id,
-//           },
-//           {
-//             stripeAccount: req.profile.stripe_seller.stipe_user_id,
-//           }
-//         )
-//         .then((charge) => {
-//           next();
-//         });
-//     });
-// };
+  try {
+    const application_fee = 0.01 * req.body.order.amount;
+    await myStripe.charges.create(
+      {
+        amount: req.body.order.amount,
+        currency: "usd",
+        source: req.body.token.id,
+        application_fee_amount: application_fee,
+      },
+      { stripeAccount: req.body.order.seller.stripe_seller.stripe_user_id }
+    );
+    next();
+  } catch (err) {
+    console.log("Could not create charge");
+    return res.status(400).json({ error: err.message });
+  }
+};
 
 module.exports = {
   create,
@@ -236,7 +211,7 @@ module.exports = {
   photo,
   isSeller,
   stripe_auth,
-  stipeCustomer,
+  createCustomer,
   createCharge,
   confirmEmail,
 };

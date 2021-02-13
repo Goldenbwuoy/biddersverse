@@ -145,7 +145,7 @@ const listWonByBidder = async (req, res) => {
 const auctionByID = async (req, res, next, id) => {
   try {
     let auction = await Auction.findById(id)
-      .populate("seller", "_id firstName lastName")
+      .populate("seller", "_id firstName lastName stripe_seller")
       .populate("bids.bidder", "_id firstName lastName")
       .exec();
     if (!auction)

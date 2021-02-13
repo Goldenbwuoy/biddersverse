@@ -37,6 +37,7 @@ function Checkout({ auction, setLoading, setRedirectToOrder, setOrderId }) {
         auction: auction,
         seller: auction.seller,
         email: token.email,
+        amount: amount,
         shipping_address: {
           street: address_line1,
           city: address_city,
