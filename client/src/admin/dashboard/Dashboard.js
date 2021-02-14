@@ -22,7 +22,7 @@ import PeopleIcon from "@material-ui/icons/People";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import LayersIcon from "@material-ui/icons/Layers";
 import ShopTwoIcon from "@material-ui/icons/ShopTwo";
-import { secondaryListItems } from "./listItems";
+import { mainListItemsData, secondaryListItems } from "./listItems";
 import Logo from "../../assets/images/logo2.png";
 import {
   Button,
@@ -190,46 +190,14 @@ const Dashboard = ({ history }) => {
         <Divider />
         <List>
           {/* {mainListItems} */}
-          <Link className={classes.sidebarLinks} to="/admin/home">
-            <ListItem button>
-              <ListItemIcon>
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText primary="Dashboard" />
-            </ListItem>
-          </Link>
-          <Link className={classes.sidebarLinks} to="/admin/users">
-            <ListItem button>
-              <ListItemIcon>
-                <PeopleIcon />
-              </ListItemIcon>
-              <ListItemText primary="Users" />
-            </ListItem>
-          </Link>
-          <Link className={classes.sidebarLinks} to="/admin/auctions">
-            <ListItem button>
-              <ListItemIcon>
-                <ShopTwoIcon />
-              </ListItemIcon>
-              <ListItemText primary="Auctions" />
-            </ListItem>
-          </Link>
-          <Link className={classes.sidebarLinks} to="/admin/orders">
-            <ListItem button>
-              <ListItemIcon>
-                <ShoppingCartIcon />
-              </ListItemIcon>
-              <ListItemText primary="Orders" />
-            </ListItem>
-          </Link>
-          <Link className={classes.sidebarLinks} to="/admin/categories">
-            <ListItem button>
-              <ListItemIcon>
-                <LayersIcon />
-              </ListItemIcon>
-              <ListItemText primary="Auction Categories" />
-            </ListItem>
-          </Link>
+          {mainListItemsData.map((item) => (
+            <Link className={classes.sidebarLinks} to={item.path}>
+              <ListItem button>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.title} />
+              </ListItem>
+            </Link>
+          ))}
         </List>
         <Divider />
         <List>{secondaryListItems}</List>

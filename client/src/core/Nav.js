@@ -24,6 +24,7 @@ import { listCategories } from "../category/api-category";
 import MyBidsMenu from "./MyBidsMenu";
 import Search from "./Search";
 import Logo from "../assets/images/logo2.png";
+import { auctionsListItems, bidsListItems } from "./drawerListItems";
 
 const drawerWidth = 340;
 
@@ -120,28 +121,6 @@ const Nav = ({ history }) => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [categories, setCategories] = useState([]);
-  const [myAuctions, setMyAuctions] = useState([
-    {
-      title: "All Auctions",
-      path: "/auctions/all/by-seller",
-      status: "all",
-    },
-    {
-      title: "Live Auctions",
-      path: "/auctions/live/by-seller",
-      status: "live",
-    },
-    {
-      title: "Sold Auctions",
-      path: "/auctions/sold/by-seller",
-      status: "sold",
-    },
-  ]);
-  const [myBids, setMyBids] = useState([
-    { title: "All Placed Bids", path: `/auctions/all/bids`, status: "all" },
-    { title: "Live Bids", path: `/auctions/live/bids`, status: "live" },
-    { title: "Won Bids", path: `/auctions/won/bids`, status: "won" },
-  ]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -307,7 +286,7 @@ const Nav = ({ history }) => {
                     <Divider />
                     <div className={classes.list}>
                       <List>
-                        {myAuctions?.map((item) => (
+                        {auctionsListItems.map((item) => (
                           <Link
                             key={item.title}
                             className={classes.drawerLinks}
@@ -339,7 +318,7 @@ const Nav = ({ history }) => {
                 <Divider />
                 <div className={classes.list}>
                   <List>
-                    {myBids?.map((item) => (
+                    {bidsListItems.map((item) => (
                       <Link
                         key={item.title}
                         className={classes.drawerLinks}

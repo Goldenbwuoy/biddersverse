@@ -8,35 +8,35 @@ import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import PeopleIcon from "@material-ui/icons/People";
 import LayersIcon from "@material-ui/icons/Layers";
 import AssignmentIcon from "@material-ui/icons/Assignment";
+import ShopTwoIcon from "@material-ui/icons/ShopTwo";
 
-export const mainListItems = (
-  <div>
-    <ListItem button>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Dashboard" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <PeopleIcon />
-      </ListItemIcon>
-      <ListItemText primary="Users" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <ShoppingCartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Orders" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <LayersIcon />
-      </ListItemIcon>
-      <ListItemText primary="Categories" />
-    </ListItem>
-  </div>
-);
+export const mainListItemsData = [
+  {
+    title: "Dashboard",
+    path: "/admin/home",
+    icon: <DashboardIcon />,
+  },
+  {
+    title: "Users",
+    path: "/admin/users",
+    icon: <PeopleIcon />,
+  },
+  {
+    title: "Auctions",
+    path: "/admin/auctions",
+    icon: <ShopTwoIcon />,
+  },
+  {
+    title: "Dashboard",
+    path: "/admin/orders",
+    icon: <ShoppingCartIcon />,
+  },
+  {
+    title: "Auction Categories",
+    path: "/admin/categories",
+    icon: <LayersIcon />,
+  },
+];
 
 export const secondaryListItems = (
   <div>
