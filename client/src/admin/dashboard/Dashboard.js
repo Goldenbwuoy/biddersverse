@@ -7,7 +7,6 @@ import Box from "@material-ui/core/Box";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
@@ -17,11 +16,6 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import PeopleIcon from "@material-ui/icons/People";
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import LayersIcon from "@material-ui/icons/Layers";
-import ShopTwoIcon from "@material-ui/icons/ShopTwo";
 import { mainListItemsData, secondaryListItems } from "./listItems";
 import Logo from "../../assets/images/logo2.png";
 import {
@@ -146,7 +140,7 @@ const Dashboard = ({ history }) => {
               <MenuIcon />
             </IconButton>
             <Link to="/admin/home">
-              <img className={classes.logo} src={Logo} alt="logo-image" />
+              <img className={classes.logo} src={Logo} alt="logo" />
             </Link>
           </Box>
 

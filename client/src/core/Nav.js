@@ -18,13 +18,19 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import OpenInBrowserIcon from "@material-ui/icons/OpenInBrowser";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { Link, withRouter } from "react-router-dom";
-import { Box, Button, Tooltip } from "@material-ui/core";
+import { Box, Button, ListItemIcon, Tooltip } from "@material-ui/core";
 import auth from "../auth/auth-helper";
 import { listCategories } from "../category/api-category";
 import MyBidsMenu from "./MyBidsMenu";
 import Search from "./Search";
 import Logo from "../assets/images/logo2.png";
 import { auctionsListItems, bidsListItems } from "./drawerListItems";
+import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
+import LayersIcon from "@material-ui/icons/Layers";
+import ShopTwoIcon from "@material-ui/icons/ShopTwo";
+import HomeIcon from "@material-ui/icons/Home";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 
 const drawerWidth = 340;
 
@@ -53,13 +59,15 @@ const useStyles = makeStyles((theme) => ({
   hide: {
     display: "none",
   },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
   drawerPaper: {
+    display: "flex",
+    position: "relative",
+    whiteSpace: "nowrap",
     width: drawerWidth,
-    background: "#CDD6DA",
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   drawerHeader: {
     display: "flex",
@@ -85,25 +93,10 @@ const useStyles = makeStyles((theme) => ({
   dividerColor: {
     backgroundColor: "red",
   },
-  list: {
-    marginLeft: "25px",
-  },
-  listItem: {
-    marginTop: "5px",
-    marginBottom: "5px",
-    marginLeft: "45px",
-    "&:hover": {
-      fontWeight: "bold",
-    },
-  },
   drawerLinks: {
     textDecoration: "none",
     cursor: "pointer",
     color: "black",
-  },
-  drawerTitles: {
-    fontSize: "16px",
-    fontWeight: "800",
   },
   authButton: {
     textTransform: "capitalize",
@@ -111,8 +104,10 @@ const useStyles = makeStyles((theme) => ({
   logo: {
     width: "100px",
     objectFit: "contain",
-    // margin: "0 20px",
-    // marginTop: " 18px",
+  },
+  sidebarLinks: {
+    textDecoration: "none",
+    color: "black",
   },
 }));
 
@@ -121,6 +116,11 @@ const Nav = ({ history }) => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [dropDownValues, setDropDownValues] = useState({
+    showCategories: false,
+    showAuctions: false,
+    showBids: false,
+  });
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -215,10 +215,7 @@ const Nav = ({ history }) => {
         </Toolbar>
       </AppBar>
       <Drawer
-        className={classes.drawer}
-        variant="persistent"
         anchor="left"
-        color="black"
         open={open}
         classes={{
           paper: classes.drawerPaper,
@@ -236,108 +233,157 @@ const Nav = ({ history }) => {
         <Divider />
         <List>
           <>
-            <ListItem button onClick={handleDrawerClose}>
-              <ListItemText>
-                <Link className={classes.drawerLinks} to="/">
-                  <Typography className={classes.drawerTitles}>Home</Typography>
-                </Link>
-              </ListItemText>
-            </ListItem>
-            <Divider />
-            <ListItem button>
-              <ListItemText>
-                <Typography className={classes.drawerTitles}>
-                  Open Auctions By Category
-                </Typography>
-              </ListItemText>
-            </ListItem>
-            <Divider />
-            <div className={classes.list}>
-              <List>
-                {categories?.map((category) => (
-                  <Link
-                    key={category._id}
-                    className={classes.drawerLinks}
-                    to={{
-                      pathname: `/auctions/categories/${category._id}`,
-                      state: { title: category.categoryName },
-                    }}
-                  >
-                    <ListItem button onClick={handleDrawerClose}>
-                      <ListItemText primary={category.categoryName} />
-                    </ListItem>
-                  </Link>
-                ))}
-              </List>
-            </div>
+            <Link className={classes.drawerLinks} to="/">
+              <ListItem button onClick={handleDrawerClose}>
+                <ListItemIcon>
+                  <HomeIcon />
+                </ListItemIcon>
+                <ListItemText primary="Home" />
+              </ListItem>
+            </Link>
 
-            <Divider />
+            <ListItem
+              button
+              onClick={() =>
+                setDropDownValues({
+                  ...dropDownValues,
+                  showCategories: !dropDownValues.showCategories,
+                })
+              }
+            >
+              <ListItemIcon>
+                <LayersIcon />
+              </ListItemIcon>
+              <ListItemText primary="Auctions By Category" />
+              <ListItemIcon>
+                {dropDownValues.showCategories ? (
+                  <ExpandLessIcon />
+                ) : (
+                  <ExpandMoreIcon />
+                )}
+              </ListItemIcon>
+            </ListItem>
+            {dropDownValues.showCategories && (
+              <>
+                <Divider />
+                <List>
+                  {categories?.map((category) => (
+                    <Link
+                      key={category._id}
+                      className={classes.drawerLinks}
+                      to={{
+                        pathname: `/auctions/categories/${category._id}`,
+                        state: { title: category.categoryName },
+                      }}
+                    >
+                      <ListItem button onClick={handleDrawerClose}>
+                        <ListItemText inset secondary={category.categoryName} />
+                      </ListItem>
+                    </Link>
+                  ))}
+                </List>
+                <Divider />
+              </>
+            )}
+
             {auth.isAuthenticated() && (
               <>
                 {auth.isAuthenticated().user.seller && (
                   <>
-                    <ListItem button>
-                      <ListItemText>
-                        <Typography className={classes.drawerTitles}>
-                          My Auctions
-                        </Typography>
-                      </ListItemText>
+                    <ListItem
+                      button
+                      onClick={() =>
+                        setDropDownValues({
+                          ...dropDownValues,
+                          showAuctions: !dropDownValues.showAuctions,
+                        })
+                      }
+                    >
+                      <ListItemIcon>
+                        <ShopTwoIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="My Auctions" />
+                      <ListItemIcon>
+                        {dropDownValues.showAuctions ? (
+                          <ExpandLessIcon />
+                        ) : (
+                          <ExpandMoreIcon />
+                        )}
+                      </ListItemIcon>
                     </ListItem>
+                    {dropDownValues.showAuctions && (
+                      <>
+                        <Divider />
+                        <List>
+                          {auctionsListItems.map((item) => (
+                            <Link
+                              key={item.title}
+                              className={classes.drawerLinks}
+                              to={{
+                                pathname: item.path,
+                                state: {
+                                  title: item.title,
+                                  status: item.status,
+                                },
+                              }}
+                            >
+                              <ListItem button onClick={handleDrawerClose}>
+                                <ListItemText inset secondary={item.title} />
+                              </ListItem>
+                            </Link>
+                          ))}
+                        </List>
+                        <Divider />
+                      </>
+                    )}
+                  </>
+                )}
+                <ListItem
+                  button
+                  onClick={() =>
+                    setDropDownValues({
+                      ...dropDownValues,
+                      showBids: !dropDownValues.showBids,
+                    })
+                  }
+                >
+                  <ListItemIcon>
+                    <MonetizationOnIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="My Bids" />
+                  <ListItemIcon>
+                    {dropDownValues.showBids ? (
+                      <ExpandLessIcon />
+                    ) : (
+                      <ExpandMoreIcon />
+                    )}
+                  </ListItemIcon>
+                </ListItem>
+                {dropDownValues.showBids && (
+                  <>
                     <Divider />
-                    <div className={classes.list}>
-                      <List>
-                        {auctionsListItems.map((item) => (
-                          <Link
-                            key={item.title}
-                            className={classes.drawerLinks}
-                            to={{
-                              pathname: item.path,
-                              state: {
-                                title: item.title,
-                                status: item.status,
-                              },
-                            }}
-                          >
-                            <ListItem button onClick={handleDrawerClose}>
-                              <ListItemText primary={item.title} />
-                            </ListItem>
-                          </Link>
-                        ))}
-                      </List>
-                    </div>
+                    <List>
+                      {bidsListItems.map((item) => (
+                        <Link
+                          key={item.title}
+                          className={classes.drawerLinks}
+                          to={{
+                            pathname: item.path,
+                            state: {
+                              title: item.title,
+                              status: item.status,
+                            },
+                          }}
+                        >
+                          <ListItem button onClick={handleDrawerClose}>
+                            <ListItemText inset secondary={item.title} />
+                          </ListItem>
+                        </Link>
+                      ))}
+                    </List>
                     <Divider />
                   </>
                 )}
-                <ListItem button>
-                  <ListItemText>
-                    <Typography className={classes.drawerTitles}>
-                      My Bids
-                    </Typography>
-                  </ListItemText>
-                </ListItem>
-                <Divider />
-                <div className={classes.list}>
-                  <List>
-                    {bidsListItems.map((item) => (
-                      <Link
-                        key={item.title}
-                        className={classes.drawerLinks}
-                        to={{
-                          pathname: item.path,
-                          state: {
-                            title: item.title,
-                            status: item.status,
-                          },
-                        }}
-                      >
-                        <ListItem button onClick={handleDrawerClose}>
-                          <ListItemText primary={item.title} />
-                        </ListItem>
-                      </Link>
-                    ))}
-                  </List>
-                </div>
-                <Divider className={classes.divider} />
               </>
             )}
           </>
