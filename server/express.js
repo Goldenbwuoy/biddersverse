@@ -11,6 +11,7 @@ const orderRoutes = require("./routes/order.routes");
 const adminRoutes = require("./routes/admin.routes");
 const reviewRoutes = require("./routes/review.routes");
 const morgan = require("morgan");
+const path = require("path");
 
 const app = express();
 
@@ -31,14 +32,18 @@ app.use("/", orderRoutes);
 app.use("/", adminRoutes);
 app.use("/", reviewRoutes);
 
+//use this to show the image you have in node js server to client (react js)
+//https://stackoverflow.com/questions/48914987/send-image-path-from-node-js-express-server-to-react-client
+app.use("/uploads", express.static("uploads"));
+
 /* To handle auth-related errors thrown by express-jwt when it tries to validate JWT
 tokens in incoming requests */
 app.use((err, req, res, next) => {
-  if (err.name === "UnauthorizedError") {
-    res.status(401).json({ error: err.name + ": " + err.message });
-  } else if (err) {
-    res.status(400).json({ error: err.name + ": " + err.message });
-  }
+	if (err.name === "UnauthorizedError") {
+		res.status(401).json({ error: err.name + ": " + err.message });
+	} else if (err) {
+		res.status(400).json({ error: err.name + ": " + err.message });
+	}
 });
 
 module.exports = app;
