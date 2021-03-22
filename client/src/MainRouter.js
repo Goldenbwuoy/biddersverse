@@ -33,6 +33,7 @@ import NewCategory from "./admin/categories/NewCategory";
 import EditCategory from "./admin/categories/EditCategory";
 import SearchResults from "./auction/SearchResults";
 import EmailConfirmation from "./auth/EmailConfirmation";
+import Footer from "./core/Footer";
 
 function MainRouter() {
   return (

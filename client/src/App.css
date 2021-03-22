@@ -1,0 +1,9 @@
+.app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.app_body {
+    padding: 0 10px 10px 10px;
+}
