@@ -27,32 +27,20 @@ const storage = multer.diskStorage({
 	},
 });
 
-const create = (req, res) => {
-	let form = new formidable.IncomingForm();
+const create = async (req, res) => {
+	console.log(req.body);
+	let auction = new Auction(req.body);
+	auction.seller = req.profile;
 
-	form.keepExtensions = true;
-	form.parse(req, async (err, fields, files) => {
-		if (err) {
-			res.status(400).json({
-				message: "Image could not be uploaded",
-			});
-		}
-		let auction = new Auction(fields);
-		auction.seller = req.profile;
-		if (files.image) {
-			auction.image.data = fs.readFileSync(files.image.path);
-			auction.image.contentType = files.image.type;
-		}
-		try {
-			let result = await auction.save();
-			// notificationHandler.scheduleNotification(result);
-			res.status(200).json(result);
-		} catch (err) {
-			return res.status(400).json({
-				error: errorHandler.getErrorMessage(err),
-			});
-		}
-	});
+	try {
+		let result = await auction.save();
+		// notificationHandler.scheduleNotification(result);
+		res.status(200).json(result);
+	} catch (err) {
+		return res.status(400).json({
+			error: errorHandler.getErrorMessage(err),
+		});
+	}
 };
 
 const upload = multer({ storage: storage }).single("file");
