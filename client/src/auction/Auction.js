@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
@@ -11,11 +10,11 @@ import auth from "../auth/auth-helper.js";
 import Timer from "./Timer.js";
 import Bidding from "./Bidding.js";
 import AuctionSettingsMenu from "./AuctionSettingsMenu";
-import { getImage } from "../helpers/auction-helper.js";
 import Suggestions from "./Suggestions.js";
 import Chat from "./chat/Chat.js";
 import Checkout from "../checkout/Checkout";
 import Loading from "../core/Loading";
+import AuctionImageSlider from "./AuctionImageSlider.js";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -185,13 +184,8 @@ function Auction({ match }) {
 						/>
 						<Grid container spacing={6}>
 							<Grid item lg={5} md={6} xs={12} sm={12}>
-								{auction.images?.length && (
-									<CardMedia
-										className={classes.media}
-										image={getImage(auction?.images[0])}
-										title={auction.itemName}
-									/>
-								)}
+								{/* Image slider */}
+								<AuctionImageSlider auction={auction} />
 
 								<Typography
 									component="p"
@@ -275,9 +269,11 @@ function Auction({ match }) {
 							</Grid>
 						</Grid>
 					</Card>
+					{/* Chat component */}
 					{auth.isAuthenticated() && <Chat auction={auction} />}
 				</Grid>
 				<Grid item xs={12} md={4} lg={4}>
+					{/* Related products */}
 					<Suggestions
 						auctions={relatedAuctions}
 						title="Related Auctions"
