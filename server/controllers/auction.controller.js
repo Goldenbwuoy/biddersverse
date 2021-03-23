@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
 		cb(null, "uploads/");
 	},
 	filename: (req, file, cb) => {
-		cb(null, `${Date.now()}_${file.originalname}`);
+		cb(null, `${Date.now()}_${file.originalname.replace(/ /g, "")}`);
 	},
 	fileFilter: (req, file, cb) => {
 		const ext = path.extname(file.originalname);
@@ -282,6 +282,7 @@ const listPopular = async (req, res) => {
 					bidStart: 1,
 					bidEnd: 1,
 					bids: 1,
+					images: 1,
 					bidCount: { $size: "$bids" },
 				},
 			},
