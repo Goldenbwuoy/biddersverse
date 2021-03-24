@@ -88,6 +88,8 @@ function Auction({ match }) {
 	const [loading, setLoading] = useState(false);
 	const [orderId, setOrderId] = useState("");
 
+	console.log(auction);
+
 	useEffect(() => {
 		const abortController = new AbortController();
 		const signal = abortController.signal;

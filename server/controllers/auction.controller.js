@@ -28,7 +28,8 @@ const storage = multer.diskStorage({
 });
 
 const create = async (req, res) => {
-	console.log(req.body);
+	if (!req.body.images)
+		return res.status(400).json({ error: "Images are required" });
 	let auction = new Auction(req.body);
 	auction.seller = req.profile;
 

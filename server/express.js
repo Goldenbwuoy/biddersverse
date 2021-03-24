@@ -24,6 +24,9 @@ app.use(helmet());
 app.use(cors());
 app.use(morgan("dev"));
 
+// Enable pre-flight
+app.options("*", cors());
+
 app.use("/", userRoutes);
 app.use("/", authRoutes);
 app.use("/", auctionRoutes);
