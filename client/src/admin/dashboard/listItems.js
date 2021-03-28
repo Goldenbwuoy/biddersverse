@@ -11,53 +11,53 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 import ShopTwoIcon from "@material-ui/icons/ShopTwo";
 
 export const mainListItemsData = [
-  {
-    title: "Dashboard",
-    path: "/admin/home",
-    icon: <DashboardIcon />,
-  },
-  {
-    title: "Users",
-    path: "/admin/users",
-    icon: <PeopleIcon />,
-  },
-  {
-    title: "Auctions",
-    path: "/admin/auctions",
-    icon: <ShopTwoIcon />,
-  },
-  {
-    title: "Dashboard",
-    path: "/admin/orders",
-    icon: <ShoppingCartIcon />,
-  },
-  {
-    title: "Auction Categories",
-    path: "/admin/categories",
-    icon: <LayersIcon />,
-  },
+	{
+		title: "Dashboard",
+		path: "/admin/home",
+		icon: <DashboardIcon />,
+	},
+	{
+		title: "Users",
+		path: "/admin/users",
+		icon: <PeopleIcon />,
+	},
+	{
+		title: "Auctions",
+		path: "/admin/auctions",
+		icon: <ShopTwoIcon />,
+	},
+	{
+		title: "Orders",
+		path: "/admin/orders",
+		icon: <ShoppingCartIcon />,
+	},
+	{
+		title: "Auction Categories",
+		path: "/admin/categories",
+		icon: <LayersIcon />,
+	},
 ];
 
 export const secondaryListItems = (
-  <div>
-    <ListSubheader inset>Saved reports</ListSubheader>
-    <ListItem button>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Current month" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Last quarter" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Year-end sale" />
-    </ListItem>
-  </div>
+	<div>
+		<ListSubheader inset>Saved reports</ListSubheader>
+		<ListItem button>
+			<ListItemIcon>
+				<AssignmentIcon />
+			</ListItemIcon>
+			<ListItemText primary="Current month" />
+		</ListItem>
+		<ListItem button>
+			<ListItemIcon>
+				<AssignmentIcon />
+			</ListItemIcon>
+			<ListItemText primary="Last quarter" />
+		</ListItem>
+		<ListItem button>
+			<ListItemIcon>
+				<AssignmentIcon />
+			</ListItemIcon>
+			<ListItemText primary="Year-end sale" />
+		</ListItem>
+	</div>
 );

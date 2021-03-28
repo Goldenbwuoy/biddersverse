@@ -13,210 +13,222 @@ import { Button, Card, Grid, Tooltip } from "@material-ui/core";
 import Reviews from "./Reviews";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    margin: "auto",
-    marginTop: theme.spacing(5),
-  },
-  paper: theme.mixins.gutters({
-    maxWidth: 700,
-    margin: "auto",
-    padding: theme.spacing(3),
-    backgroundColor: "#80808024",
-  }),
-  topSection: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  title: {
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(2),
-    color: theme.palette.openTitle,
-  },
-  card: {
-    padding: "8px",
-  },
-  stripe_connect: {
-    marginRight: "10px",
-  },
-  stripe_connected: {
-    verticalAlign: "super",
-    marginRight: "10px",
-  },
-  infoContainer: {
-    display: "flex",
-    justifyContent: "space-between",
-    margin: "20px 0",
-  },
-  infoText: {
-    display: "flex",
-    marginBottom: "15px",
-  },
-  profileImage: {
-    display: "flex",
-    width: "200px",
-  },
-  infoTitle: {
-    fontWeight: "700",
-    marginRight: "10px",
-  },
-  auctionsInfo: {
-    display: "flex",
-    justifyContent: "space-around",
-    margin: "20px 0",
-  },
-  auctionInfoSection: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  stripeInfo: {
-    display: "flex",
-    justifyContent: "space-around",
-    margin: "20px 0",
-  },
+	root: {
+		margin: "auto",
+		marginTop: theme.spacing(5),
+	},
+	paper: theme.mixins.gutters({
+		maxWidth: 700,
+		margin: "auto",
+		padding: theme.spacing(3),
+		backgroundColor: "#80808024",
+	}),
+	topSection: {
+		display: "flex",
+		justifyContent: "space-between",
+		alignItems: "center",
+	},
+	title: {
+		marginTop: theme.spacing(3),
+		marginBottom: theme.spacing(2),
+		color: theme.palette.openTitle,
+	},
+	card: {
+		padding: "8px",
+	},
+	stripe_connect: {
+		marginRight: "10px",
+	},
+	stripe_connected: {
+		verticalAlign: "super",
+		marginRight: "10px",
+	},
+	infoContainer: {
+		display: "flex",
+		justifyContent: "space-between",
+		margin: "20px 0",
+	},
+	infoText: {
+		display: "flex",
+		marginBottom: "15px",
+	},
+	profileImage: {
+		display: "flex",
+		width: "200px",
+	},
+	infoTitle: {
+		fontWeight: "700",
+		marginRight: "10px",
+	},
+	auctionsInfo: {
+		display: "flex",
+		justifyContent: "space-around",
+		margin: "20px 0",
+	},
+	auctionInfoSection: {
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "center",
+	},
+	stripeInfo: {
+		display: "flex",
+		justifyContent: "space-around",
+		margin: "20px 0",
+	},
 }));
 
 function Profile({ match }) {
-  const classes = useStyles();
-  const [user, setUser] = useState({});
-  const [redirectToSignin, setRedirectToSignin] = useState(false);
-  const { token } = auth.isAuthenticated();
-  const isUser =
-    auth.isAuthenticated().user &&
-    auth.isAuthenticated().user._id === user?._id;
+	const classes = useStyles();
+	const [user, setUser] = useState({});
+	const [redirectToSignin, setRedirectToSignin] = useState(false);
+	const { token } = auth.isAuthenticated();
+	const isUser =
+		auth.isAuthenticated().user &&
+		auth.isAuthenticated().user._id === user?._id;
 
-  useEffect(() => {
-    const abortController = new AbortController();
-    const signal = abortController.signal;
+	useEffect(() => {
+		const abortController = new AbortController();
+		const signal = abortController.signal;
 
-    read(
-      {
-        userId: match.params.userId,
-      },
-      { token: token },
-      signal
-    ).then((data) => {
-      if (data && data.error) {
-        setRedirectToSignin(true);
-      } else {
-        setUser(data);
-      }
-    });
+		read(
+			{
+				userId: match.params.userId,
+			},
+			{ token: token },
+			signal
+		).then((data) => {
+			if (data && data.error) {
+				setRedirectToSignin(true);
+			} else {
+				setUser(data);
+			}
+		});
 
-    return function cleanup() {
-      abortController.abort();
-    };
-  }, [match.params.userId, token]);
+		return function cleanup() {
+			abortController.abort();
+		};
+	}, [match.params.userId, token]);
 
-  if (redirectToSignin) {
-    return <Redirect to="/signin" />;
-  }
-  return (
-    <Grid className={classes.root} container spacing={2}>
-      <Grid item xs={12} sm={6}>
-        <Paper className={classes.paper} elevation={4}>
-          <span className={classes.topSection}>
-            <Typography variant="h6" className={classes.title}>
-              Profile
-            </Typography>
-            {isUser && (
-              <Tooltip title="Edit Profile">
-                <Link to={`/user/edit/${user._id}`}>
-                  <EditIcon color="primary" />
-                </Link>
-              </Tooltip>
-            )}
-          </span>
+	if (redirectToSignin) {
+		return <Redirect to="/signin" />;
+	}
+	return (
+		<Grid className={classes.root} container spacing={2}>
+			<Grid item xs={12} sm={12} lg={6}>
+				<Paper className={classes.paper} elevation={4}>
+					<span className={classes.topSection}>
+						<Typography variant="h6" className={classes.title}>
+							Profile
+						</Typography>
+						{isUser && (
+							<Tooltip title="Edit Profile">
+								<Link to={`/user/edit/${user._id}`}>
+									<EditIcon color="primary" />
+								</Link>
+							</Tooltip>
+						)}
+					</span>
 
-          <Card className={classes.card}>
-            <div className={classes.infoContainer}>
-              <div>
-                <span className={classes.infoText}>
-                  <Typography className={classes.infoTitle}>
-                    First Name:
-                  </Typography>
-                  <Typography>{user.firstName}</Typography>
-                </span>
-                <span className={classes.infoText}>
-                  <Typography className={classes.infoTitle}>
-                    Last Name:
-                  </Typography>
-                  <Typography>{user.lastName}</Typography>
-                </span>
-                <span className={classes.infoText}>
-                  <Typography className={classes.infoTitle}>Status:</Typography>
-                  <Typography>Status</Typography>
-                </span>
-                <span className={classes.infoText}>
-                  <Typography className={classes.infoTitle}>
-                    Member Since:
-                  </Typography>
-                  <Typography>
-                    {new Date(user.createdAt).toDateString()}
-                  </Typography>
-                </span>
-              </div>
-              <img
-                className={classes.profileImage}
-                src={profileImage}
-                alt="profile"
-              />
-            </div>
-            <Divider />
-            <div className={classes.auctionsInfo}>
-              <div className={classes.auctionInfoSection}>
-                <Typography variant="h3">200</Typography>
-                <Typography>Auctions Posted</Typography>
-              </div>
-              <div className={classes.auctionInfoSection}>
-                <Typography variant="h3">100</Typography>
-                <Typography>Sold Auctions</Typography>
-              </div>
-              <div className={classes.auctionInfoSection}>
-                <Typography variant="h3">230</Typography>
-                <Typography>Won Auctions</Typography>
-              </div>
-            </div>
-            <Divider />
-            <div className={classes.stripeInfo}>
-              <span>
-                {isUser && (
-                  <>
-                    {user.seller && user.stripe_seller && (
-                      <Button
-                        variant="contained"
-                        disabled
-                        className={classes.stripe_connected}
-                      >
-                        Stripe connected
-                      </Button>
-                    )}
+					<Card className={classes.card}>
+						<div className={classes.infoContainer}>
+							<div>
+								<span className={classes.infoText}>
+									<Typography className={classes.infoTitle}>
+										First Name:
+									</Typography>
+									<Typography>{user.firstName}</Typography>
+								</span>
+								<span className={classes.infoText}>
+									<Typography className={classes.infoTitle}>
+										Last Name:
+									</Typography>
+									<Typography>{user.lastName}</Typography>
+								</span>
+								<span className={classes.infoText}>
+									<Typography className={classes.infoTitle}>
+										Phone Number:
+									</Typography>
+									<Typography>{user.phoneNumber}</Typography>
+								</span>
+								<span className={classes.infoText}>
+									<Typography className={classes.infoTitle}>
+										Member Since:
+									</Typography>
+									<Typography>
+										{new Date(
+											user.createdAt
+										).toDateString()}
+									</Typography>
+								</span>
+							</div>
+							<img
+								className={classes.profileImage}
+								src={profileImage}
+								alt="profile"
+							/>
+						</div>
+						<Divider />
+						<div className={classes.auctionsInfo}>
+							<div className={classes.auctionInfoSection}>
+								<Typography variant="h3">200</Typography>
+								<Typography>Auctions Posted</Typography>
+							</div>
+							<div className={classes.auctionInfoSection}>
+								<Typography variant="h3">100</Typography>
+								<Typography>Sold Auctions</Typography>
+							</div>
+							<div className={classes.auctionInfoSection}>
+								<Typography variant="h3">230</Typography>
+								<Typography>Won Auctions</Typography>
+							</div>
+						</div>
+						<Divider />
+						<div className={classes.stripeInfo}>
+							<span>
+								{isUser && (
+									<>
+										{user.seller && user.stripe_seller && (
+											<Button
+												variant="contained"
+												disabled
+												className={
+													classes.stripe_connected
+												}
+											>
+												Stripe connected
+											</Button>
+										)}
 
-                    {user.seller && !user.stripe_seller && (
-                      <a
-                        href={
-                          "https://connect.stripe.com/oauth/authorize?response_type=code&client_id=" +
-                          process.env.REACT_APP_CLIENT_ID +
-                          "&scope=read_write"
-                        }
-                        className={classes.stripe_connected}
-                      >
-                        <img src={stripeButton} alt="stripe_button" />
-                      </a>
-                    )}
-                  </>
-                )}
-              </span>
-            </div>
-          </Card>
-        </Paper>
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <Reviews userId={match.params.userId} />
-      </Grid>
-    </Grid>
-  );
+										{user.seller && !user.stripe_seller && (
+											<a
+												href={
+													"https://connect.stripe.com/oauth/authorize?response_type=code&client_id=" +
+													process.env
+														.REACT_APP_CLIENT_ID +
+													"&scope=read_write"
+												}
+												className={
+													classes.stripe_connected
+												}
+											>
+												<img
+													src={stripeButton}
+													alt="stripe_button"
+												/>
+											</a>
+										)}
+									</>
+								)}
+							</span>
+						</div>
+					</Card>
+				</Paper>
+			</Grid>
+			<Grid item xs={12} sm={12} lg={6}>
+				<Reviews userId={match.params.userId} />
+			</Grid>
+		</Grid>
+	);
 }
 
 export default Profile;

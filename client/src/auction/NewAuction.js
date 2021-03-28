@@ -200,6 +200,7 @@ function NewAuction() {
 					<br />
 					<TextField
 						id="startingBid"
+						type="number"
 						label="Starting Bid ($)"
 						className={classes.textField}
 						value={values.startingBid}
