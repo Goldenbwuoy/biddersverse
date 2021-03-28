@@ -119,142 +119,169 @@ function Profile({ match }) {
 		return <Redirect to="/signin" />;
 	}
 	return (
-		<Grid className={classes.root} container spacing={2}>
-			<Grid item xs={12} sm={12} lg={6}>
-				<Paper className={classes.paper} elevation={4}>
-					<span className={classes.topSection}>
-						<Typography variant="h6" className={classes.title}>
-							Profile
-						</Typography>
-						{isUser && (
-							<Tooltip title="Edit Profile">
-								<Link to={`/user/edit/${user._id}`}>
-									<EditIcon color="primary" />
-								</Link>
-							</Tooltip>
-						)}
-					</span>
-
-					<Card className={classes.card}>
-						<div className={classes.infoContainer}>
-							<div>
-								<span className={classes.infoText}>
-									<Typography className={classes.infoTitle}>
-										First Name:
-									</Typography>
-									<Typography>{user.firstName}</Typography>
-								</span>
-								<span className={classes.infoText}>
-									<Typography className={classes.infoTitle}>
-										Last Name:
-									</Typography>
-									<Typography>{user.lastName}</Typography>
-								</span>
-								<span className={classes.infoText}>
-									<Typography className={classes.infoTitle}>
-										Phone Number:
-									</Typography>
-									<Typography>{user.phoneNumber}</Typography>
-								</span>
-								<span className={classes.infoText}>
-									<Typography className={classes.infoTitle}>
-										Member Since:
-									</Typography>
-									<Typography>
-										{new Date(
-											user.createdAt
-										).toDateString()}
-									</Typography>
-								</span>
-							</div>
-							<img
-								className={classes.profileImage}
-								src={profileImage}
-								alt="profile"
-							/>
-						</div>
-						<Divider />
-						<div className={classes.auctionsInfo}>
-							{user.seller && (
-								<>
-									<div className={classes.auctionInfoSection}>
-										<Typography
-											className={classes.statsNumber}
-										>
-											{stats.auctionsPosted}
-										</Typography>
-										<Typography>Auctions Posted</Typography>
-									</div>
-									<div className={classes.auctionInfoSection}>
-										<Typography
-											className={classes.statsNumber}
-										>
-											{stats.soldAuctions}
-										</Typography>
-										<Typography>Sold Auctions</Typography>
-									</div>
-								</>
+		<div className={classes.root}>
+			<Grid container spacing={2}>
+				<Grid item xs={12} sm={12} lg={6}>
+					<Paper className={classes.paper} elevation={4}>
+						<span className={classes.topSection}>
+							<Typography variant="h6" className={classes.title}>
+								Profile
+							</Typography>
+							{isUser && (
+								<Tooltip title="Edit Profile">
+									<Link to={`/user/edit/${user._id}`}>
+										<EditIcon color="primary" />
+									</Link>
+								</Tooltip>
 							)}
+						</span>
 
-							<div className={classes.auctionInfoSection}>
-								<Typography className={classes.statsNumber}>
-									{stats.bidsByUser}
-								</Typography>
-								<Typography>Auctions Bid On</Typography>
+						<Card className={classes.card}>
+							<div className={classes.infoContainer}>
+								<div>
+									<span className={classes.infoText}>
+										<Typography
+											className={classes.infoTitle}
+										>
+											First Name:
+										</Typography>
+										<Typography>
+											{user.firstName}
+										</Typography>
+									</span>
+									<span className={classes.infoText}>
+										<Typography
+											className={classes.infoTitle}
+										>
+											Last Name:
+										</Typography>
+										<Typography>{user.lastName}</Typography>
+									</span>
+									<span className={classes.infoText}>
+										<Typography
+											className={classes.infoTitle}
+										>
+											Phone Number:
+										</Typography>
+										<Typography>
+											{user.phoneNumber}
+										</Typography>
+									</span>
+									<span className={classes.infoText}>
+										<Typography
+											className={classes.infoTitle}
+										>
+											Member Since:
+										</Typography>
+										<Typography>
+											{new Date(
+												user.createdAt
+											).toDateString()}
+										</Typography>
+									</span>
+								</div>
+								<img
+									className={classes.profileImage}
+									src={profileImage}
+									alt="profile"
+								/>
 							</div>
-							<div className={classes.auctionInfoSection}>
-								<Typography className={classes.statsNumber}>
-									{stats.wonByUser}
-								</Typography>
-								<Typography>Auctions Won</Typography>
-							</div>
-						</div>
-						<Divider />
-						<div className={classes.stripeInfo}>
-							<span>
-								{isUser && (
+							<Divider />
+							<div className={classes.auctionsInfo}>
+								{user.seller && (
 									<>
-										{user.seller && user.stripe_seller && (
-											<Button
-												variant="contained"
-												disabled
-												className={
-													classes.stripe_connected
-												}
+										<div
+											className={
+												classes.auctionInfoSection
+											}
+										>
+											<Typography
+												className={classes.statsNumber}
 											>
-												Stripe connected
-											</Button>
-										)}
-
-										{user.seller && !user.stripe_seller && (
-											<a
-												href={
-													"https://connect.stripe.com/oauth/authorize?response_type=code&client_id=" +
-													process.env
-														.REACT_APP_CLIENT_ID +
-													"&scope=read_write"
-												}
-												className={
-													classes.stripe_connected
-												}
+												{stats.auctionsPosted}
+											</Typography>
+											<Typography>
+												Auctions Posted
+											</Typography>
+										</div>
+										<div
+											className={
+												classes.auctionInfoSection
+											}
+										>
+											<Typography
+												className={classes.statsNumber}
 											>
-												<img
-													src={stripeButton}
-													alt="stripe_button"
-												/>
-											</a>
-										)}
+												{stats.soldAuctions}
+											</Typography>
+											<Typography>
+												Sold Auctions
+											</Typography>
+										</div>
 									</>
 								)}
-							</span>
-						</div>
-					</Card>
-				</Paper>
+
+								<div className={classes.auctionInfoSection}>
+									<Typography className={classes.statsNumber}>
+										{stats.bidsByUser}
+									</Typography>
+									<Typography>Auctions Bid On</Typography>
+								</div>
+								<div className={classes.auctionInfoSection}>
+									<Typography className={classes.statsNumber}>
+										{stats.wonByUser}
+									</Typography>
+									<Typography>Auctions Won</Typography>
+								</div>
+							</div>
+							<Divider />
+							<div className={classes.stripeInfo}>
+								<span>
+									{isUser && (
+										<>
+											{user.seller && user.stripe_seller && (
+												<Button
+													variant="contained"
+													disabled
+													className={
+														classes.stripe_connected
+													}
+												>
+													Stripe connected
+												</Button>
+											)}
+
+											{user.seller &&
+												!user.stripe_seller && (
+													<a
+														href={
+															"https://connect.stripe.com/oauth/authorize?response_type=code&client_id=" +
+															process.env
+																.REACT_APP_CLIENT_ID +
+															"&scope=read_write"
+														}
+														className={
+															classes.stripe_connected
+														}
+													>
+														<img
+															src={stripeButton}
+															alt="stripe_button"
+														/>
+													</a>
+												)}
+										</>
+									)}
+								</span>
+							</div>
+						</Card>
+					</Paper>
+				</Grid>
+				<Grid item xs={12} sm={12} lg={6}>
+					<Reviews userId={match.params.userId} />
+				</Grid>
 			</Grid>
-			<Grid item xs={12} sm={12} lg={6}>
-				<Reviews userId={match.params.userId} />
-			</Grid>
-		</Grid>
+		</div>
 	);
 }
 
