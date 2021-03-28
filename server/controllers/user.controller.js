@@ -1,4 +1,5 @@
 const User = require("../models/user.model.js");
+const Auction = require("../models/auction.model");
 const errorHandler = require("../helpers/dbErrorHandler.js");
 const extend = require("lodash/extend");
 const formidable = require("formidable");
@@ -204,6 +205,79 @@ const createCharge = async (req, res, next) => {
 	}
 };
 
+const get_stats = (req, res) => {
+	const stats = {
+		wonByUser: req.wonAuctions.length,
+		bidsByUser: req.bidAuctions.length,
+		auctionsPosted: req.profile.seller
+			? req.auctionsByUser.length
+			: undefined,
+		soldAuctions: req.profile.seller ? req.soldByUser.length : undefined,
+	};
+
+	return res.status(200).json({ profile: req.profile, stats });
+};
+
+const wonByUser = async (req, res, next) => {
+	try {
+		const wonAuctions = await Auction.find({
+			"bids.bidder": req.profile._id,
+			bidEnd: { $lt: new Date() },
+			"bids.0.bidder": req.profile._id,
+		});
+		req.wonAuctions = wonAuctions;
+		next();
+	} catch (err) {
+		return res.status(400).json({
+			error: errorHandler.getErrorMessage(err),
+		});
+	}
+};
+
+const bidsByUser = async (req, res, next) => {
+	try {
+		let auctions = await Auction.find({ "bids.bidder": req.profile._id });
+		req.bidAuctions = auctions;
+		next();
+	} catch (err) {
+		return res.status(400).json({
+			error: errorHandler.getErrorMessage(err),
+		});
+	}
+};
+
+const allAuctionsByUser = async (req, res, next) => {
+	if (!req.profile.seller) next();
+
+	try {
+		let auctions = await Auction.find({ seller: req.profile._id });
+		req.auctionsByUser = auctions;
+		next();
+	} catch (err) {
+		return res.status(400).json({
+			error: errorHandler.getErrorMessage(err),
+		});
+	}
+};
+
+const soldAuctionsByUser = async (req, res, next) => {
+	if (!req.profile.seller) next();
+
+	try {
+		let auctions = await Auction.find({
+			seller: req.profile._id,
+			bidEnd: { $lt: new Date() },
+			$where: "this.bids.length > 0",
+		});
+		req.soldByUser = auctions;
+		next();
+	} catch (err) {
+		return res.status(400).json({
+			error: errorHandler.getErrorMessage(err),
+		});
+	}
+};
+
 module.exports = {
 	create,
 	userByID,
@@ -217,4 +291,9 @@ module.exports = {
 	createCustomer,
 	createCharge,
 	confirmEmail,
+	get_stats,
+	wonByUser,
+	bidsByUser,
+	allAuctionsByUser,
+	soldAuctionsByUser,
 };

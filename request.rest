@@ -202,3 +202,7 @@ GET http://localhost:5000/api/auctions/popular
 
 ### get user reviews
 GET http://localhost:5000/api/reviews/user/6009329fec623b2ba4fa2719
+
+### get profile stats
+GET http://localhost:5000/api/users/profile/605a99d56266af39e85d97fe
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA5MzJlM2VjNjIzYjJiYTRmYTI3MWEiLCJpYXQiOjE2MTEyODgxMTJ9.uSyQWbiun9XsBsCEGUowQfiQupWVCC4g2kQAWR7S-cQ

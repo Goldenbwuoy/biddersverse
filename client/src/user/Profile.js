@@ -4,7 +4,7 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import auth from "./../auth/auth-helper";
-import { read } from "./api-user.js";
+import { getProfile } from "./api-user.js";
 import { Redirect, Link } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import profileImage from "../assets/images/profile-pic.jpg";
@@ -75,11 +75,16 @@ const useStyles = makeStyles((theme) => ({
 		justifyContent: "space-around",
 		margin: "20px 0",
 	},
+	statsNumber: {
+		fontSize: 24,
+		fontWeight: "800",
+	},
 }));
 
 function Profile({ match }) {
 	const classes = useStyles();
 	const [user, setUser] = useState({});
+	const [stats, setStats] = useState({});
 	const [redirectToSignin, setRedirectToSignin] = useState(false);
 	const { token } = auth.isAuthenticated();
 	const isUser =
@@ -90,7 +95,7 @@ function Profile({ match }) {
 		const abortController = new AbortController();
 		const signal = abortController.signal;
 
-		read(
+		getProfile(
 			{
 				userId: match.params.userId,
 			},
@@ -100,7 +105,8 @@ function Profile({ match }) {
 			if (data && data.error) {
 				setRedirectToSignin(true);
 			} else {
-				setUser(data);
+				setUser(data.profile);
+				setStats(data.stats);
 			}
 		});
 
@@ -169,17 +175,38 @@ function Profile({ match }) {
 						</div>
 						<Divider />
 						<div className={classes.auctionsInfo}>
+							{user.seller && (
+								<>
+									<div className={classes.auctionInfoSection}>
+										<Typography
+											className={classes.statsNumber}
+										>
+											{stats.auctionsPosted}
+										</Typography>
+										<Typography>Auctions Posted</Typography>
+									</div>
+									<div className={classes.auctionInfoSection}>
+										<Typography
+											className={classes.statsNumber}
+										>
+											{stats.soldAuctions}
+										</Typography>
+										<Typography>Sold Auctions</Typography>
+									</div>
+								</>
+							)}
+
 							<div className={classes.auctionInfoSection}>
-								<Typography variant="h3">200</Typography>
-								<Typography>Auctions Posted</Typography>
+								<Typography className={classes.statsNumber}>
+									{stats.bidsByUser}
+								</Typography>
+								<Typography>Auctions Bid On</Typography>
 							</div>
 							<div className={classes.auctionInfoSection}>
-								<Typography variant="h3">100</Typography>
-								<Typography>Sold Auctions</Typography>
-							</div>
-							<div className={classes.auctionInfoSection}>
-								<Typography variant="h3">230</Typography>
-								<Typography>Won Auctions</Typography>
+								<Typography className={classes.statsNumber}>
+									{stats.wonByUser}
+								</Typography>
+								<Typography>Auctions Won</Typography>
 							</div>
 						</div>
 						<Divider />
