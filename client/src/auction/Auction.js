@@ -75,6 +75,9 @@ const useStyles = makeStyles((theme) => ({
 	toggleChatsButton: {
 		marginTop: "25px",
 	},
+	paymentError: {
+		margin: theme.spacing(2),
+	},
 }));
 
 function Auction({ match }) {
@@ -87,6 +90,7 @@ function Auction({ match }) {
 	const [redirectToOrder, setRedirectToOrder] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [orderId, setOrderId] = useState("");
+	const [paymentError, setPaymentError] = useState("");
 
 	console.log(auction);
 
@@ -244,18 +248,43 @@ function Auction({ match }) {
 														._id ===
 														auction.bids[0]?.bidder
 															._id && (
-														<Checkout
-															auction={auction}
-															setLoading={
-																setLoading
-															}
-															setRedirectToOrder={
-																setRedirectToOrder
-															}
-															setOrderId={
-																setOrderId
-															}
-														/>
+														<>
+															<Checkout
+																auction={
+																	auction
+																}
+																setLoading={
+																	setLoading
+																}
+																setRedirectToOrder={
+																	setRedirectToOrder
+																}
+																setOrderId={
+																	setOrderId
+																}
+																setPaymentError={
+																	setPaymentError
+																}
+															/>
+															{paymentError && (
+																<div
+																	className={
+																		classes.paymentError
+																	}
+																>
+																	<Typography
+																		style={{
+																			color:
+																				"red",
+																		}}
+																	>
+																		{
+																			paymentError
+																		}
+																	</Typography>
+																</div>
+															)}
+														</>
 													)}
 											</>
 										)}

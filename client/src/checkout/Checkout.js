@@ -11,7 +11,13 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Checkout({ auction, setLoading, setRedirectToOrder, setOrderId }) {
+function Checkout({
+	auction,
+	setLoading,
+	setRedirectToOrder,
+	setOrderId,
+	setPaymentError,
+}) {
 	const classes = useStyles();
 
 	console.log(auction.seller);
@@ -60,8 +66,10 @@ function Checkout({ auction, setLoading, setRedirectToOrder, setOrderId }) {
 			setOrderId(response.data._id);
 			setRedirectToOrder(true);
 		} catch (err) {
-			setLoading(false);
+			console.log(err);
 			console.log(err.response.data);
+			setPaymentError(err.response.data.error);
+			setLoading(false);
 		}
 	};
 
