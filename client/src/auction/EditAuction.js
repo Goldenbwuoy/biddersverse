@@ -154,33 +154,6 @@ function EditAuction({ match }) {
 						Update Auction
 					</Typography>
 					<br />
-					<Avatar
-						src={getAuctionImage(auction)}
-						className={classes.bigAvatar}
-					/>
-					<br />
-					<input
-						accept="image/*"
-						onChange={handleChange("image")}
-						className={classes.input}
-						id="icon-button-file"
-						type="file"
-					/>
-					<label htmlFor="icon-button-file">
-						<Button
-							variant="contained"
-							color="default"
-							component="span"
-						>
-							Change Image
-							<FileUpload />
-						</Button>
-					</label>{" "}
-					<span className={classes.filename}>
-						{auction.image ? auction.image.name : ""}
-					</span>
-					<br />
-					<br />
 					<TextField
 						id="name"
 						label="Item Name"

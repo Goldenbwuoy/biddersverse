@@ -6,13 +6,11 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Icon from "@material-ui/core/Icon";
-import FileUpload from "@material-ui/icons/AddPhotoAlternate";
 import { makeStyles } from "@material-ui/core/styles";
 import auth from "./../auth/auth-helper";
 import { read, update } from "./api-user.js";
 import { Redirect } from "react-router-dom";
 import { Avatar, FormControlLabel, Switch } from "@material-ui/core";
-import defaultImage from "../assets/images/profile-pic.png";
 
 const useStyles = makeStyles((theme) => ({
 	card: {
