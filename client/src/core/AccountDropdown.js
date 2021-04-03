@@ -1,16 +1,17 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+import auth from "../auth/auth-helper";
 import "./styles/Dropdown.css";
 
 const MenuItems = [
 	{
 		title: "View Profile",
-		path: "/",
+		path: "/user/",
 		cName: "dropdown-link",
 	},
 	{
 		title: "Edit Profile",
-		path: "/",
+		path: "/user/edit/",
 		cName: "dropdown-link",
 	},
 	{
@@ -18,14 +19,10 @@ const MenuItems = [
 		path: "/",
 		cName: "dropdown-link",
 	},
-	{
-		title: "Sign Out",
-		path: "/",
-		cName: "dropdown-link",
-	},
 ];
 
-function AccountDropdown() {
+function AccountDropdown({ history }) {
+	const { user } = auth.isAuthenticated();
 	const [click, setClick] = useState(false);
 
 	const handleClick = () => setClick(!click);
@@ -33,14 +30,18 @@ function AccountDropdown() {
 		<>
 			<ul
 				onClick={handleClick}
-				className={click ? "dropdown-menu clicked" : "dropdown-menu"}
+				className={
+					click
+						? "dropdown-menu account clicked"
+						: "dropdown-menu account"
+				}
 			>
 				{MenuItems.map((item, index) => {
 					return (
 						<li key={index}>
 							<Link
 								className={item.cName}
-								to={item.path}
+								to={item.path + user._id}
 								onClick={() => setClick(false)}
 							>
 								{item.title}
@@ -48,9 +49,19 @@ function AccountDropdown() {
 						</li>
 					);
 				})}
+				<li>
+					<button
+						className="logout-button"
+						onClick={() => {
+							auth.clearJWT(() => history.push("/"));
+						}}
+					>
+						Sign Out
+					</button>
+				</li>
 			</ul>
 		</>
 	);
 }
 
-export default AccountDropdown;
+export default withRouter(AccountDropdown);

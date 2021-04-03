@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { listLatest } from "../auction/api-auction";
 import PopularAuctions from "../auction/PopularAuctions";
+import Cards from "./Cards";
 import HeroSection from "./HeroSection";
 
 function Home() {
@@ -25,6 +26,7 @@ function Home() {
 	return (
 		<>
 			<HeroSection />
+			<Cards />
 		</>
 	);
 }

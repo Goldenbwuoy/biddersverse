@@ -103,7 +103,7 @@
     }
   
     .nav-links:hover {
-      background-color: #1888ff;
+      background-color: #006637;
       border-radius: 0;
     }
   
@@ -136,7 +136,7 @@
       margin: 2rem auto;
       border-radius: 4px;
       width: 80%;
-      background: #1888ff;
+      background: #006637;
       text-decoration: none;
       color: #fff;
       font-size: 1.5rem;
@@ -144,7 +144,7 @@
   
     .nav-links-mobile:hover {
       background: #fff;
-      color: #1888ff;
+      color: #006637;
       transition: 250ms;
     }
   

@@ -4,7 +4,7 @@ import "./styles/Button.css";
 
 function Button({ text }) {
 	return (
-		<Link to="/">
+		<Link to="/signin">
 			<button className="btn">{text}</button>
 		</Link>
 	);

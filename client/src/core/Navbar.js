@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, withRouter } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, withRouter, useHistory } from "react-router-dom";
 import ClearIcon from "@material-ui/icons/Clear";
 import MenuIcon from "@material-ui/icons/Menu";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
@@ -8,11 +8,31 @@ import Button from "./Button";
 import CategoryDropdown from "./Dropdown";
 import "./styles/Navbar.css";
 import AccountDropdown from "./AccountDropdown";
+import { listCategories } from "../category/api-category";
+import auth from "../auth/auth-helper";
 
 function Navbar() {
+	const history = useHistory();
 	const [click, setClick] = useState(false);
 	const [dropdown, setDropdown] = useState(false);
 	const [profileDropdown, setProfileDropdown] = useState(false);
+	const [categories, setCategories] = useState([]);
+
+	useEffect(() => {
+		const abortController = new AbortController();
+		const signal = abortController.signal;
+
+		listCategories(signal).then((data) => {
+			if (data && data.error) {
+				console.log(data.error);
+			} else {
+				setCategories(data);
+			}
+		});
+		return function cleanup() {
+			abortController.abort();
+		};
+	}, []);
 
 	const handleClick = () => setClick(!click);
 	const closeMobileMenu = () => setClick(false);
@@ -38,7 +58,6 @@ function Navbar() {
 					<p>Biddersverse</p>
 				</Link>
 				<div className="menu-icon" onClick={handleClick}>
-					<i className={click ? "fas fa-times" : "fas fa-bars"} />
 					{click ? (
 						<ClearIcon style={{ color: "white" }} />
 					) : (
@@ -67,33 +86,42 @@ function Navbar() {
 						>
 							Auctions By Category <ArrowDropDownIcon />
 						</Link>
-						{dropdown && <CategoryDropdown />}
+						{dropdown && (
+							<CategoryDropdown categories={categories} />
+						)}
 					</li>
-					<li
-						className="nav-item"
-						onMouseEnter={onMouseEnterProfile}
-						onMouseLeave={onMouseLeaveProfile}
-					>
-						<Link
-							to="/"
-							className="nav-links dropdown"
-							onClick={closeMobileMenu}
+					{auth.isAuthenticated() && (
+						<li
+							className="nav-item"
+							onMouseEnter={onMouseEnterProfile}
+							onMouseLeave={onMouseLeaveProfile}
 						>
-							<AccountCircleIcon /> <ArrowDropDownIcon />
-						</Link>
-						{profileDropdown && <AccountDropdown />}
-					</li>
-					<li className="nav-item">
-						<Link
-							to="/"
-							className="nav-links-mobile"
-							onClick={closeMobileMenu}
-						>
-							sign Up
-						</Link>
-					</li>
+							<Link
+								to="/"
+								className="nav-links dropdown"
+								onClick={closeMobileMenu}
+							>
+								<AccountCircleIcon /> <ArrowDropDownIcon />
+							</Link>
+							{profileDropdown && (
+								<AccountDropdown history={history} />
+							)}
+						</li>
+					)}
+
+					{!auth.isAuthenticated() && (
+						<li className="nav-item">
+							<Link
+								to="/signin"
+								className="nav-links-mobile"
+								onClick={closeMobileMenu}
+							>
+								Sign In
+							</Link>
+						</li>
+					)}
 				</ul>
-				<Button text="Sign In" />
+				{!auth.isAuthenticated() && <Button text="Sign In" />}
 			</nav>
 		</>
 	);

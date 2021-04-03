@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
-import Nav from "../core/Nav";
 import Navbar from "../core/Navbar";
 
 const PublicRoute = ({ component: Component, ...rest }) => (

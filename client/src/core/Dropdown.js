@@ -25,7 +25,7 @@ const MenuItems = [
 	},
 ];
 
-function DropDown() {
+function DropDown({ categories }) {
 	const [click, setClick] = useState(false);
 
 	const handleClick = () => setClick(!click);
@@ -35,15 +35,20 @@ function DropDown() {
 				onClick={handleClick}
 				className={click ? "dropdown-menu clicked" : "dropdown-menu"}
 			>
-				{MenuItems.map((item, index) => {
+				{categories.map((category, index) => {
 					return (
-						<li key={index}>
+						<li key={category._id}>
 							<Link
-								className={item.cName}
-								to={item.path}
+								className="dropdown-link"
+								to={{
+									pathname: `/auctions/categories/${category._id}`,
+									state: {
+										title: category.categoryName,
+									},
+								}}
 								onClick={() => setClick(false)}
 							>
-								{item.title}
+								{category.categoryName}
 							</Link>
 						</li>
 					);
