@@ -52,7 +52,7 @@ video {
     }
   } */
   
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 850px) {
   
     .hero-section-div > p {
       font-size: 20px;

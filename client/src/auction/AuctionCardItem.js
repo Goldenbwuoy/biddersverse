@@ -1,16 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function CardItem({ src, text, label, path }) {
+function AuctionCardItem({ auction }) {
 	return (
 		<>
-			{/* <li className="cards__item"> */}
-			<Link className="cards__item__link" to={path}>
-				<figure className="cards__item__pic-wrap" data-category={label}>
-					<img src={src} alt="Auction" className="cards__item__img" />
+			<Link className="cards__item__link" to={auction.path}>
+				<figure
+					className="cards__item__pic-wrap"
+					data-category={auction.label}
+				>
+					<img
+						src={auction.src}
+						alt="Auction"
+						className="cards__item__img"
+					/>
 				</figure>
 				<div className="cards__item__info">
-					<h5 className="cards__item__text">{text}</h5>
+					<h5 className="cards__item__text">{auction.text}</h5>
 					<div className="cards__item__row">
 						<h4 className="cards__item__row-title">current bid</h4>
 						<h4 className="cards__item__row-title">
@@ -23,9 +29,8 @@ function CardItem({ src, text, label, path }) {
 					</div>
 				</div>
 			</Link>
-			{/* </li> */}
 		</>
 	);
 }
 
-export default CardItem;
+export default AuctionCardItem;

@@ -1,5 +1,5 @@
 .cards {
-    padding: 4rem;
+    padding: 5px;
     background: #fff;
   }
   
@@ -13,7 +13,7 @@
     align-items: center;
     max-width: 1120px;
     width: 100%;
-    margin: 50px auto;
+    margin: 40px auto;
   }
 
   .cards__items {

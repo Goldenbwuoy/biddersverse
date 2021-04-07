@@ -1,8 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { listLatest } from "../auction/api-auction";
+import AuctionCardGrid from "../auction/AuctionCardGrid";
 import PopularAuctions from "../auction/PopularAuctions";
-import Cards from "./Cards";
 import HeroSection from "./HeroSection";
+
+const auctions = [
+	{
+		src: "/images/ps4.png",
+		text: "Brand New PS4",
+		label: "Adventure",
+		path: "/",
+	},
+	{
+		src: "/images/ps4.png",
+		text: "Brand New PS4",
+		label: "Adventure",
+		path: "/",
+	},
+	{
+		src: "/images/ps4.png",
+		text: "Brand New PS4",
+		label: "Adventure",
+		path: "/",
+	},
+	{
+		src: "/images/ps4.png",
+		text: "Brand New PS4",
+		label: "Adventure",
+		path: "/",
+	},
+];
 
 function Home() {
 	const [latestAuctions, setLatestAuctions] = useState([]);
@@ -26,7 +53,8 @@ function Home() {
 	return (
 		<>
 			<HeroSection />
-			<Cards />
+			<AuctionCardGrid auctions={auctions} title="Recently Added" />
+			<AuctionCardGrid auctions={auctions} title="Popular Auctions" />
 		</>
 	);
 }
