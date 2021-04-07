@@ -3,7 +3,7 @@
     background: #fff;
   }
   
-  h1 {
+  h3 {
     text-align: center;
   }
   
@@ -12,15 +12,10 @@
     flex-flow: column;
     align-items: center;
     max-width: 1120px;
-    width: 90%;
-    margin: 0 auto;
+    width: 100%;
+    margin: 50px auto;
   }
-  
-  .cards__wrapper {
-    position: relative;
-    margin: 50px 0 45px;
-  }
-  
+
   .cards__items {
     margin-bottom: 24px;
   }
@@ -90,13 +85,32 @@
   }
   
   .cards__item__info {
-    padding: 20px 30px 30px;
+    padding: 10px 10px 10px;
   }
   
   .cards__item__text {
     color: #252e48;
-    font-size: 18px;
+    font-size: 12px;
     line-height: 24px;
+    font-weight: 900;
+  }
+
+  .cards__item__row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 8px 0;
+  }
+  .cards__item__row-title {
+    font-variant: small-caps;
+  }
+
+  .cards__item__row-price {
+    color: #006637;
+  }
+  .cards__item__row-time {
+    color: #000;
+    font-weight: 750;
   }
   
   @media only screen and (min-width: 1200px) {

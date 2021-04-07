@@ -1,66 +1,63 @@
 import React from "react";
 import CardItem from "./CardItem";
 import "./styles/Cards.css";
+import { Grid } from "@material-ui/core";
 
 function Cards() {
 	return (
 		<div className="cards">
-			<h1>Checkout These Recently Added Auctions</h1>
+			<h3>Checkout These Recently Added Auctions</h3>
 			<div className="cards__container">
-				<div className="cards__wrapper">
-					<ul className="cards__items">
+				<Grid container spacing={4}>
+					<Grid item xs={12} sm={6} md={3}>
 						<CardItem
 							src="/images/ps4.png"
 							text="Brand New PS4"
 							label="Adventure"
 							path="/"
 						/>
+					</Grid>
+					<Grid item xs={12} sm={6} md={3}>
 						<CardItem
 							src="/images/ps4.png"
 							text="Brand New PS4"
 							label="Adventure"
 							path="/"
 						/>
+					</Grid>
+					<Grid item xs={12} sm={6} md={3}>
 						<CardItem
 							src="/images/ps4.png"
 							text="Brand New PS4"
 							label="Adventure"
 							path="/"
 						/>
+					</Grid>
+					<Grid item xs={12} sm={6} md={3}>
 						<CardItem
 							src="/images/ps4.png"
 							text="Brand New PS4"
 							label="Adventure"
 							path="/"
 						/>
-					</ul>
-					<ul className="cards__items">
+					</Grid>
+					<Grid item xs={12} sm={6} md={3}>
 						<CardItem
 							src="/images/ps4.png"
 							text="Brand New PS4"
 							label="Adventure"
 							path="/"
 						/>
+					</Grid>
+					<Grid item xs={12} sm={6} md={3}>
 						<CardItem
 							src="/images/ps4.png"
 							text="Brand New PS4"
 							label="Adventure"
 							path="/"
 						/>
-						<CardItem
-							src="/images/ps4.png"
-							text="Brand New PS4"
-							label="Adventure"
-							path="/"
-						/>
-						<CardItem
-							src="/images/ps4.png"
-							text="Brand New PS4"
-							label="Adventure"
-							path="/"
-						/>
-					</ul>
-				</div>
+					</Grid>
+				</Grid>
 			</div>
 		</div>
 	);
