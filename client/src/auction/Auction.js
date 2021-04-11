@@ -92,8 +92,6 @@ function Auction({ match }) {
 	const [orderId, setOrderId] = useState("");
 	const [paymentError, setPaymentError] = useState("");
 
-	console.log(auction);
-
 	useEffect(() => {
 		const abortController = new AbortController();
 		const signal = abortController.signal;
@@ -154,7 +152,7 @@ function Auction({ match }) {
 	return (
 		<div className={classes.root}>
 			<Grid container spacing={2}>
-				<Grid item xs={12} md={8} lg={8}>
+				<Grid item xs={12} md={9} lg={9}>
 					<Card className={classes.card}>
 						<CardHeader
 							title={auction.itemName}
@@ -303,7 +301,7 @@ function Auction({ match }) {
 					{/* Chat component */}
 					{auth.isAuthenticated() && <Chat auction={auction} />}
 				</Grid>
-				<Grid item xs={12} md={4} lg={4}>
+				<Grid item xs={12} md={3} lg={3}>
 					{/* Related products */}
 					<Suggestions
 						auctions={relatedAuctions}

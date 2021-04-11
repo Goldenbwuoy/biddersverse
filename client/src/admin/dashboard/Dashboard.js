@@ -45,10 +45,14 @@ const useStyles = makeStyles((theme) => ({
 		...theme.mixins.toolbar,
 	},
 	appBar: {
+		backgroundColor: "black",
+		height: "100px",
 		transition: theme.transitions.create(["width", "margin"], {
 			easing: theme.transitions.easing.sharp,
 			duration: theme.transitions.duration.leavingScreen,
 		}),
+		display: "flex",
+		justifyContent: "center",
 	},
 	appBarShift: {
 		marginLeft: drawerWidth,

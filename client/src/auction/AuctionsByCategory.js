@@ -2,45 +2,6 @@ import React, { useEffect, useState } from "react";
 import { listOpenByCategory } from "./api-auction";
 import AuctionCardGrid from "./AuctionCardGrid";
 
-const __auctions = [
-	{
-		src: "/images/ps4.png",
-		text: "Brand New PS4",
-		label: "Adventure",
-		path: "/",
-	},
-	{
-		src: "/images/ps4.png",
-		text: "Brand New PS4",
-		label: "Adventure",
-		path: "/",
-	},
-	{
-		src: "/images/ps4.png",
-		text: "Brand New PS4",
-		label: "Adventure",
-		path: "/",
-	},
-	{
-		src: "/images/ps4.png",
-		text: "Brand New PS4",
-		label: "Adventure",
-		path: "/",
-	},
-	{
-		src: "/images/ps4.png",
-		text: "Brand New PS4",
-		label: "Adventure",
-		path: "/",
-	},
-	{
-		src: "/images/ps4.png",
-		text: "Brand New PS4",
-		label: "Adventure",
-		path: "/",
-	},
-];
-
 function AuctionsByCategory({ match, location }) {
 	const [auctions, setAuctions] = useState([]);
 
@@ -64,11 +25,8 @@ function AuctionsByCategory({ match, location }) {
 		};
 	}, [match.params.categoryId]);
 	return (
-		<div>
-			<AuctionCardGrid
-				auctions={__auctions}
-				title={location.state.title}
-			/>
+		<div style={{ height: "100vh", paddingTop: "30px" }}>
+			<AuctionCardGrid auctions={auctions} title={location.state.title} />
 		</div>
 	);
 }

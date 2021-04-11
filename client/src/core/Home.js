@@ -50,11 +50,15 @@ function Home() {
 			abortController.abort();
 		};
 	}, []);
+
 	return (
 		<>
 			<HeroSection />
-			<AuctionCardGrid auctions={auctions} title="Recently Added" />
-			<AuctionCardGrid auctions={auctions} title="Popular Auctions" />
+			<AuctionCardGrid auctions={latestAuctions} title="Recently Added" />
+			<AuctionCardGrid
+				auctions={latestAuctions}
+				title="Popular Auctions"
+			/>
 		</>
 	);
 }

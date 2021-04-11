@@ -10,12 +10,14 @@ import "./styles/Navbar.css";
 import AccountDropdown from "./AccountDropdown";
 import { listCategories } from "../category/api-category";
 import auth from "../auth/auth-helper";
+import MyBiddersverseDropdown from "./MyBiddersverseDropdown";
 
 function Navbar() {
 	const history = useHistory();
 	const [click, setClick] = useState(false);
 	const [dropdown, setDropdown] = useState(false);
 	const [profileDropdown, setProfileDropdown] = useState(false);
+	const [myBiddersverseDropdown, setMyBiddersverseDropdown] = useState(false);
 	const [categories, setCategories] = useState([]);
 
 	useEffect(() => {
@@ -51,6 +53,15 @@ function Navbar() {
 			? setProfileDropdown(false)
 			: setProfileDropdown(false);
 
+	const onMouseEnterMybiddersverse = () =>
+		window.innerWidth < 960
+			? setMyBiddersverseDropdown(false)
+			: setMyBiddersverseDropdown(true);
+	const onMouseLeaveMybiddersverse = () =>
+		window.innerWidth < 960
+			? setMyBiddersverseDropdown(false)
+			: setMyBiddersverseDropdown(false);
+
 	return (
 		<>
 			<nav className="navbar">
@@ -64,23 +75,34 @@ function Navbar() {
 						<MenuIcon style={{ color: "white" }} />
 					)}
 				</div>
+
 				<ul className={click ? "nav-menu active" : "nav-menu"}>
-					<li className="nav-item">
-						<Link
-							to="/"
-							className="nav-links"
-							onClick={closeMobileMenu}
+					{auth.isAuthenticated() && (
+						<li
+							onMouseEnter={onMouseEnterMybiddersverse}
+							onMouseLeave={onMouseLeaveMybiddersverse}
+							className="nav-item"
 						>
-							My Biddersverse
-						</Link>
-					</li>
+							<Link
+								to="/"
+								className="nav-links dropdown"
+								onClick={closeMobileMenu}
+							>
+								My Biddersverse <ArrowDropDownIcon />
+							</Link>
+							{myBiddersverseDropdown && (
+								<MyBiddersverseDropdown />
+							)}
+						</li>
+					)}
+
 					<li
 						className="nav-item"
 						onMouseEnter={onMouseEnter}
 						onMouseLeave={onMouseLeave}
 					>
 						<Link
-							to="/"
+							to="#"
 							className="nav-links dropdown"
 							onClick={closeMobileMenu}
 						>
@@ -97,7 +119,7 @@ function Navbar() {
 							onMouseLeave={onMouseLeaveProfile}
 						>
 							<Link
-								to="/"
+								to="#"
 								className="nav-links dropdown"
 								onClick={closeMobileMenu}
 							>

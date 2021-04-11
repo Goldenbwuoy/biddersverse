@@ -10,7 +10,7 @@ function AuctionCardGrid({ auctions, title }) {
 			<div className="cards__container">
 				<Grid container spacing={4}>
 					{auctions.map((auction) => (
-						<Grid item xs={12} sm={6} md={3}>
+						<Grid key={auction._id} item xs={12} sm={6} md={3}>
 							<CardItem auction={auction} />
 						</Grid>
 					))}

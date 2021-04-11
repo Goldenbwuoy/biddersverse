@@ -109,8 +109,12 @@
     color: #006637;
   }
   .cards__item__row-time {
-    color: #000;
-    font-weight: 750;
+    color: rgb(250, 4, 4);
+    font-weight: bold;
+  }
+
+  .small {
+    font-size: 12px;
   }
   
   @media only screen and (min-width: 1200px) {

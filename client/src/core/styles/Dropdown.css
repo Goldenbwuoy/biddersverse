@@ -4,6 +4,8 @@
     top: 80px;
     list-style: none;
     text-align: start;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
   }
 
 .account {
