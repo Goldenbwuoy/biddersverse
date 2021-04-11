@@ -1,48 +1,51 @@
-import React from "react";
-import { useState } from "react";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-import ErrorIcon from "@material-ui/icons/Error";
-import Icon from "@material-ui/core/Icon";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState } from "react";
 import auth from "./../auth/auth-helper";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { signin } from "./api-auth.js";
-import Loading from "../core/Loading";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import { Link } from "react-router-dom";
+import Grid from "@material-ui/core/Grid";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import { CircularProgress } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-	card: {
-		maxWidth: 600,
-		margin: "auto",
-		textAlign: "center",
-		marginTop: theme.spacing(5),
-		paddingBottom: theme.spacing(2),
+	root: {
+		height: "100vh",
 	},
-	error: {
-		verticalAlign: "middle",
+	paper: {
+		marginTop: theme.spacing(8),
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "center",
 	},
-	title: {
-		marginTop: theme.spacing(2),
-		color: theme.palette.openTitle,
+	avatar: {
+		margin: theme.spacing(1),
+		backgroundColor: theme.palette.secondary.main,
 	},
-	textField: {
-		marginLeft: theme.spacing(1),
-		marginRight: theme.spacing(1),
-		width: "80%",
+	form: {
+		width: "100%", // Fix IE 11 issue.
+		marginTop: theme.spacing(1),
 	},
 	submit: {
-		margin: "auto",
-		marginBottom: theme.spacing(2),
+		margin: theme.spacing(3, 0, 2),
 	},
-	links: {
-		marginLeft: theme.spacing(1),
-		marginRight: theme.spacing(1),
-		width: 300,
+	error: {
+		marginTop: theme.spacing(1),
+	},
+	loading: {
+		color: "#fff",
+	},
+	link: {
 		textDecoration: "none",
+		color: "#006637",
 	},
 }));
 
@@ -93,71 +96,89 @@ function SignIn(props) {
 	if (redirectToReferrer) {
 		return <Redirect to={from} />;
 	}
+
 	return (
-		<>
-			{values.loading ? (
-				<Loading />
-			) : (
-				<Card className={classes.card}>
-					<CardContent>
-						<Typography variant="h6" className={classes.title}>
-							Sign In
+		<Container className={classes.root} component="main" maxWidth="xs">
+			<CssBaseline />
+			<div className={classes.paper}>
+				<Avatar className={classes.avatar}>
+					<LockOutlinedIcon />
+				</Avatar>
+				<Typography component="h1" variant="h5">
+					Sign in
+				</Typography>
+				<form
+					onSubmit={clickSubmit}
+					className={classes.form}
+					noValidate
+				>
+					<TextField
+						variant="outlined"
+						margin="normal"
+						required
+						fullWidth
+						id="email"
+						label="Email Address"
+						name="email"
+						autoComplete="email"
+						autoFocus
+						value={values.email}
+						onChange={handleChange("email")}
+					/>
+					<TextField
+						variant="outlined"
+						margin="normal"
+						required
+						fullWidth
+						name="password"
+						label="Password"
+						type="password"
+						id="password"
+						autoComplete="current-password"
+						value={values.password}
+						onChange={handleChange("password")}
+					/>
+					<FormControlLabel
+						control={<Checkbox value="remember" color="primary" />}
+						label="Remember me"
+					/>
+					{values.error && (
+						<Typography className={classes.error} color="secondary">
+							{values.error}
 						</Typography>
-						<form onSubmit={clickSubmit}>
-							<TextField
-								id="email"
-								type="email"
-								label="Email"
-								variant="outlined"
-								className={classes.textField}
-								value={values.email}
-								onChange={handleChange("email")}
-								margin="normal"
+					)}
+
+					<Button
+						type="submit"
+						fullWidth
+						variant="contained"
+						color="primary"
+						className={classes.submit}
+					>
+						{values.loading ? (
+							<CircularProgress
+								size={24}
+								className={classes.loading}
 							/>
-							<br />
-							<TextField
-								id="password"
-								type="password"
-								label="Password"
-								variant="outlined"
-								className={classes.textField}
-								value={values.password}
-								onChange={handleChange("password")}
-								margin="normal"
-							/>
-							<br />{" "}
-							{values.error && (
-								<Typography component="p" color="error">
-									<Icon
-										color="error"
-										className={classes.error}
-									>
-										<ErrorIcon />
-									</Icon>
-									{values.error}
-								</Typography>
-							)}
-							<CardActions>
-								<Button
-									color="primary"
-									type="submit"
-									variant="contained"
-									className={classes.submit}
-								>
-									Submit
-								</Button>
-							</CardActions>
-						</form>
-						<Link className={classes.links} to="/signup">
-							Don't have an account?
-						</Link>
-						<Link className={classes.links} to="/adminLogin">
-							Are you the admin?
-						</Link>
-					</CardContent>
-				</Card>
-			)}
-		</>
+						) : (
+							"Sign In"
+						)}
+					</Button>
+					<Grid container>
+						<Grid item xs>
+							<Link className={classes.link} to="#">
+								Forgot password?
+							</Link>
+						</Grid>
+						<Grid item>
+							<Link className={classes.link} to="/signup">
+								{"Don't have an account? Sign Up"}
+							</Link>
+						</Grid>
+					</Grid>
+				</form>
+			</div>
+		</Container>
 	);
 }
 
