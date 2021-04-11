@@ -3,7 +3,7 @@
     background: #fff;
   }
   
-  h3 {
+  .cards__header {
     text-align: center;
   }
   
@@ -37,6 +37,8 @@
     border-radius: 10px;
     overflow: hidden;
     text-decoration: none;
+    border: 1px solid lightgrey;
+    border-radius: 10px;
   }
   
   .cards__item__pic-wrap {

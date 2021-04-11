@@ -1,35 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { listLatest } from "../auction/api-auction";
-import AuctionCardGrid from "../auction/AuctionCardGrid";
-import PopularAuctions from "../auction/PopularAuctions";
+import AuctionCardSlider from "./AuctionCardSlider";
 import HeroSection from "./HeroSection";
-
-const auctions = [
-	{
-		src: "/images/ps4.png",
-		text: "Brand New PS4",
-		label: "Adventure",
-		path: "/",
-	},
-	{
-		src: "/images/ps4.png",
-		text: "Brand New PS4",
-		label: "Adventure",
-		path: "/",
-	},
-	{
-		src: "/images/ps4.png",
-		text: "Brand New PS4",
-		label: "Adventure",
-		path: "/",
-	},
-	{
-		src: "/images/ps4.png",
-		text: "Brand New PS4",
-		label: "Adventure",
-		path: "/",
-	},
-];
 
 function Home() {
 	const [latestAuctions, setLatestAuctions] = useState([]);
@@ -54,10 +26,18 @@ function Home() {
 	return (
 		<>
 			<HeroSection />
-			<AuctionCardGrid auctions={latestAuctions} title="Recently Added" />
-			<AuctionCardGrid
+			<AuctionCardSlider auctions={latestAuctions} title="New Listings" />
+			<AuctionCardSlider
 				auctions={latestAuctions}
-				title="Popular Auctions"
+				title="Popular Listings"
+			/>
+			<AuctionCardSlider
+				auctions={latestAuctions}
+				title="Closing Listings"
+			/>
+			<AuctionCardSlider
+				auctions={latestAuctions}
+				title="Recently Sold Listings"
 			/>
 		</>
 	);
