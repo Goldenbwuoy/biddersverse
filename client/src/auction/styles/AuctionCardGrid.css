@@ -4,16 +4,18 @@
   }
   
   .cards__header {
-    text-align: center;
+    text-align: start;
+    margin: 0 0 40px 10px;
   }
   
   .cards__container {
     display: flex;
     flex-flow: column;
-    align-items: center;
-    max-width: 1120px;
     width: 100%;
     margin: 40px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(56, 125, 255, 0.17);
   }
 
   .cards__items {

@@ -10,10 +10,10 @@ function AuctionsBySeller({ location }) {
 
 	const title =
 		status && status === "all"
-			? "All Auctions"
+			? "All My Listings"
 			: status === "live"
-			? "Live Auctions"
-			: "Sold Auctions";
+			? "Live Listings"
+			: "Sold Listings";
 
 	useEffect(() => {
 		const abortController = new AbortController();
@@ -37,7 +37,7 @@ function AuctionsBySeller({ location }) {
 		};
 	}, [user._id, status]);
 	return (
-		<div style={{ height: "100vh", paddingTop: "30px" }}>
+		<div style={{ paddingTop: "30px" }}>
 			<AuctionCardGrid auctions={auctions} title={title} />
 		</div>
 	);
