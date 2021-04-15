@@ -15,11 +15,15 @@ import Chat from "./chat/Chat.js";
 import Checkout from "../checkout/Checkout";
 import Loading from "../core/Loading";
 import AuctionImageSlider from "./AuctionImageSlider.js";
+import AuctionDetailTabs from "./AuctionDetailTabs.js";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
 		flexGrow: 1,
-		margin: 30,
+		marginTop: theme.spacing(4),
+		marginBottom: theme.spacing(4),
+		marginLeft: theme.spacing(10),
+		marginRight: theme.spacing(10),
 	},
 	flex: {
 		display: "flex",
@@ -191,7 +195,7 @@ function Auction({ match }) {
 								{/* Image slider */}
 								<AuctionImageSlider auction={auction} />
 
-								<Typography
+								{/* <Typography
 									component="p"
 									variant="subtitle1"
 									className={classes.subheading}
@@ -203,7 +207,7 @@ function Auction({ match }) {
 									className={classes.description}
 								>
 									{auction.description}
-								</Typography>
+								</Typography> */}
 							</Grid>
 
 							<Grid item lg={7} md={6} xs={12} sm={12}>
@@ -296,6 +300,7 @@ function Auction({ match }) {
 									).toLocaleString()}`}</Typography>
 								)}
 							</Grid>
+							<AuctionDetailTabs auction={auction} />
 						</Grid>
 					</Card>
 					{/* Chat component */}
