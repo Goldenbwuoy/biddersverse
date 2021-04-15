@@ -106,7 +106,7 @@ const useStyles = makeStyles((theme) => ({
 		width: "100px",
 		objectFit: "contain",
 		// margin: "0 20px",
-		// marginTop: " 18px",
+		paddingTop: " 15px",
 	},
 }));
 
@@ -144,7 +144,7 @@ const Dashboard = ({ history }) => {
 						<Link to="/admin/home">
 							<img
 								className={classes.logo}
-								src={Logo}
+								src="/images/logo.png"
 								alt="logo"
 							/>
 						</Link>

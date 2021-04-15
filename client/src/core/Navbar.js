@@ -65,8 +65,8 @@ function Navbar() {
 	return (
 		<>
 			<nav className="navbar">
-				<Link to="/" className="nav-links">
-					<p>Biddersverse</p>
+				<Link to="/" className="nav-logo">
+					<img className="logo" src="/images/logo.png" />
 				</Link>
 				<div className="menu-icon" onClick={handleClick}>
 					{click ? (

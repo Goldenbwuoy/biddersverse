@@ -9,14 +9,12 @@
     top: 0;
     z-index: 999;
   }
-  
-  .navbar-logo {
-    color: #fff;
-    justify-self: start;
-    margin-left: 20px;
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 2rem;
+
+  .logo {
+    width: 100px;
+    object-fit: contain;
+    align-self: center;
+    padding-top: 15px;
   }
   
   .fa-firstdraft {
