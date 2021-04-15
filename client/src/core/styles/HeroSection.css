@@ -32,25 +32,82 @@ video {
       'Lucida Sans', Arial, sans-serif;
   }
 
-.hero-section-div > input {
+.search-form {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.search-form-header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.search-section {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  /* border: 1px solid #fff; */
+  border-radius: 3px;
+  height: 60px;
+}
+
+.search-section-header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 3px;
+}
+
+
+.search-input {
     color: #fff;
     font-size: 20px;
     padding: 15px;
-    border-radius: 10px;
     border: none;
-    width: 80%;
+    width: 100%;
     outline: none;
+    border-radius: 10px;
+    flex: 0.9;
     color: gray;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
-      'Lucida Sans', Arial, sans-serif;
   }
 
-  /* @media screen and (max-width: 960px) {
-    .hero-container > h1 {
-      font-size: 70px;
-      margin-top: -150px;
-    }
-  } */
+  .search-input-header {
+    color: #fff;
+    font-size: 14px;
+    padding: 5px;
+    border: none;
+    width: 100%;
+    outline: none;
+    border-radius: 10px;
+    flex: 0.9;
+    color: gray;
+  }
+
+.search-icon {
+    padding: 10px;
+    height: 100% !important;
+    background-color: #fff;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    flex: 0.1;
+    border: 1px solid lightgrey;
+
+}
+
+.search-icon-header {
+    padding: 10px;
+    height: 100% !important;
+    background-color: #fff;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    flex: 0.1;
+    border: 1px solid lightgrey;
+}
   
   @media screen and (max-width: 850px) {
   
@@ -59,7 +116,7 @@ video {
       width: 100%;
       padding: 5px;
     }
-    .hero-section-div > input {
+    .span > input {
       font-size: 15px;
       padding: 10px;
       width: 90%;

@@ -38,6 +38,13 @@
     align-items: center;
     height: 80px;
   }
+
+  .nav-item-search {
+    display: flex;
+    align-items: center;
+    height: 80px;
+    margin: 0 15px;
+  }
   
   .nav-links {
     color: white;

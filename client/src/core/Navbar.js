@@ -11,6 +11,7 @@ import AccountDropdown from "./AccountDropdown";
 import { listCategories } from "../category/api-category";
 import auth from "../auth/auth-helper";
 import MyBiddersverseDropdown from "./MyBiddersverseDropdown";
+import Search from "./Search";
 
 function Navbar() {
 	const history = useHistory();
@@ -77,6 +78,9 @@ function Navbar() {
 				</div>
 
 				<ul className={click ? "nav-menu active" : "nav-menu"}>
+					<li className="nav-item-search">
+						<Search header={true} />
+					</li>
 					{auth.isAuthenticated() && (
 						<li
 							onMouseEnter={onMouseEnterMybiddersverse}
