@@ -9,13 +9,13 @@ import { Redirect, Link } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import profileImage from "../assets/images/profile-pic.jpg";
 import stripeButton from "../assets/images/stripeButton.png";
-import { Button, Card, Grid, Tooltip } from "@material-ui/core";
+import { Button, Card, Container, Grid, Tooltip } from "@material-ui/core";
 import Reviews from "./Reviews";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
-		margin: "auto",
-		marginTop: theme.spacing(5),
+		height: "100vh",
+		marginTop: theme.spacing(3),
 	},
 	paper: theme.mixins.gutters({
 		maxWidth: 700,
@@ -119,7 +119,7 @@ function Profile({ match }) {
 		return <Redirect to="/signin" />;
 	}
 	return (
-		<div className={classes.root}>
+		<Container className={classes.root} component="main" maxWidth="xl">
 			<Grid container spacing={2}>
 				<Grid item xs={12} sm={12} lg={6}>
 					<Paper className={classes.paper} elevation={4}>
@@ -129,7 +129,10 @@ function Profile({ match }) {
 							</Typography>
 							{isUser && (
 								<Tooltip title="Edit Profile">
-									<Link to={`/user/edit/${user._id}`}>
+									<Link
+										className={classes.link}
+										to={`/user/edit/${user._id}`}
+									>
 										<EditIcon color="primary" />
 									</Link>
 								</Tooltip>
@@ -281,7 +284,7 @@ function Profile({ match }) {
 					<Reviews userId={match.params.userId} />
 				</Grid>
 			</Grid>
-		</div>
+		</Container>
 	);
 }
 

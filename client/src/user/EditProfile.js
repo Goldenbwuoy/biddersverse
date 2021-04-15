@@ -10,9 +10,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import auth from "./../auth/auth-helper";
 import { read, update } from "./api-user.js";
 import { Redirect } from "react-router-dom";
-import { Avatar, FormControlLabel, Switch } from "@material-ui/core";
+import { Container, FormControlLabel, Switch } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
+	root: {
+		height: "100vh",
+	},
 	card: {
 		maxWidth: 600,
 		margin: "auto",
@@ -22,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	title: {
 		margin: theme.spacing(2),
-		color: theme.palette.protectedTitle,
+		color: theme.palette.primary,
 	},
 	error: {
 		verticalAlign: "middle",
@@ -93,7 +96,7 @@ function EditProfile({ match }) {
 		return function cleanup() {
 			abortController.abort();
 		};
-	}, [match.params.userId]);
+	}, [match.params.userId, jwt.token]);
 
 	const clickSubmit = () => {
 		const user = {
@@ -137,86 +140,94 @@ function EditProfile({ match }) {
 		return <Redirect to={"/user/" + values.userId} />;
 	}
 	return (
-		<Card className={classes.card}>
-			<CardContent>
-				<Typography variant="h6" className={classes.title}>
-					Edit Profile
-				</Typography>
-				<TextField
-					id="firstName"
-					label="First Name"
-					variant="outlined"
-					className={classes.textField}
-					value={values.firstName}
-					onChange={handleChange("firstName")}
-					margin="normal"
-				/>
-				<TextField
-					id="lastName"
-					label="Last Name"
-					variant="outlined"
-					className={classes.textField}
-					value={values.lastName}
-					onChange={handleChange("lastName")}
-					margin="normal"
-				/>
-				<br />
-				<TextField
-					id="email"
-					type="email"
-					variant="outlined"
-					label="Email"
-					className={classes.textField}
-					value={values.email}
-					onChange={handleChange("email")}
-					margin="normal"
-				/>
-				<br />
-				<TextField
-					id="phoneNumber"
-					label="Mobile Phone"
-					variant="outlined"
-					className={classes.textField}
-					value={values.phoneNumber}
-					onChange={handleChange("phoneNumber")}
-					margin="normal"
-				/>
-				<br />
-				<Typography variant="subtitle1" className={classes.subheading}>
-					Seller Account
-				</Typography>
-				<FormControlLabel
-					control={
-						<Switch
-							classes={{
-								checked: classes.checked,
-								bar: classes.bar,
-							}}
-							checked={values.seller}
-							onChange={handleCheck}
-						/>
-					}
-					label={values.seller ? "Active" : "Inactive"}
-				/>
-				<br />{" "}
-				{values.error && (
-					<Typography component="p" color="error">
-						<Icon color="error" className={classes.error}></Icon>
-						{values.error}
+		<Container className={classes.root} component="main" maxWidth="xl">
+			<Card className={classes.card}>
+				<CardContent>
+					<Typography variant="h6" className={classes.title}>
+						Edit Profile
 					</Typography>
-				)}
-			</CardContent>
-			<CardActions>
-				<Button
-					color="primary"
-					variant="contained"
-					onClick={clickSubmit}
-					className={classes.submit}
-				>
-					Update
-				</Button>
-			</CardActions>
-		</Card>
+					<TextField
+						id="firstName"
+						label="First Name"
+						variant="outlined"
+						className={classes.textField}
+						value={values.firstName}
+						onChange={handleChange("firstName")}
+						margin="normal"
+					/>
+					<TextField
+						id="lastName"
+						label="Last Name"
+						variant="outlined"
+						className={classes.textField}
+						value={values.lastName}
+						onChange={handleChange("lastName")}
+						margin="normal"
+					/>
+					<br />
+					<TextField
+						id="email"
+						type="email"
+						variant="outlined"
+						label="Email"
+						className={classes.textField}
+						value={values.email}
+						onChange={handleChange("email")}
+						margin="normal"
+					/>
+					<br />
+					<TextField
+						id="phoneNumber"
+						label="Mobile Phone"
+						variant="outlined"
+						className={classes.textField}
+						value={values.phoneNumber}
+						onChange={handleChange("phoneNumber")}
+						margin="normal"
+					/>
+					<br />
+					<Typography
+						variant="subtitle1"
+						className={classes.subheading}
+					>
+						Seller Account
+					</Typography>
+					<FormControlLabel
+						control={
+							<Switch
+								classes={{
+									checked: classes.checked,
+									bar: classes.bar,
+								}}
+								checked={values.seller}
+								onChange={handleCheck}
+							/>
+						}
+						label={values.seller ? "Active" : "Inactive"}
+					/>
+					<br />{" "}
+					{values.error && (
+						<Typography component="p" color="error">
+							<Icon
+								color="error"
+								className={classes.error}
+							></Icon>
+							{values.error}
+						</Typography>
+					)}
+				</CardContent>
+				<CardActions>
+					<Button
+						color="primary"
+						variant="contained"
+						onClick={clickSubmit}
+						className={classes.submit}
+					>
+						Update
+					</Button>
+				</CardActions>
+			</Card>
+		</Container>
 	);
 }
 
