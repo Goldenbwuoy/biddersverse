@@ -20,8 +20,15 @@ import EditIcon from "@material-ui/icons/Edit";
 import { listAuctions } from "../api-admin";
 import DeleteAuction from "./DeleteAuction";
 import ViewBids from "./ViewBids";
+import { getImage } from "../../helpers/auction-helper";
 
 const useStyles = makeStyles((theme) => ({
+	container: {
+		flexGrow: 1,
+		overflow: "auto",
+		paddingTop: theme.spacing(4),
+		marginBottom: theme.spacing(10),
+	},
 	root: theme.mixins.gutters({
 		maxWidth: 1450,
 		margin: "auto",
@@ -40,6 +47,10 @@ const useStyles = makeStyles((theme) => ({
 	},
 	textField: {
 		margin: "10px 0",
+	},
+	image: {
+		width: 60,
+		objectFit: "contain",
 	},
 }));
 
@@ -133,7 +144,7 @@ function Auctions() {
 		Math.min(rowsPerPage, auctions.length - page * rowsPerPage);
 
 	return (
-		<div>
+		<div className={classes.container}>
 			<Paper className={classes.root} elevation={4}>
 				<Typography type="title" className={classes.title}>
 					Auctions
@@ -157,6 +168,7 @@ function Auctions() {
 				>
 					<TableHead>
 						<TableRow>
+							<StyledTableCell>Image</StyledTableCell>
 							<StyledTableCell>Item</StyledTableCell>
 							<StyledTableCell>Seller</StyledTableCell>
 							<StyledTableCell>Start Time</StyledTableCell>
@@ -181,6 +193,12 @@ function Auctions() {
 							)
 							.map((auction) => (
 								<StyledTableRow key={auction._id}>
+									<StyledTableCell>
+										<img
+											className={classes.image}
+											src={getImage(auction?.images[0])}
+										/>
+									</StyledTableCell>
 									<StyledTableCell>
 										{auction.itemName}
 									</StyledTableCell>
@@ -225,7 +243,7 @@ function Auctions() {
 							))}
 						{emptyRows > 0 && (
 							<StyledTableRow style={{ height: 63 * emptyRows }}>
-								<StyledTableCell colSpan={7} />
+								<StyledTableCell colSpan={8} />
 							</StyledTableRow>
 						)}
 					</TableBody>

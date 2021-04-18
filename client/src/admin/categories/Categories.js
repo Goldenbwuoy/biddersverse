@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
 	Button,
 	Divider,
+	Fab,
 	IconButton,
 	makeStyles,
 	Paper,
@@ -24,6 +25,12 @@ import { listCategories } from "../api-admin";
 import DeleteCategory from "./DeleteCategory";
 
 const useStyles = makeStyles((theme) => ({
+	container: {
+		flexGrow: 1,
+		overflow: "auto",
+		paddingTop: theme.spacing(4),
+		marginBottom: theme.spacing(10),
+	},
 	root: theme.mixins.gutters({
 		maxWidth: 600,
 		margin: "auto",
@@ -45,6 +52,21 @@ const useStyles = makeStyles((theme) => ({
 	},
 	textField: {
 		margin: "10px 0",
+	},
+	fab: {
+		margin: 0,
+		top: "auto",
+		right: 40,
+		bottom: 40,
+		left: "auto",
+		position: "fixed",
+	},
+	link: {
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		color: "white",
+		textDecoration: "none",
 	},
 }));
 
@@ -117,18 +139,10 @@ function Categories() {
 		Math.min(rowsPerPage, categories.length - page * rowsPerPage);
 
 	return (
-		<div>
+		<div className={classes.container}>
 			<Paper className={classes.root} elevation={4}>
 				<Typography type="title" className={classes.title}>
-					Product Categories
-					<span className={classes.addButton}>
-						<Link to="/admin/create/category">
-							<Button color="primary" variant="contained">
-								<AddIcon className={classes.leftIcon}></AddIcon>{" "}
-								New Category
-							</Button>
-						</Link>
-					</span>
+					Listing Categories
 				</Typography>
 				<Divider />
 				<TextField
@@ -205,6 +219,11 @@ function Categories() {
 					onChangeRowsPerPage={handleChangeRowsPerPage}
 				/>
 			</Paper>
+			<Fab className={classes.fab} color="primary" aria-label="add">
+				<Link className={classes.link} to="/admin/create/category">
+					<AddIcon />
+				</Link>
+			</Fab>
 		</div>
 	);
 }

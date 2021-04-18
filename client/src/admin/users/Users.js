@@ -1,6 +1,8 @@
 import {
 	Button,
+	Container,
 	Divider,
+	Fab,
 	IconButton,
 	makeStyles,
 	Paper,
@@ -24,11 +26,17 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteUser from "./DeleteUser";
 
 const useStyles = makeStyles((theme) => ({
+	container: {
+		flexGrow: 1,
+		overflow: "auto",
+		paddingTop: theme.spacing(4),
+		marginBottom: theme.spacing(10),
+	},
 	root: theme.mixins.gutters({
 		maxWidth: 1200,
 		margin: "auto",
 		padding: theme.spacing(1),
-		marginBottom: "20px",
+		marginBottom: theme.spacing(2),
 	}),
 	title: {
 		margin: `${theme.spacing(3)}px 0 ${theme.spacing(3)}px ${theme.spacing(
@@ -45,6 +53,21 @@ const useStyles = makeStyles((theme) => ({
 	},
 	textField: {
 		margin: "10px 0",
+	},
+	fab: {
+		margin: 0,
+		top: "auto",
+		right: 40,
+		bottom: 40,
+		left: "auto",
+		position: "fixed",
+	},
+	link: {
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		color: "white",
+		textDecoration: "none",
 	},
 }));
 
@@ -117,18 +140,10 @@ function Users() {
 		rowsPerPage - Math.min(rowsPerPage, users.length - page * rowsPerPage);
 
 	return (
-		<div>
+		<div className={classes.container}>
 			<Paper className={classes.root} elevation={4}>
 				<Typography type="title" className={classes.title}>
-					Users
-					<span className={classes.addButton}>
-						<Link to="/admin/create/user">
-							<Button color="primary" variant="contained">
-								<AddIcon className={classes.leftIcon}></AddIcon>{" "}
-								New User
-							</Button>
-						</Link>
-					</span>
+					Registered Users
 				</Typography>
 				<Divider />
 				<TextField
@@ -231,6 +246,11 @@ function Users() {
 					onChangeRowsPerPage={handleChangeRowsPerPage}
 				/>
 			</Paper>
+			<Fab className={classes.fab} color="primary" aria-label="add">
+				<Link className={classes.link} to="/admin/create/user">
+					<AddIcon />
+				</Link>
+			</Fab>
 		</div>
 	);
 }
