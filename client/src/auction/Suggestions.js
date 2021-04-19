@@ -6,12 +6,12 @@ import AuctionCardItem from "./AuctionCardItem";
 
 const useStyles = makeStyles((theme) => ({
 	root: theme.mixins.gutters({
-		padding: theme.spacing(1),
-		paddingBottom: 24,
-		backgroundColor: "#80808024",
+		paddingTop: theme.spacing(1),
+		backgroundColor: "#fff",
 	}),
 	title: {
-		margin: `${theme.spacing(4)}px 0 ${theme.spacing(2)}px`,
+		marginTop: theme.spacing(4),
+		paddingBottom: theme.spacing(4),
 		color: theme.palette.openTitle,
 		fontSize: "1.1em",
 	},
@@ -26,7 +26,11 @@ function Suggestions({ auctions, title }) {
 					{title}
 				</Typography>
 				{auctions.map((item, i) => {
-					return <AuctionCardItem auction={item} />;
+					return (
+						<div>
+							<AuctionCardItem auction={item} />;
+						</div>
+					);
 				})}
 			</Paper>
 		</div>

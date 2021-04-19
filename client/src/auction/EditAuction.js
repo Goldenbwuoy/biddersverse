@@ -1,20 +1,27 @@
 import React, { useState, useEffect } from "react";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import FileUpload from "@material-ui/icons/AddPhotoAlternate";
+import {
+	Card,
+	CardActions,
+	CardContent,
+	Button,
+	TextField,
+	Typography,
+	MenuItem,
+	Select,
+	Icon,
+} from "@material-ui/core";
 import auth from "../auth/auth-helper";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link, Redirect } from "react-router-dom";
-import { Avatar, MenuItem, Select } from "@material-ui/core";
+import ErrorIcon from "@material-ui/icons/Error";
+import { Redirect, useHistory } from "react-router-dom";
 import { listCategories } from "../category/api-category";
 import { read, updateAuction } from "./api-auction";
-import { getAuctionImage, getDateString } from "../helpers/auction-helper";
+import { getDateString } from "../helpers/auction-helper";
 
 const useStyles = makeStyles((theme) => ({
+	root: {
+		marginBottom: theme.spacing(4),
+	},
 	card: {
 		maxWidth: 600,
 		margin: "auto",
@@ -30,21 +37,9 @@ const useStyles = makeStyles((theme) => ({
 		color: theme.palette.openTitle,
 		fontSize: "1em",
 	},
-	textField: {
-		marginLeft: theme.spacing(1),
-		marginRight: theme.spacing(1),
-		width: "80%",
-	},
 	submit: {
 		margin: "auto",
 		marginBottom: theme.spacing(2),
-	},
-	select: {
-		marginTop: 15,
-		marginBottom: 15,
-		marginLeft: theme.spacing(1),
-		marginRight: theme.spacing(1),
-		width: "80%",
 	},
 	input: {
 		display: "none",
@@ -60,10 +55,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function EditAuction({ match }) {
+	const history = useHistory();
 	const classes = useStyles();
 	const { token } = auth.isAuthenticated();
 	const [categories, setCategories] = useState([]);
 	const [redirectToAuction, setRedirectToAuction] = useState(false);
+	const [error, setError] = useState("");
 	const [auction, setAuction] = useState({
 		itemName: "",
 		category: "",
@@ -93,7 +90,7 @@ function EditAuction({ match }) {
 
 		read({ auctionId: match.params.auctionId }, signal).then((data) => {
 			if (data.error) {
-				// setError(data.error);
+				setError(data.error);
 			} else {
 				data.bidEnd = getDateString(new Date(data.bidEnd));
 				data.bidStart = getDateString(new Date(data.bidStart));
@@ -143,7 +140,7 @@ function EditAuction({ match }) {
 	}
 
 	return (
-		<div>
+		<div className={classes.root}>
 			<Card className={classes.card}>
 				<CardContent>
 					<Typography
@@ -162,6 +159,8 @@ function EditAuction({ match }) {
 						value={auction.itemName}
 						onChange={handleChange("itemName")}
 						margin="normal"
+						fullWidth
+						required
 					/>
 					<br />
 					<Select
@@ -172,6 +171,8 @@ function EditAuction({ match }) {
 						value={auction.category}
 						onChange={handleChange("category")}
 						margin="normal"
+						fullWidth
+						required
 					>
 						{categories.map((category) => (
 							<MenuItem key={category._id} value={category._id}>
@@ -190,6 +191,8 @@ function EditAuction({ match }) {
 						onChange={handleChange("description")}
 						className={classes.textField}
 						margin="normal"
+						fullWidth
+						required
 					/>
 					<br />
 					<TextField
@@ -201,6 +204,8 @@ function EditAuction({ match }) {
 						value={auction.startingBid}
 						onChange={handleChange("startingBid")}
 						margin="normal"
+						fullWidth
+						required
 					/>
 					<br />
 					<br />
@@ -215,6 +220,8 @@ function EditAuction({ match }) {
 						InputLabelProps={{
 							shrink: true,
 						}}
+						fullWidth
+						required
 					/>
 					<br />
 					<br />
@@ -229,18 +236,28 @@ function EditAuction({ match }) {
 						InputLabelProps={{
 							shrink: true,
 						}}
+						fullWidth
+						required
 					/>
 					<br /> <br />
-					{/* {values.error && (
-            <Typography component="p" color="error">
-              <Icon color="error" className={classes.error}>
-                error
-              </Icon>
-              {values.error}
-            </Typography>
-          )} */}
+					{error && (
+						<Typography component="p" color="error">
+							<Icon color="error" className={classes.error}>
+								<ErrorIcon />
+							</Icon>
+							{error}
+						</Typography>
+					)}
 				</CardContent>
 				<CardActions>
+					<Button
+						onClick={() => history.goBack()}
+						className={classes.submit}
+						variant="contained"
+						color="secondary"
+					>
+						Cancel
+					</Button>
 					<Button
 						color="primary"
 						variant="contained"
@@ -249,9 +266,6 @@ function EditAuction({ match }) {
 					>
 						Update
 					</Button>
-					<Link to="/myauctions" className={classes.submit}>
-						<Button variant="contained">Cancel</Button>
-					</Link>
 				</CardActions>
 			</Card>
 		</div>

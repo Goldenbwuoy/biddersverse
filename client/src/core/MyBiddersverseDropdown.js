@@ -42,6 +42,14 @@ function MyBiddersverseDropdown() {
 							</li>
 							<li>
 								<Link
+									to="/auction/new"
+									className="dashboard__link"
+								>
+									Create Listing
+								</Link>
+							</li>
+							<li>
+								<Link
 									to="/seller/orders"
 									className="dashboard__link"
 								>
@@ -55,7 +63,7 @@ function MyBiddersverseDropdown() {
 			)}
 
 			<div>
-				<h4 className="dashboard__header">My Dashboard</h4>
+				<h4 className="dashboard__header">My Bids</h4>
 				<ul className="dashboard__list">
 					<li>
 						<Link

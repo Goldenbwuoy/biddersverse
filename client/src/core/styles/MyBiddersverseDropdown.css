@@ -18,6 +18,7 @@
     color: rgb(219, 204, 204);
     margin-bottom: 15px;
     font-weight: 600;
+    text-align: start;
 }
 .dashboard__list {
     list-style: none;
