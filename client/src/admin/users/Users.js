@@ -24,6 +24,8 @@ import { Link } from "react-router-dom";
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteUser from "./DeleteUser";
+import CreateUser from "./CreateUser";
+import UpdateUser from "./UpdateUser";
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -95,6 +97,9 @@ function Users() {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(5);
 	const [search, setSearch] = useState("");
+	const [openNew, setOpenNew] = useState(false);
+	const [openEdit, setOpenEdit] = useState(false);
+	const [selectedUser, setSelectedUser] = useState({});
 
 	const classes = useStyles();
 	const { token } = auth.isAdminAuthenticated();
@@ -123,6 +128,24 @@ function Users() {
 		setUsers(updatedUsers);
 	};
 
+	const updateUser = (user) => {
+		let usersCopy = [...users];
+		const updatedUsers = usersCopy.map((currentUser) =>
+			currentUser._id === user._id
+				? {
+						...currentUser,
+						firstName: user.firstName,
+						lastName: user.lastName,
+						email: user.email,
+						phoneNumber: user.phoneNumber,
+						seller: user.seller,
+				  }
+				: currentUser
+		);
+		setUsers(updatedUsers);
+		console.log(updatedUsers);
+	};
+
 	const handleSearchChange = (event) => {
 		setSearch(event.target.value);
 	};
@@ -134,6 +157,15 @@ function Users() {
 	const handleChangeRowsPerPage = (event) => {
 		setRowsPerPage(parseInt(event.target.value, 10));
 		setPage(0);
+	};
+
+	const updateUsers = (user) => {
+		setUsers([...users, user]);
+	};
+
+	const openEditDialog = (user) => {
+		setSelectedUser(user);
+		setOpenEdit(true);
 	};
 
 	const emptyRows =
@@ -207,19 +239,18 @@ function Users() {
 									</StyledTableCell>
 									<StyledTableCell>
 										<Tooltip title="Edit">
-											<Link
-												to={`/admin/edit/user/${user._id}`}
+											<IconButton
+												style={{
+													marginRight: "15px",
+												}}
+												size="small"
+												color="primary"
+												onClick={() =>
+													openEditDialog(user)
+												}
 											>
-												<IconButton
-													style={{
-														marginRight: "15px",
-													}}
-													size="small"
-													color="primary"
-												>
-													<EditIcon />
-												</IconButton>
-											</Link>
+												<EditIcon />
+											</IconButton>
 										</Tooltip>
 
 										<DeleteUser
@@ -246,11 +277,25 @@ function Users() {
 					onChangeRowsPerPage={handleChangeRowsPerPage}
 				/>
 			</Paper>
-			<Fab className={classes.fab} color="primary" aria-label="add">
-				<Link className={classes.link} to="/admin/create/user">
-					<AddIcon />
-				</Link>
+			<Fab
+				onClick={() => setOpenNew(true)}
+				className={classes.fab}
+				color="primary"
+				aria-label="add"
+			>
+				<AddIcon />
 			</Fab>
+			<CreateUser
+				updateUsers={updateUsers}
+				open={openNew}
+				setOpen={setOpenNew}
+			/>
+			<UpdateUser
+				open={openEdit}
+				setOpen={setOpenEdit}
+				user={selectedUser}
+				editUser={updateUser}
+			/>
 		</div>
 	);
 }

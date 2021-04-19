@@ -21,6 +21,7 @@ import { listAuctions } from "../api-admin";
 import DeleteAuction from "./DeleteAuction";
 import ViewBids from "./ViewBids";
 import { getImage } from "../../helpers/auction-helper";
+import UpdateAuction from "./UpdateAuction";
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -98,6 +99,8 @@ function Auctions() {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(5);
 	const [search, setSearch] = useState("");
+	const [openEdit, setOpenEdit] = useState(false);
+	const [selectedAuction, setSelectedAuction] = useState({});
 
 	const classes = useStyles();
 	const { token } = auth.isAdminAuthenticated();
@@ -137,6 +140,29 @@ function Auctions() {
 
 	const handleSearchChange = (event) => {
 		setSearch(event.target.value);
+	};
+
+	const openEditDialog = (auction) => {
+		setSelectedAuction(auction);
+		setOpenEdit(true);
+	};
+
+	const editAuction = (auction) => {
+		let auctionsCopy = [...auctions];
+		const updatedAuctions = auctionsCopy.map((currentAuction) =>
+			currentAuction._id === auction._id
+				? {
+						...currentAuction,
+						itemName: auction.itemName,
+						category: auction.category,
+						description: auction.description,
+						startingBid: auction.startingBid,
+						bidStart: auction.bidStart,
+						bidEnd: auction.bidEnd,
+				  }
+				: currentAuction
+		);
+		setAuctions(updatedAuctions);
 	};
 
 	const emptyRows =
@@ -229,6 +255,9 @@ function Auctions() {
 													}}
 													size="small"
 													color="primary"
+													onClick={() =>
+														openEditDialog(auction)
+													}
 												>
 													<EditIcon />
 												</IconButton>
@@ -258,6 +287,12 @@ function Auctions() {
 					onChangeRowsPerPage={handleChangeRowsPerPage}
 				/>
 			</Paper>
+			<UpdateAuction
+				open={openEdit}
+				setOpen={setOpenEdit}
+				auction={selectedAuction}
+				editAuction={editAuction}
+			/>
 		</div>
 	);
 }

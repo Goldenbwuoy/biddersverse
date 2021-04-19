@@ -329,6 +329,7 @@ const update = (req, res) => {
 			let result = await auction.save();
 			res.json(result);
 		} catch (err) {
+			console.log(err);
 			return res.status(400).json({
 				error: errorHandler.getErrorMessage(err),
 			});

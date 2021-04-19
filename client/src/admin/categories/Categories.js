@@ -23,6 +23,8 @@ import EditIcon from "@material-ui/icons/Edit";
 import auth from "../../auth/auth-helper";
 import { listCategories } from "../api-admin";
 import DeleteCategory from "./DeleteCategory";
+import CreateCategory from "./CreateCategory";
+import UpdateCategory from "./UpdateCategory";
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -94,6 +96,9 @@ function Categories() {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(5);
 	const [search, setSearch] = useState("");
+	const [openCreate, setOpenCreate] = useState(false);
+	const [openEdit, setOpenEdit] = useState(false);
+	const [selectedCategory, setSelectedCategory] = useState({});
 
 	const { token } = auth.isAdminAuthenticated();
 	const classes = useStyles();
@@ -114,6 +119,11 @@ function Categories() {
 		};
 	}, [token]);
 
+	const openEditDialog = (category) => {
+		setSelectedCategory(category);
+		setOpenEdit(true);
+	};
+
 	const removeCategory = (category) => {
 		const updatedCategories = [...categories];
 		const index = updatedCategories.indexOf(category);
@@ -132,6 +142,24 @@ function Categories() {
 
 	const handleSearchChange = (event) => {
 		setSearch(event.target.value);
+	};
+
+	const updateCategories = (category) => {
+		setCategories([...categories, category]);
+	};
+
+	const updateCategory = (category) => {
+		let categoriesCopy = [...categories];
+		const updatedCategories = categoriesCopy.map((currentCategory) =>
+			currentCategory._id === category._id
+				? {
+						...currentCategory,
+						categoryName: category.categoryName,
+				  }
+				: currentCategory
+		);
+		setCategories(updatedCategories);
+		console.log(updatedCategories);
 	};
 
 	const emptyRows =
@@ -181,19 +209,18 @@ function Categories() {
 									</StyledTableCell>
 									<StyledTableCell>
 										<Tooltip title="Edit">
-											<Link
-												to={`/admin/edit/category/${category._id}`}
+											<IconButton
+												style={{
+													marginRight: "15px",
+												}}
+												size="small"
+												color="primary"
+												onClick={() =>
+													openEditDialog(category)
+												}
 											>
-												<IconButton
-													style={{
-														marginRight: "15px",
-													}}
-													size="small"
-													color="primary"
-												>
-													<EditIcon />
-												</IconButton>
-											</Link>
+												<EditIcon />
+											</IconButton>
 										</Tooltip>
 										<DeleteCategory
 											category={category}
@@ -204,7 +231,7 @@ function Categories() {
 							))}
 						{emptyRows > 0 && (
 							<StyledTableRow style={{ height: 63 * emptyRows }}>
-								<StyledTableCell />
+								<StyledTableCell colSpan={2} />
 							</StyledTableRow>
 						)}
 					</TableBody>
@@ -219,11 +246,25 @@ function Categories() {
 					onChangeRowsPerPage={handleChangeRowsPerPage}
 				/>
 			</Paper>
-			<Fab className={classes.fab} color="primary" aria-label="add">
-				<Link className={classes.link} to="/admin/create/category">
-					<AddIcon />
-				</Link>
+			<Fab
+				onClick={() => setOpenCreate(true)}
+				className={classes.fab}
+				color="primary"
+				aria-label="add"
+			>
+				<AddIcon />
 			</Fab>
+			<CreateCategory
+				open={openCreate}
+				setOpen={setOpenCreate}
+				updateCategories={updateCategories}
+			/>
+			<UpdateCategory
+				open={openEdit}
+				setOpen={setOpenEdit}
+				category={selectedCategory}
+				editCategory={updateCategory}
+			/>
 		</div>
 	);
 }
