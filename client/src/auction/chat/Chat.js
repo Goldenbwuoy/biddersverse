@@ -1,11 +1,13 @@
 import {
-	Button,
 	Card,
 	IconButton,
 	makeStyles,
 	TextField,
+	Dialog,
+	DialogTitle,
+	Button,
 } from "@material-ui/core";
-import SendIcon from "@material-ui/icons/Send";
+import CloseIcon from "@material-ui/icons/CloseOutlined";
 import { ExpandMore, ExpandLess } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
 import "./Chat.css";
@@ -27,12 +29,11 @@ const useStyles = makeStyles((theme) => ({
 
 let socket;
 
-function Chat({ auction }) {
+function Chat({ auction, openChats, setOpenChats }) {
 	const classes = useStyles();
 	const { user } = auth.isAuthenticated();
 	const [text, setText] = useState("");
 	const [chatMessages, setChatMessages] = useState([]);
-	const [openChats, setOpenChats] = useState(false);
 
 	useEffect(() => {
 		setChatMessages(auction.messages);
@@ -60,6 +61,10 @@ function Chat({ auction }) {
 		setText(e.target.value);
 	};
 
+	const toggleChats = () => {
+		setOpenChats(!openChats);
+	};
+
 	const sendMessage = (e) => {
 		e.preventDefault();
 		let newMessage = {
@@ -74,12 +79,14 @@ function Chat({ auction }) {
 		setText("");
 	};
 
-	const toggleChats = () => {
-		setOpenChats(!openChats);
+	const keyPressed = (event) => {
+		if (event.charCode === 13 && text) {
+			sendMessage(event);
+		}
 	};
 
 	return (
-		<div>
+		<>
 			<Button
 				className={classes.toggleChatsButton}
 				color="primary"
@@ -93,16 +100,29 @@ function Chat({ auction }) {
 					<ExpandMore className={classes.rightIcon} />
 				)}
 			</Button>
-			{openChats && (
-				<Card className="chat">
-					<div className="chat__header">
-						<h3>
+			<Dialog
+				fullWidth={true}
+				maxWidth={"md"}
+				open={openChats}
+				aria-labelledby=""
+			>
+				<div className="chat__header">
+					<DialogTitle id="">
+						<h4 className="chat__header-title">
 							Auction Chat{" "}
 							<span className="chatHeader__item">
 								({auction.itemName})
 							</span>
-						</h3>
-					</div>
+						</h4>
+					</DialogTitle>
+					<IconButton
+						onClick={() => setOpenChats(false)}
+						color="secondary"
+					>
+						<CloseIcon />
+					</IconButton>
+				</div>
+				<Card className="chat">
 					<ScrollToBottom className="chat__messages">
 						{chatMessages &&
 							chatMessages.map((message) => (
@@ -122,24 +142,25 @@ function Chat({ auction }) {
 						<TextField
 							id="message"
 							type="text"
-							label="Type Message"
-							variant="outlined"
+							variant="filled"
+							InputProps={{ disableUnderline: true }}
 							className="chatForm__input"
 							value={text}
 							onChange={handleChange}
+							multiline
+							rows="4"
+							onKeyPress={keyPressed}
 						/>
 						<IconButton
 							disabled={!text}
 							type="submit"
 							color="primary"
 							variant="contained"
-						>
-							<SendIcon />
-						</IconButton>
+						></IconButton>
 					</form>
 				</Card>
-			)}
-		</div>
+			</Dialog>
+		</>
 	);
 }
 

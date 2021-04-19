@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
+import { Card, CardHeader, Typography, Grid, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { listRelated, read } from "./api-auction.js";
 import { Link, Redirect } from "react-router-dom";
+import { ExpandMore, ExpandLess } from "@material-ui/icons";
 import auth from "../auth/auth-helper.js";
 import Timer from "./Timer.js";
 import Bidding from "./Bidding.js";
@@ -95,6 +93,7 @@ function Auction({ match }) {
 	const [loading, setLoading] = useState(false);
 	const [orderId, setOrderId] = useState("");
 	const [paymentError, setPaymentError] = useState("");
+	const [openChats, setOpenChats] = useState(false);
 
 	useEffect(() => {
 		const abortController = new AbortController();
@@ -138,6 +137,10 @@ function Auction({ match }) {
 
 	const update = () => {
 		setJustEnded(true);
+	};
+
+	const toggleChats = () => {
+		setOpenChats(!openChats);
 	};
 
 	if (redirectToMyAuctions) {
@@ -304,7 +307,30 @@ function Auction({ match }) {
 						</Grid>
 					</Card>
 					{/* Chat component */}
-					{auth.isAuthenticated() && <Chat auction={auction} />}
+					{
+						auth.isAuthenticated() && (
+							// <Button
+							// 	className={classes.toggleChatsButton}
+							// 	color="primary"
+							// 	variant="contained"
+							// 	onClick={toggleChats}
+							// >
+							// 	Chat Messages ({auction.messages?.length}){" "}
+							// 	{openChats ? (
+							// 		<ExpandLess className={classes.rightIcon} />
+							// 	) : (
+							// 		<ExpandMore className={classes.rightIcon} />
+							// 	)}
+							// </Button>
+							<Chat
+								auction={auction}
+								openChats={openChats}
+								setOpenChats={setOpenChats}
+							/>
+						)
+
+						// <Chat auction={auction} />
+					}
 				</Grid>
 				<Grid item xs={12} md={3} lg={3}>
 					{/* Related products */}
@@ -314,6 +340,11 @@ function Auction({ match }) {
 					/>
 				</Grid>
 			</Grid>
+			{/* <Chat
+				auction={auction}
+				openChats={openChats}
+				setOpenChats={setOpenChats}
+			/> */}
 		</div>
 	);
 }
