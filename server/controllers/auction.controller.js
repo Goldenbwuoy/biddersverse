@@ -256,15 +256,16 @@ const listSoldBySeller = async (req, res) => {
 	}
 };
 
-const listLatest = async (req, res) => {
+const listLatest = async (req, res, next) => {
 	try {
 		let auctions = await Auction.find({ bidEnd: { $gt: new Date() } })
 			.select("-image")
 			.sort("-createdAt")
-			.limit(5)
+			.limit(8)
 			.populate("seller", "_id firstName lastName")
 			.populate("bids.bidder", "_id firstName lastName");
-		res.json(auctions);
+		req.latest = auctions;
+		next();
 	} catch (err) {
 		return res.status(400).json({
 			error: errorHandler.getErrorMessage(err),
@@ -272,10 +273,53 @@ const listLatest = async (req, res) => {
 	}
 };
 
-const listPopular = async (req, res) => {
+const listRecentlySold = async (req, res, next) => {
+	try {
+		let auctions = await Auction.find({
+			bidEnd: { $lt: new Date() },
+			$where: "this.bids.length > 0",
+		})
+			.sort("-bidEnd")
+			.select("-bids")
+			.select("-messages")
+			.limit(8)
+			.populate("seller", "_id firstName lastName");
+		req.recentlySold = auctions;
+		next();
+	} catch (err) {
+		return res.status(400).json({
+			error: errorHandler.getErrorMessage(err),
+		});
+	}
+};
+
+const listClosing = async (req, res, next) => {
+	try {
+		let auctions = await Auction.find({
+			bidEnd: { $gt: new Date() },
+		})
+			.sort("bidEnd")
+			.select("-bids")
+			.select("-messages")
+			.limit(8)
+			.populate("seller", "_id firstName lastName");
+		req.closing = auctions;
+		next();
+	} catch (err) {
+		return res.status(400).json({
+			error: errorHandler.getErrorMessage(err),
+		});
+	}
+};
+
+const listPopular = async (req, res, next) => {
 	try {
 		const auctions = await Auction.aggregate([
-			{ $match: { bidEnd: { $gt: new Date() } } },
+			{
+				$match: {
+					bidEnd: { $gt: new Date() },
+				},
+			},
 			{
 				$project: {
 					itemName: 1,
@@ -290,12 +334,24 @@ const listPopular = async (req, res) => {
 			{ $sort: { bidsCount: -1 } },
 			{ $limit: 10 },
 		]).exec();
-		res.json(auctions);
+		req.popular = auctions;
+		next();
 	} catch (err) {
 		return res.status(400).json({
 			error: errorHandler.getErrorMessage(err),
 		});
 	}
+};
+
+const homeListings = (req, res) => {
+	const auctions = {
+		popular: req.popular,
+		closing: req.closing,
+		latest: req.latest,
+		recentlySold: req.recentlySold,
+	};
+
+	res.json(auctions);
 };
 
 const isSeller = (req, res, next) => {
@@ -372,6 +428,9 @@ module.exports = {
 	listOpenBySeller,
 	listSoldBySeller,
 	listPopular,
+	listRecentlySold,
+	listClosing,
+	homeListings,
 	auctionByID,
 	photo,
 	read,

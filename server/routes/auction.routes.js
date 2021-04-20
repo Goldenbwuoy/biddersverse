@@ -62,9 +62,23 @@ router
 	.route("/api/auctions/category/:categoryId")
 	.get(auctionCtrl.listOpenByCategory);
 
-router.route("/api/auctions/added/latest").get(auctionCtrl.listLatest);
+// router.route("/api/auctions/added/latest").get(auctionCtrl.listLatest);
 
-router.route("/api/auctions/popular").get(auctionCtrl.listPopular);
+// router.route("/api/auctions/popular").get(auctionCtrl.listPopular);
+
+// router.route("/api/auctions/recently_sold").get(auctionCtrl.listRecentlySold);
+
+// router.route("/api/auctions/closing").get(auctionCtrl.listClosing);
+
+router
+	.route("/api/auctions/home_listings")
+	.get(
+		auctionCtrl.listLatest,
+		auctionCtrl.listPopular,
+		auctionCtrl.listRecentlySold,
+		auctionCtrl.listClosing,
+		auctionCtrl.homeListings
+	);
 
 router.route("/api/auctions/image/:auctionId").get(auctionCtrl.photo);
 

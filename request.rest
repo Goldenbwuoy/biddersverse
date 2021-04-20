@@ -200,6 +200,12 @@ Content-Type: application/json
 ### list popular auctions
 GET http://localhost:5000/api/auctions/popular
 
+### list recently sold auctions
+GET http://localhost:5000/api/auctions/recently_sold
+
+### list closing auctions
+GET http://localhost:5000/api/auctions/home_listings
+
 ### get user reviews
 GET http://localhost:5000/api/reviews/user/6009329fec623b2ba4fa2719
 

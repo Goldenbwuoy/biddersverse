@@ -53,6 +53,18 @@ const listLatest = async (signal) => {
 	}
 };
 
+const homePageListings = async (signal) => {
+	try {
+		let response = await fetch(`${BASE_URL}/api/auctions/home_listings`, {
+			method: "GET",
+			signal: signal,
+		});
+		return response.json();
+	} catch (err) {
+		console.log(err);
+	}
+};
+
 const listOpenByCategory = async (params) => {
 	try {
 		let response = await fetch(
@@ -182,6 +194,7 @@ export {
 	create,
 	listOpen,
 	listPopular,
+	homePageListings,
 	listBySeller,
 	read,
 	listOpenByCategory,
