@@ -82,6 +82,67 @@ const listOrders = async (req, res) => {
 	}
 };
 
+const registeredUsers = async (req, res, next) => {
+	try {
+		let users = await User.find({});
+		req.registeredUsers = users;
+		next();
+	} catch (err) {
+		return res
+			.status(400)
+			.json({ error: errorHandler.getErrorMessage(err) });
+	}
+};
+const allListings = async (req, res, next) => {
+	try {
+		let auctions = await Auction.find({});
+		req.totalListings = auctions;
+		next();
+	} catch (err) {
+		return res
+			.status(400)
+			.json({ error: errorHandler.getErrorMessage(err) });
+	}
+};
+
+const activeListings = async (req, res, next) => {
+	try {
+		let auctions = await Auction.find({ bidEnd: { $gt: new Date() } });
+		req.activeListings = auctions;
+		next();
+	} catch (err) {
+		return res
+			.status(400)
+			.json({ error: errorHandler.getErrorMessage(err) });
+	}
+};
+
+const listingsWithBids = async (req, res, next) => {
+	try {
+		let auctions = await Auction.find({
+			bidEnd: { $gt: new Date() },
+			$where: "this.bids.length > 0",
+		});
+		req.listingsWithBids = auctions;
+		next();
+	} catch (err) {
+		return res
+			.status(400)
+			.json({ error: errorHandler.getErrorMessage(err) });
+	}
+};
+
+const dashboardSummary = (req, res) => {
+	const listings = {
+		registeredUsers: req.registeredUsers.length,
+		totalListings: req.totalListings.length,
+		activeListings: req.activeListings.length,
+		listingsWithBids: req.listingsWithBids.length,
+	};
+
+	return res.status(200).json(listings);
+};
+
 module.exports = {
 	create,
 	createUser,
@@ -89,4 +150,9 @@ module.exports = {
 	listUsers,
 	listAuctions,
 	listOrders,
+	registeredUsers,
+	allListings,
+	activeListings,
+	listingsWithBids,
+	dashboardSummary,
 };

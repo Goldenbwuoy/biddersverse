@@ -212,3 +212,8 @@ GET http://localhost:5000/api/reviews/user/6009329fec623b2ba4fa2719
 ### get profile stats
 GET http://localhost:5000/api/users/profile/605a99d56266af39e85d97fe
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA5MzJlM2VjNjIzYjJiYTRmYTI3MWEiLCJpYXQiOjE2MTEyODgxMTJ9.uSyQWbiun9XsBsCEGUowQfiQupWVCC4g2kQAWR7S-cQ
+
+### dashboard summary
+GET http://localhost:5000/api/admin/dashboard_summary
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDAyNjNhOTc0MTU1YjIwN2M5NmMzM2UiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTA3NzI0NDd9.pYjBLnvw2WsvXXPOSZl4FXlAVu2oY7Qn-dn66mB509U
+

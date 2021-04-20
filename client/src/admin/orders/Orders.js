@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 			1
 		)}px`,
 		color: theme.palette.openTitle,
-		fontSize: "1.2em",
+		fontSize: "1.3em",
 	},
 }));
 

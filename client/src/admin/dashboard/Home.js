@@ -8,11 +8,12 @@ import {
 	Paper,
 	Typography,
 } from "@material-ui/core";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
-import HomeImage from "../../assets/images/homeImage.PNG";
 import RecentOrders from "../orders/RecentOrders";
 import InfoCard from "./InfoCard";
+import { dashboardSummary } from "../api-admin";
+import auth from "../../auth/auth-helper";
 
 const useStyles = makeStyles((theme) => ({
 	imageCard: {
@@ -46,8 +47,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Home() {
+	const [summary, setSummary] = useState({});
 	const classes = useStyles();
-	const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+	const { token } = auth.isAdminAuthenticated();
+
+	useEffect(() => {
+		const abortController = new AbortController();
+		const signal = abortController.signal;
+
+		dashboardSummary({ token: token }, signal).then((data) => {
+			if (data && data.error) {
+				console.log(data.error);
+			} else {
+				setSummary(data);
+			}
+		});
+		return function cleanup() {
+			abortController.abort();
+		};
+	}, []);
+
+	console.log(summary);
 	return (
 		<main className={classes.content}>
 			<div className={classes.appBarSpacer} />
@@ -59,26 +79,38 @@ function Home() {
 				<Grid container spacing={3}>
 					<Grid item xs={12} md={6} lg={3}>
 						<InfoCard
-							background="#DD561C"
-							info={{ detail: "Registered Users", number: 20 }}
+							background="rgba(221, 86, 28, 0.3)"
+							info={{
+								detail: "Registered Users",
+								number: summary?.registeredUsers,
+							}}
 						/>
 					</Grid>
 					<Grid item xs={12} md={6} lg={3}>
 						<InfoCard
-							background="green"
-							info={{ detail: "Active Listings", number: 20 }}
+							background="rgba(0, 102, 55, 0.3)"
+							info={{
+								detail: "Active Listings",
+								number: summary?.activeListings,
+							}}
 						/>
 					</Grid>
 					<Grid item xs={12} md={6} lg={3}>
 						<InfoCard
-							background="#BB0000"
-							info={{ detail: "Listings with Bids", number: 15 }}
+							background="rgba(187, 0, 0, 0.3)"
+							info={{
+								detail: "Listings with Bids",
+								number: summary?.listingsWithBids,
+							}}
 						/>
 					</Grid>
 					<Grid item xs={12} md={6} lg={3}>
 						<InfoCard
-							background="#17D4FC"
-							info={{ detail: "Total Listings", number: 50 }}
+							background="rgba(23, 212, 252, 0.3)"
+							info={{
+								detail: "Total Listings",
+								number: summary?.totalListings,
+							}}
 						/>
 					</Grid>
 					{/* Recent Orders */}

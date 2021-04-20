@@ -27,6 +27,18 @@ router
 	.get(authCtrl.requireSignin, authCtrl.isAdmin, adminCtrl.listAuctions);
 
 router
+	.route("/api/admin/dashboard_summary")
+	.get(
+		authCtrl.requireSignin,
+		authCtrl.isAdmin,
+		adminCtrl.registeredUsers,
+		adminCtrl.allListings,
+		adminCtrl.activeListings,
+		adminCtrl.listingsWithBids,
+		adminCtrl.dashboardSummary
+	);
+
+router
 	.route("/api/admin/auctions/:auctionId")
 	.delete(authCtrl.requireSignin, authCtrl.isAdmin, auctionCtrl.remove)
 	.put(authCtrl.requireSignin, authCtrl.isAdmin, auctionCtrl.update);

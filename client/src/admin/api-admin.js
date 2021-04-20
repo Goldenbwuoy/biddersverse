@@ -16,6 +16,22 @@ const listUsers = async (credentials, signal) => {
 	}
 };
 
+const dashboardSummary = async (credentials, signal) => {
+	try {
+		const response = await fetch(`${BASE_URL}/admin/dashboard_summary`, {
+			method: "GET",
+			signal: signal,
+			headers: {
+				Accept: "application/json",
+				Authorization: `Bearer ${credentials.token}`,
+			},
+		});
+		return response.json();
+	} catch (err) {
+		console.log(err);
+	}
+};
+
 const createUser = async (credentials, user) => {
 	try {
 		const response = await fetch(`${BASE_URL}/admin/users`, {
@@ -273,6 +289,7 @@ export {
 	listUsers,
 	createUser,
 	readUser,
+	dashboardSummary,
 	updateUser,
 	deleteUser,
 	listAuctions,

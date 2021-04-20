@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Route, Redirect } from "react-router-dom";
+import Footer from "../core/Footer";
 import Navbar from "../core/Navbar";
 import auth from "./auth-helper";
 
@@ -11,6 +12,7 @@ const UserRoute = ({ component: Component, ...rest }) => (
 				<>
 					<Navbar />
 					<Component {...props} />
+					<Footer />
 				</>
 			) : (
 				<Redirect

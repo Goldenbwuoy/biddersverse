@@ -5,10 +5,10 @@ const useStyles = makeStyles((theme) => ({
 	heading: {
 		fontSize: 35,
 		fontWeight: "bold",
-		color: "#fff",
+		color: "#000",
 	},
 	detail: {
-		color: "#fff",
+		color: "#636363",
 		fontSize: 16,
 		fontWeight: "bold",
 	},
@@ -18,7 +18,11 @@ function InfoCard({ background, info }) {
 	const classes = useStyles();
 	return (
 		<Paper
-			style={{ height: 100, backgroundColor: background, padding: 10 }}
+			style={{
+				height: 100,
+				boxShadow: `0 6px 20px ${background}`,
+				padding: 10,
+			}}
 		>
 			<Typography className={classes.heading}>{info.number}</Typography>
 			<Typography className={classes.detail}>{info.detail}</Typography>

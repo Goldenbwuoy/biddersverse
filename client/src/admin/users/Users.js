@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 			1
 		)}px`,
 		color: theme.palette.openTitle,
-		fontSize: "1.2em",
+		fontSize: "1.3em",
 	},
 	addButton: {
 		float: "right",
@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
 
 const StyledTableCell = withStyles((theme) => ({
 	head: {
-		backgroundColor: "#A5BEBD",
+		backgroundColor: "rgba(0, 102, 55, 0.1)",
 		color: theme.palette.common.black,
 		fontWeight: "850",
 	},
