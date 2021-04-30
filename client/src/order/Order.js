@@ -15,7 +15,8 @@ import Review from "./Review";
 
 const useStyles = makeStyles((theme) => ({
 	card: {
-		textAlign: "center",
+		textAlign: "start",
+		paddingLeft: theme.spacing(1),
 		paddingTop: theme.spacing(1),
 		paddingBottom: theme.spacing(2),
 		flexGrow: 1,
@@ -65,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
 	title: {
 		marginTop: theme.spacing(2),
 		marginBottom: theme.spacing(1),
-		color: theme.palette.protectedTitle,
+		color: theme.palette.openTitle,
 		fontSize: "1.2em",
 	},
 	subheading: {

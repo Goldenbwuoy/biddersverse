@@ -10,21 +10,27 @@ import { makeStyles } from "@material-ui/core/styles";
 import auth from "./../auth/auth-helper";
 import { read, update } from "./api-user.js";
 import { Redirect } from "react-router-dom";
-import { Container, FormControlLabel, Switch } from "@material-ui/core";
+import {
+	CircularProgress,
+	Container,
+	FormControlLabel,
+	Grid,
+	Switch,
+} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
 		height: "100vh",
 	},
 	card: {
-		maxWidth: 600,
 		margin: "auto",
-		textAlign: "center",
 		marginTop: theme.spacing(5),
-		paddingBottom: theme.spacing(2),
+		padding: theme.spacing(2),
+		width: "100%",
 	},
 	title: {
-		margin: theme.spacing(2),
+		margintop: theme.spacing(4),
+		marginBottom: theme.spacing(2),
 		color: theme.palette.primary,
 	},
 	error: {
@@ -39,17 +45,9 @@ const useStyles = makeStyles((theme) => ({
 		display: "none",
 	},
 	submit: {
-		margin: "auto",
-		marginBottom: theme.spacing(2),
+		margin: `${theme.spacing(4)} 0`,
 	},
-	filename: {
-		marginLeft: "10px",
-	},
-	bigAvatar: {
-		width: 60,
-		height: 60,
-		margin: "auto",
-	},
+
 	subheading: {
 		marginTop: theme.spacing(2),
 		color: theme.palette.openTitle,
@@ -98,7 +96,8 @@ function EditProfile({ match }) {
 		};
 	}, [match.params.userId, jwt.token]);
 
-	const clickSubmit = () => {
+	const clickSubmit = (event) => {
+		event.preventDefault();
 		const user = {
 			firstName: values.firstName || undefined,
 			lastName: values.lastName || undefined,
@@ -140,92 +139,120 @@ function EditProfile({ match }) {
 		return <Redirect to={"/user/" + values.userId} />;
 	}
 	return (
-		<Container className={classes.root} component="main" maxWidth="xl">
+		<Container className={classes.root} component="main" maxWidth="sm">
 			<Card className={classes.card}>
-				<CardContent>
-					<Typography variant="h6" className={classes.title}>
-						Edit Profile
-					</Typography>
-					<TextField
-						id="firstName"
-						label="First Name"
-						variant="outlined"
-						className={classes.textField}
-						value={values.firstName}
-						onChange={handleChange("firstName")}
-						margin="normal"
-					/>
-					<TextField
-						id="lastName"
-						label="Last Name"
-						variant="outlined"
-						className={classes.textField}
-						value={values.lastName}
-						onChange={handleChange("lastName")}
-						margin="normal"
-					/>
-					<br />
-					<TextField
-						id="email"
-						type="email"
-						variant="outlined"
-						label="Email"
-						className={classes.textField}
-						value={values.email}
-						onChange={handleChange("email")}
-						margin="normal"
-					/>
-					<br />
-					<TextField
-						id="phoneNumber"
-						label="Mobile Phone"
-						variant="outlined"
-						className={classes.textField}
-						value={values.phoneNumber}
-						onChange={handleChange("phoneNumber")}
-						margin="normal"
-					/>
-					<br />
-					<Typography
-						variant="subtitle1"
-						className={classes.subheading}
+				<div className={classes.paper}>
+					<form
+						onSubmit={clickSubmit}
+						className={classes.form}
+						noValidate
 					>
-						Seller Account
-					</Typography>
-					<FormControlLabel
-						control={
-							<Switch
-								classes={{
-									checked: classes.checked,
-									bar: classes.bar,
-								}}
-								checked={values.seller}
-								onChange={handleCheck}
-							/>
-						}
-						label={values.seller ? "Active" : "Inactive"}
-					/>
-					<br />{" "}
-					{values.error && (
-						<Typography component="p" color="error">
-							<Icon
-								color="error"
-								className={classes.error}
-							></Icon>
-							{values.error}
+						<Typography variant="h6" className={classes.title}>
+							Edit Profile
 						</Typography>
-					)}
-				</CardContent>
-				<CardActions>
-					<Button
-						color="primary"
-						variant="contained"
-						onClick={clickSubmit}
-						className={classes.submit}
-					>
-						Update
-					</Button>
-				</CardActions>
+						<Grid container spacing={2}>
+							<Grid item xs={12} sm={6}>
+								<TextField
+									autoComplete="fname"
+									name="firstName"
+									variant="outlined"
+									required
+									fullWidth
+									id="firstName"
+									label="First Name"
+									autoFocus
+									value={values.firstName}
+									onChange={handleChange("firstName")}
+								/>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<TextField
+									variant="outlined"
+									required
+									fullWidth
+									id="lastName"
+									label="Last Name"
+									name="lastName"
+									autoComplete="lname"
+									value={values.lastName}
+									onChange={handleChange("lastName")}
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<TextField
+									variant="outlined"
+									required
+									fullWidth
+									id="email"
+									label="Email Address"
+									name="email"
+									autoComplete="email"
+									value={values.email}
+									onChange={handleChange("email")}
+									margin="normal"
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<TextField
+									variant="outlined"
+									required
+									fullWidth
+									id="phoneNumber"
+									label="Phone Number"
+									name="phoneNumber"
+									value={values.phoneNumber}
+									onChange={handleChange("phoneNumber")}
+									margin="normal"
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<Typography
+									variant="subtitle1"
+									className={classes.subheading}
+								>
+									Seller Account
+								</Typography>
+								<FormControlLabel
+									control={
+										<Switch
+											checked={values.seller}
+											onChange={handleCheck}
+										/>
+									}
+									label={
+										values.seller ? "Active" : "Inactive"
+									}
+								/>
+							</Grid>
+							{values.error && (
+								<Grid item xs={12}>
+									<Typography
+										className={classes.error}
+										color="secondary"
+									>
+										{values.error}
+									</Typography>
+								</Grid>
+							)}
+						</Grid>
+						<Button
+							type="submit"
+							fullWidth
+							variant="contained"
+							color="primary"
+							className={classes.submit}
+						>
+							{values.loading ? (
+								<CircularProgress
+									size={24}
+									className={classes.loading}
+								/>
+							) : (
+								"Update Profile"
+							)}
+						</Button>
+					</form>
+				</div>
 			</Card>
 		</Container>
 	);
