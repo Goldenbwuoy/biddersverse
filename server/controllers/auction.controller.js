@@ -419,6 +419,25 @@ const setPurchased = async (req, res, next) => {
 	}
 };
 
+const addBidder = async (req, res) => {
+	console.log(req.profile);
+	try {
+		let result = await Auction.findOneAndUpdate(
+			{
+				_id: req.auction._id,
+			},
+			{ $push: { bidders: { $each: [req.profile] } } },
+			{ new: true }
+		).exec();
+		return res.status(200).json(result);
+	} catch (err) {
+		console.log(err);
+		return res.status(400).json({
+			error: errorHandler.getErrorMessage(err),
+		});
+	}
+};
+
 module.exports = {
 	create,
 	uploadImage,
@@ -444,4 +463,5 @@ module.exports = {
 	listOpenByBidder,
 	listWonByBidder,
 	setPurchased,
+	addBidder,
 };

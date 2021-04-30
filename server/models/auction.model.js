@@ -43,6 +43,11 @@ const AuctionSchema = new mongoose.Schema(
 				time: Date,
 			},
 		],
+		bidders: [
+			{
+				bidder: { type: mongoose.Schema.ObjectId, ref: "User" },
+			},
+		],
 		messages: [
 			{
 				sender: { type: mongoose.Schema.ObjectId, ref: "User" },

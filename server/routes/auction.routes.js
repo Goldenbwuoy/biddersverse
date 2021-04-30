@@ -40,6 +40,10 @@ router
 	);
 
 router
+	.route("/api/auctions/bidder/:userId/join/:auctionId")
+	.put(authCtrl.requireSignin, auctionCtrl.addBidder);
+
+router
 	.route("/api/auctions/:auctionId")
 	.delete(authCtrl.requireSignin, auctionCtrl.isSeller, auctionCtrl.remove)
 	.put(authCtrl.requireSignin, auctionCtrl.isSeller, auctionCtrl.update);
