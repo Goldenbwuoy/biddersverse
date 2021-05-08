@@ -52,7 +52,8 @@ const calculateTimeLeft = (date) => {
 	return timeLeft;
 };
 
-const getDepositAmount = (auction) => auction.startingBid * 0.1;
+const getDepositAmount = (auction) =>
+	Math.round(auction.startingBid * 0.1 * 100) / 100;
 
 export {
 	getAuctionImage,

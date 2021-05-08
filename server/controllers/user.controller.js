@@ -120,6 +120,17 @@ const isSeller = (req, res, next) => {
 	next();
 };
 
+const isStripeSeller = (req, res, next) => {
+	const isStripeSeller = req.profile && req.profile.stripe_seller;
+	if (!isStripeSeller) {
+		return res.status(403).json({
+			error:
+				"Connect your Stripe Account in Profile settings to List Products.",
+		});
+	}
+	next();
+};
+
 const stripe_auth = (req, res, next) => {
 	request(
 		{
@@ -287,6 +298,7 @@ module.exports = {
 	update,
 	photo,
 	isSeller,
+	isStripeSeller,
 	stripe_auth,
 	createCustomer,
 	createCharge,

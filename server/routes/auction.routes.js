@@ -15,6 +15,7 @@ router
 		authCtrl.requireSignin,
 		authCtrl.hasAuthorization,
 		userCtrl.isSeller,
+		userCtrl.isStripeSeller,
 		auctionCtrl.create
 	)
 	.get(
