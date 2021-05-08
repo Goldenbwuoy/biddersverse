@@ -8,7 +8,6 @@ function AuctionDetailTabs({ auction }) {
 		setToggleState(index);
 	};
 
-	console.log(auction.seller);
 	return (
 		<div className="tab__container">
 			<div className="bloc-tabs">

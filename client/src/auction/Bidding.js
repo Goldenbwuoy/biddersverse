@@ -7,14 +7,20 @@ import SocketIOClient from "socket.io-client";
 import BidHistory from "./BidHistory";
 import { Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { getDepositAmount } from "../helpers/auction-helper";
+import PayDeposit from "../checkout/PayDeposit";
 const endpoint = "http://127.0.0.1:5000";
+
+let socket;
 
 const useStyles = makeStyles((theme) => ({
 	placeForm: {
 		margin: "0px 16px 16px",
-		backgroundColor: "#e7ede4",
+		// backgroundColor: "#e7ede4",
 		display: "inline-block",
 		borderRadius: 3,
+		boxShadow: `0 6px 20px rgba(0, 102, 55, 0.3)`,
+		border: `1px rgba(0, 102, 55, 0.3) solid`,
 	},
 	marginInput: {
 		margin: 16,
@@ -28,7 +34,17 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-let socket;
+const isRegisteredBidder = (bidders, bidder) => {
+	let isRegistered = false;
+	bidders.find((item, index) => {
+		if (item._id === bidder) {
+			isRegistered = true;
+			return isRegistered;
+		}
+	});
+
+	return isRegistered;
+};
 
 function Bidding(props) {
 	const classes = useStyles();
@@ -45,6 +61,10 @@ function Bidding(props) {
 			});
 		};
 	}, [props.auction._id]);
+
+	console.log(props.auction);
+	console.log(user?._id);
+	console.log(isRegisteredBidder(props.auction.bidders, user._id));
 
 	useEffect(() => {
 		socket.on("new bid", (payload) => {
@@ -84,41 +104,62 @@ function Bidding(props) {
 			{!props.justEnded &&
 				new Date() < new Date(props.auction.bidEnd) &&
 				!isSeller && (
-					<div className={classes.placeForm}>
-						{props.auction.bids.length &&
-						props.auction.bids[0].bidder?._id === user._id ? (
-							<Typography className={classes.message}>
-								You are the highest bidder in this Auction. You
-								will be notified if another bidder outbids you.
-							</Typography>
+					<>
+						{isRegisteredBidder(props.auction.bidders, user._id) ? (
+							<div className={classes.placeForm}>
+								{props.auction.bids.length &&
+								props.auction.bids[0].bidder?._id ===
+									user._id ? (
+									<Typography className={classes.message}>
+										You are the highest bidder in this
+										Auction. You will be notified if another
+										bidder outbids you.
+									</Typography>
+								) : (
+									<>
+										<TextField
+											id="bid"
+											label="Your Bid ($)"
+											value={bid}
+											onChange={handleChange}
+											type="number"
+											margin="normal"
+											helperText={`Enter $${
+												Number(minBid) + 1
+											} or more`}
+											className={classes.marginInput}
+										/>
+										<br />
+										<Button
+											variant="contained"
+											className={classes.marginBtn}
+											color="secondary"
+											disabled={bid < minBid + 1}
+											onClick={placeBid}
+										>
+											Place Bid
+										</Button>
+										<br />
+									</>
+								)}
+							</div>
 						) : (
 							<>
-								<TextField
-									id="bid"
-									label="Your Bid ($)"
-									value={bid}
-									onChange={handleChange}
-									type="number"
-									margin="normal"
-									helperText={`Enter $${
-										Number(minBid) + 1
-									} or more`}
-									className={classes.marginInput}
+								<div className={classes.placeForm}>
+									<Typography className={classes.message}>
+										{`Bidders must pay a deposit of 10% of the
+									starting price of an auction in order to
+									participate in the auction. Pay $${getDepositAmount(props.auction)} to Join
+									the auction.`}
+									</Typography>
+								</div>
+								<PayDeposit
+									updateAuction={props.updateBids}
+									auction={props.auction}
 								/>
-								<br />
-								<Button
-									variant="contained"
-									className={classes.marginBtn}
-									color="secondary"
-									disabled={bid < minBid + 1}
-									onClick={placeBid}
-								>
-									Place Bid
-								</Button>
-								<br />
 							</>
 						)}
-					</div>
+					</>
 				)}
 
 			{/* At the end of the auction, if there are any bids placed, the seller should be able to see the winning bidder and the bid history */}

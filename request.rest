@@ -218,6 +218,6 @@ GET http://localhost:5000/api/admin/dashboard_summary
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDAyNjNhOTc0MTU1YjIwN2M5NmMzM2UiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTA3NzI0NDd9.pYjBLnvw2WsvXXPOSZl4FXlAVu2oY7Qn-dn66mB509U
 
 ### join an auction
-PUT http://localhost:5000/api/auctions/bidder/607278510aaaf31b207513ff/join/608b72d363a8fd33a8926650
+PUT http://localhost:5000/api/auctions/bidder/60613566cc93fc00f82c695a/join/608b72d363a8fd33a8926650
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDcyNzg1MTBhYWFmMzFiMjA3NTEzZmYiLCJpYXQiOjE2MTk3NTE5MDB9.xUozBBmEkyadSXTQCtyvOHqIv-R_d9B3qxc7nGAA1xQ
 

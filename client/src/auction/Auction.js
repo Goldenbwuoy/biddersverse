@@ -70,6 +70,7 @@ const useStyles = makeStyles((theme) => ({
 	lastBid: {
 		color: "#303030",
 		margin: "16px",
+		fontWeight: "700",
 	},
 	rightIcon: {
 		marginLeft: "12px",
@@ -220,13 +221,21 @@ function Auction({ match }) {
 											endTime={auction.bidEnd}
 											update={update}
 										/>
-										{auction.bids.length > 0 && (
+										{auction.bids.length > 0 ? (
 											<Typography
 												component="p"
 												variant="subtitle1"
 												className={classes.lastBid}
 											>
-												{` Current highest bid: $ ${auction.bids[0].bid}`}
+												{` Current Highest Bid: $ ${auction.bids[0].bid}`}
+											</Typography>
+										) : (
+											<Typography
+												component="p"
+												variant="subtitle1"
+												className={classes.lastBid}
+											>
+												{` Starting Bid: $ ${auction.startingBid}`}
 											</Typography>
 										)}
 										{!auth.isAuthenticated() && (

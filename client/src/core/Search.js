@@ -29,8 +29,6 @@ const Search = ({ header }) => {
 		});
 	};
 
-	console.log(history);
-
 	if (values.redirectToResults) {
 		setValues({
 			...values,

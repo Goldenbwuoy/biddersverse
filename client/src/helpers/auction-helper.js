@@ -52,4 +52,12 @@ const calculateTimeLeft = (date) => {
 	return timeLeft;
 };
 
-export { getAuctionImage, getDateString, calculateTimeLeft, getImage };
+const getDepositAmount = (auction) => auction.startingBid * 0.1;
+
+export {
+	getAuctionImage,
+	getDateString,
+	calculateTimeLeft,
+	getImage,
+	getDepositAmount,
+};

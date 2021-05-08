@@ -22,7 +22,6 @@ function Home() {
 			abortController.abort();
 		};
 	}, []);
-	console.log(listings);
 
 	return (
 		<>

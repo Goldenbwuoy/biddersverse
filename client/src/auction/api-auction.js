@@ -190,6 +190,26 @@ const updateAuction = (params, credentials, auction) => {
 		.catch((err) => console.log(err));
 };
 
+const payDeposit = async (params, credentials) => {
+	console.log(credentials.token);
+
+	try {
+		let response = await fetch(
+			`${BASE_URL}/api/auctions/bidder/${params.userId}/join/${params.auctionId}`,
+			{
+				method: "PUT",
+				headers: {
+					Accept: "application/json",
+					Authorization: `Bearer ${credentials.token}`,
+				},
+			}
+		);
+		return response.json();
+	} catch (err) {
+		console.log(err);
+	}
+};
+
 export {
 	create,
 	listOpen,
@@ -204,4 +224,5 @@ export {
 	updateAuction,
 	listRelated,
 	searchAuctions,
+	payDeposit,
 };
