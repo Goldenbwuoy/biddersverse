@@ -16,7 +16,7 @@ const MenuItems = [
 	},
 	{
 		title: "Reset Password",
-		path: "/",
+		path: "/user/reset-password/",
 		cName: "dropdown-link",
 	},
 ];

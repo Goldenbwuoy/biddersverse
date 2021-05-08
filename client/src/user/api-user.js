@@ -81,6 +81,23 @@ const update = async (params, credentials, user) => {
 	}
 };
 
+const resetPassword = async (credentials, info) => {
+	try {
+		let response = await fetch(`${BASE_URL}/api/users/reset_password`, {
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${credentials.token}`,
+			},
+			body: JSON.stringify(info),
+		});
+		return await response.json();
+	} catch (err) {
+		console.log(err);
+	}
+};
+
 const remove = async (params, credentials) => {
 	try {
 		let response = await fetch(`${BASE_URL}/api/users/${params.userId}`, {
@@ -145,6 +162,7 @@ export {
 	read,
 	getProfile,
 	update,
+	resetPassword,
 	remove,
 	stripeUpdate,
 	listReviews,

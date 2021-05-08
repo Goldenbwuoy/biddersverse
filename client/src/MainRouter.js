@@ -26,6 +26,7 @@ import Categories from "./admin/categories/Categories";
 import Orders from "./admin/orders/Orders";
 import SearchResults from "./auction/SearchResults";
 import EmailConfirmation from "./auth/EmailConfirmation";
+import UpdatePassword from "./user/UpdatePassword";
 
 function MainRouter() {
 	return (
@@ -49,6 +50,10 @@ function MainRouter() {
 					component={StripeConnect}
 				/>
 				<UserRoute path="/user/edit/:userId" component={EditProfile} />
+				<UserRoute
+					path="/user/reset-password/:userId"
+					component={UpdatePassword}
+				/>
 				<UserRoute path="/auction/new" component={NewAuction} />
 				<UserRoute
 					path="/auction/edit/:auctionId"

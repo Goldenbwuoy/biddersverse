@@ -20,6 +20,10 @@ router
 	);
 
 router
+	.route("/api/users/reset_password")
+	.post(authCtrl.requireSignin, userCtrl.resetPassword);
+
+router
 	.route("/api/users/:userId")
 	.get(authCtrl.requireSignin, userCtrl.read)
 	.put(authCtrl.requireSignin, authCtrl.hasAuthorization, userCtrl.update)
