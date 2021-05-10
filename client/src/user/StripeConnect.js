@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 		margin: `${theme.spacing(3)}px 0 ${theme.spacing(2)}px ${theme.spacing(
 			2
 		)}px`,
-		color: theme.palette.protectedTitle,
+		color: theme.palette.openTitle,
 		fontSize: 24,
 	},
 	subheading: {
@@ -26,15 +26,13 @@ const useStyles = makeStyles((theme) => ({
 		marginLeft: "24px",
 	},
 	status: {
-		position: "fixed",
-		top: "50%",
-		left: "50%",
-		marginTop: "-50px",
-		marginLeft: "-100px",
+		display: "flex",
+		justifyContent: "center",
 	},
 	image: {
 		width: "150px",
 		objectFit: "contain",
+		marginTop: 40,
 	},
 }));
 function StripeConnect(props) {
@@ -97,13 +95,19 @@ function StripeConnect(props) {
 	};
 
 	return (
-		<div>
+		<div style={{ height: "100vh" }}>
 			<Paper className={classes.root} elevation={4}>
 				<Typography type="title" className={classes.title}>
 					Stripe Account Connection
 				</Typography>
 				{values.error && (
 					<>
+						<Typography
+							type="subheading"
+							className={classes.subheading}
+						>
+							Failed to connect your stripe account
+						</Typography>
 						<div className={classes.status}>
 							<img
 								className={classes.image}
@@ -111,24 +115,18 @@ function StripeConnect(props) {
 								alt=""
 							/>
 						</div>
-						<Typography
-							type="subheading"
-							className={classes.subheading}
-						>
-							Failed to connect your stripe account
-						</Typography>
 					</>
 				)}
 				{values.connecting && <Status status="connecting" />}
 				{values.connected && (
 					<>
-						<Status status="connected" />
 						<Typography
 							type="subheading"
 							className={classes.subheading}
 						>
-							Your String account is successfully connected
+							Your Stripe account is successfully connected
 						</Typography>
+						<Status status="connected" />
 					</>
 				)}
 			</Paper>
