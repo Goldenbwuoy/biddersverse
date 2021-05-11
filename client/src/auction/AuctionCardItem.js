@@ -36,7 +36,7 @@ function AuctionCardItem({ auction }) {
 			<Link className="cards__item__link" to={`/auction/${auction._id}`}>
 				<figure
 					className="cards__item__pic-wrap"
-					data-category={auctionState}
+					data-category={`${auctionState} (${auction.bids?.length} bids)`}
 				>
 					<img
 						src={getImage(auction?.images[0])}

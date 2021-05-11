@@ -26,7 +26,11 @@ function AuctionsByCategory({ match, location }) {
 	}, [match.params.categoryId]);
 	return (
 		<div style={{ height: "100vh", paddingTop: "30px" }}>
-			<AuctionCardGrid auctions={auctions} title={location.state.title} />
+			<AuctionCardGrid
+				auctions={auctions}
+				setAuctions={setAuctions}
+				title={location.state.title}
+			/>
 		</div>
 	);
 }

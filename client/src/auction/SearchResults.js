@@ -6,7 +6,11 @@ function SearchResults({ location }) {
 	console.log(location.pathname.split("=")[1]);
 	return (
 		<div style={{ height: "100vh", paddingTop: "30px" }}>
-			<AuctionCardGrid auctions={results} title="Search Results" />
+			<AuctionCardGrid
+				auctions={results}
+				title="Search Results"
+				search={true}
+			/>
 		</div>
 	);
 }

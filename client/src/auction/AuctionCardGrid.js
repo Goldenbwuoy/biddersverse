@@ -1,14 +1,117 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./styles/AuctionCardGrid.css";
 import CardItem from "./AuctionCardItem";
-import { Container, Grid } from "@material-ui/core";
+import { Container, Divider, Grid, makeStyles } from "@material-ui/core";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 
-function AuctionCardGrid({ auctions, title }) {
+const useStyles = makeStyles((theme) => ({
+	formControl: {
+		margin: theme.spacing(1),
+		width: 200,
+	},
+	selectEmpty: {
+		marginTop: theme.spacing(2),
+	},
+}));
+
+const sortValues = { recent: "recent", name: "name", popularity: "popularity" };
+
+function AuctionCardGrid({ auctions, setAuctions, title, search }) {
+	const classes = useStyles();
+	const [selected, setSelected] = useState("");
+
+	useEffect(() => {
+		if (!search) {
+			setSelected(sortValues.recent);
+			const sortedByCreated = auctions.sort((a, b) => {
+				const keyA = new Date(a.createdAt);
+				const keyB = new Date(b.createdAt);
+
+				return keyA < keyB ? 1 : -1;
+			});
+			setAuctions(sortedByCreated);
+		}
+	}, [title]);
+
+	const sortListings = (criteria) => {
+		if (criteria === sortValues.recent) {
+			const sortedByCreated = auctions.sort((current, next) => {
+				const keyA = new Date(current.createdAt);
+				const keyB = new Date(next.createdAt);
+
+				if (keyA > keyB) return -1;
+				if (keyB < keyA) return 1;
+				return 0;
+			});
+			setAuctions(sortedByCreated);
+		} else if (criteria === sortValues.name) {
+			const sortedByName = auctions.sort((current, next) => {
+				if (
+					current.itemName.toLowerCase() < next.itemName.toLowerCase()
+				)
+					return -1;
+				if (
+					current.itemName.toLowerCase() > next.itemName.toLowerCase()
+				)
+					return 1;
+				return 0;
+			});
+			setAuctions(sortedByName);
+		} else if (criteria === sortValues.popularity) {
+			const sortedByBids = auctions.sort((current, next) => {
+				if (current.bids.length > next.bids.length) return -1;
+				if (current.bids.length < next.bids.length) return 1;
+				return 0;
+			});
+			setAuctions(sortedByBids);
+		} else {
+			setAuctions(auctions);
+		}
+	};
+
+	const handleChange = (event) => {
+		setSelected(event.target.value);
+		sortListings(event.target.value);
+	};
+
+	console.log(selected);
 	return (
 		<Container component="main" maxWidth="xl">
 			<div className="cards">
 				<div className="cards__container">
 					<h3 className="cards__header">{title}</h3>
+					{!search && (
+						<div className="sort_input">
+							<span>Sort By:</span>
+							<FormControl
+								variant="filled"
+								size="small"
+								margin="none"
+								className={classes.formControl}
+							>
+								<Select
+									native
+									value={selected}
+									onChange={handleChange}
+									label="Sort By"
+								>
+									<option value={sortValues.recent}>
+										Recently Listed
+									</option>
+									<option value={sortValues.name}>
+										Name
+									</option>
+									<option value={sortValues.popularity}>
+										Popularity
+									</option>
+								</Select>
+							</FormControl>
+						</div>
+					)}
+
+					<Divider style={{ marginBottom: 15 }} />
 					{auctions?.length ? (
 						<Grid container spacing={4}>
 							{auctions.map((auction) => (

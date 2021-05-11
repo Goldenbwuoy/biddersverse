@@ -280,8 +280,6 @@ const listRecentlySold = async (req, res, next) => {
 			$where: "this.bids.length > 0",
 		})
 			.sort("-bidEnd")
-			.select("-bids")
-			.select("-messages")
 			.limit(8)
 			.populate("seller", "_id firstName lastName");
 		req.recentlySold = auctions;
@@ -299,8 +297,6 @@ const listClosing = async (req, res, next) => {
 			bidEnd: { $gt: new Date() },
 		})
 			.sort("bidEnd")
-			.select("-bids")
-			.select("-messages")
 			.limit(8)
 			.populate("seller", "_id firstName lastName");
 		req.closing = auctions;

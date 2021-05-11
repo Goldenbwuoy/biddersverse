@@ -23,6 +23,9 @@ function Home() {
 		};
 	}, []);
 
+	console.log(listings.latest);
+	console.log(listings.closing);
+
 	return (
 		<>
 			<HeroSection />

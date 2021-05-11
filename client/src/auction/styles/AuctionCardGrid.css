@@ -5,7 +5,7 @@
   
   .cards__header {
     text-align: start;
-    margin: 0 0 40px 10px;
+    margin: 0 0 10px 10px;
   }
   
   .cards__container {
@@ -16,6 +16,12 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 6px 20px rgba(56, 125, 255, 0.17);
+  }
+
+  .sort_input {
+    margin: 0 0 10px 0;
+    display: flex;
+    align-items: center;
   }
 
   .cards__items {

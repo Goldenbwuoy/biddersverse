@@ -39,7 +39,11 @@ function AuctionsByBidder({ location }) {
 	}, [user.id, status]);
 	return (
 		<div style={{ height: "100vh", paddingTop: "30px" }}>
-			<AuctionCardGrid auctions={auctions} title={title} />
+			<AuctionCardGrid
+				auctions={auctions}
+				setAuctions={setAuctions}
+				title={title}
+			/>
 		</div>
 	);
 }
