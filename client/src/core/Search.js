@@ -5,12 +5,12 @@ import { useState } from "react";
 import Button from "@material-ui/core/Button";
 import { searchAuctions } from "../auction/api-auction";
 import { useHistory } from "react-router-dom";
+import search from "./search-helper";
 
 const Search = ({ header }) => {
 	const history = useHistory();
 	const [values, setValues] = useState({
 		search: "",
-		results: [],
 		redirectToResults: false,
 	});
 
@@ -20,10 +20,11 @@ const Search = ({ header }) => {
 			if (data && data.error) {
 				console.log(data.error);
 			} else {
-				setValues({
-					...values,
-					results: data,
-					redirectToResults: true,
+				search.setResult(data, () => {
+					setValues({
+						...values,
+						redirectToResults: true,
+					});
 				});
 			}
 		});
@@ -36,7 +37,6 @@ const Search = ({ header }) => {
 		});
 		history.push({
 			pathname: `/search?query=${values.search}`,
-			state: { results: values.results },
 		});
 	}
 

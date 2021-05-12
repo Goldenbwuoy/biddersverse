@@ -18,22 +18,22 @@ const useStyles = makeStyles((theme) => ({
 
 const sortValues = { recent: "recent", name: "name", popularity: "popularity" };
 
-function AuctionCardGrid({ auctions, setAuctions, title, search }) {
+function AuctionCardGrid({ auctions, setAuctions, title }) {
 	const classes = useStyles();
 	const [selected, setSelected] = useState("");
 
-	useEffect(() => {
-		if (!search) {
-			setSelected(sortValues.recent);
-			const sortedByCreated = auctions.sort((a, b) => {
-				const keyA = new Date(a.createdAt);
-				const keyB = new Date(b.createdAt);
+	// useEffect(() => {
+	// 	setSelected(sortValues.recent);
+	// 	const sortedByCreated = auctions.sort((current, next) => {
+	// 		const keyA = new Date(current.createdAt);
+	// 		const keyB = new Date(next.createdAt);
 
-				return keyA < keyB ? 1 : -1;
-			});
-			setAuctions(sortedByCreated);
-		}
-	}, [title]);
+	// 		if (keyA > keyB) return -1;
+	// 		if (keyB < keyA) return 1;
+	// 		return 0;
+	// 	});
+	// 	setAuctions(sortedByCreated);
+	// }, [title, auctions]);
 
 	const sortListings = (criteria) => {
 		if (criteria === sortValues.recent) {
@@ -81,16 +81,20 @@ function AuctionCardGrid({ auctions, setAuctions, title, search }) {
 		<Container component="main" maxWidth="xl">
 			<div className="cards">
 				<div className="cards__container">
-					<h3 className="cards__header">{title}</h3>
-					{!search && (
+					<h3 className="cards__header">
+						{title} {`(${auctions?.length} listings)`}
+					</h3>
+					{auctions?.length !== 0 && (
 						<div className="sort_input">
-							<span>Sort By:</span>
 							<FormControl
 								variant="filled"
 								size="small"
 								margin="none"
 								className={classes.formControl}
 							>
+								<InputLabel htmlFor="outlined-age-native-simple">
+									Sort By
+								</InputLabel>
 								<Select
 									native
 									value={selected}
