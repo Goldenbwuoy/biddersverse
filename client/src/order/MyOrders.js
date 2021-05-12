@@ -64,33 +64,43 @@ function MyOrders() {
 	return (
 		<Container className={classes.root} component="main" maxWidth="xl">
 			<Paper className={classes.Paper} elevation={4}>
-				<Typography type="title" className={classes.title}>
-					Your Orders
-				</Typography>
-				<List dense>
-					{orders.map((order) => (
-						<span key={order._id}>
-							<Link
-								className={classes.link}
-								to={`/order/${order._id}`}
-							>
-								<ListItem button>
-									<ListItemText
-										primary={
-											<strong>
-												{order.auction.itemName}
-											</strong>
-										}
-										secondary={new Date(
-											order.createdAt
-										).toDateString()}
-									/>
-								</ListItem>
-							</Link>
-							<Divider />
-						</span>
-					))}
-				</List>
+				<h3 className="cards__header">Orders For Items Bought</h3>
+				{orders?.length ? (
+					<List dense>
+						{orders.map((order) => (
+							<span key={order._id}>
+								<Link
+									className={classes.link}
+									to={`/order/${order._id}`}
+								>
+									<ListItem button>
+										<ListItemText
+											primary={
+												<strong>
+													{order.auction.itemName}
+												</strong>
+											}
+											secondary={new Date(
+												order.createdAt
+											).toDateString()}
+										/>
+									</ListItem>
+								</Link>
+								<Divider />
+							</span>
+						))}
+					</List>
+				) : (
+					<div
+						style={{
+							padding: `20px 10px`,
+							backgroundColor: "#fff",
+							borderRadius: 3,
+						}}
+					>
+						<h4>No Orders Found!!</h4>
+					</div>
+				)}
 			</Paper>
 		</Container>
 	);

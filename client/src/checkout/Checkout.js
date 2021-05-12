@@ -36,12 +36,8 @@ function Checkout({
 			},
 		};
 
-		const {
-			address_city,
-			address_country,
-			address_line1,
-			address_zip,
-		} = token.card;
+		const { address_city, address_country, address_line1, address_zip } =
+			token.card;
 
 		const body = {
 			token: token,

@@ -310,26 +310,14 @@ const listClosing = async (req, res, next) => {
 
 const listPopular = async (req, res, next) => {
 	try {
-		const auctions = await Auction.aggregate([
-			{
-				$match: {
-					bidEnd: { $gt: new Date() },
-				},
-			},
-			{
-				$project: {
-					itemName: 1,
-					startingBid: 1,
-					bidStart: 1,
-					bidEnd: 1,
-					bids: 1,
-					images: 1,
-					bidCount: { $size: "$bids" },
-				},
-			},
-			{ $sort: { bidsCount: -1 } },
-			{ $limit: 10 },
-		]).exec();
+		let auctions = await Auction.find({
+			bidEnd: { $gt: new Date() },
+			$where: "this.bids.length >= 2",
+		})
+			.sort("-bidEnd")
+			.limit(5)
+			.populate("seller", "_id firstName lastName");
+
 		req.popular = auctions;
 		next();
 	} catch (err) {

@@ -72,6 +72,7 @@ const useStyles = makeStyles((theme) => ({
 	subheading: {
 		marginTop: theme.spacing(1),
 		color: theme.palette.openTitle,
+		marginLeft: 10,
 	},
 	productTitle: {
 		fontSize: "1.15em",
@@ -142,164 +143,167 @@ function Order({ match }) {
 	};
 
 	return (
-		<Card className={classes.card}>
-			<Typography
-				type="headline"
-				component="h2"
-				className={classes.title}
-			>
-				Order Details
-			</Typography>
-			{!loading && (
-				<>
-					<Typography
-						type="subheading"
-						component="h2"
-						className={classes.subheading}
-					>
-						Order Code: <strong>{order._id}</strong> <br /> Placed
-						on {new Date(order.createdAt).toDateString()}
-					</Typography>
-					<br />
-					<Grid container spacing={4}>
-						<Grid item xs={7} sm={7}>
-							<Card className={classes.innerCardItems}>
-								<span>
-									<Card className={classes.cart}>
-										{order.auction.images?.length && (
-											<CardMedia
-												className={classes.cover}
-												image={getImage(
-													order.auction.images[0]
-												)}
-												title={order.auction.itemName}
-											/>
-										)}
-
-										<div className={classes.details}>
-											<CardContent
-												className={classes.content}
-											>
-												<Typography
-													type="title"
-													component="h3"
-													className={
-														classes.productTitle
-													}
-													color="primary"
-												>
-													<strong>
-														{order.auction.itemName}
-													</strong>
-												</Typography>
-
-												<Typography
-													type="subheading"
-													component="h3"
-													color={
-														order.status ===
-														"Cancelled"
-															? "error"
-															: "primary"
-													}
-												>
-													Status: {order.status}
-												</Typography>
-											</CardContent>
-										</div>
-									</Card>
-									<Divider />
-								</span>
-								<div className={classes.checkout}>
+		<div style={{ height: "100vh" }}>
+			<Card className={classes.card}>
+				<h3 className="cards__header">Order Details</h3>
+				{!loading && (
+					<>
+						<Typography
+							type="subheading"
+							component="h2"
+							className={classes.subheading}
+						>
+							Order Code: <strong>{order._id}</strong> <br />{" "}
+							Placed on {new Date(order.createdAt).toDateString()}
+						</Typography>
+						<br />
+						<Grid container spacing={4}>
+							<Grid item xs={7} sm={7}>
+								<Card className={classes.innerCardItems}>
 									<span>
-										{order.status === "Delivered" &&
-											!reviewed && (
-												<Review
-													order={order}
-													setReviewed={setReviewed}
+										<Card className={classes.cart}>
+											{order.auction.images?.length && (
+												<CardMedia
+													className={classes.cover}
+													image={getImage(
+														order.auction.images[0]
+													)}
+													title={
+														order.auction.itemName
+													}
 												/>
 											)}
+
+											<div className={classes.details}>
+												<CardContent
+													className={classes.content}
+												>
+													<Typography
+														type="title"
+														component="h3"
+														className={
+															classes.productTitle
+														}
+														color="primary"
+													>
+														<strong>
+															{
+																order.auction
+																	.itemName
+															}
+														</strong>
+													</Typography>
+
+													<Typography
+														type="subheading"
+														component="h3"
+														color={
+															order.status ===
+															"Cancelled"
+																? "error"
+																: "primary"
+														}
+													>
+														Status: {order.status}
+													</Typography>
+												</CardContent>
+											</div>
+										</Card>
+										<Divider />
 									</span>
-									<span className={classes.total}>
-										Winning Bid: ${getWinningBid()}
-									</span>
-								</div>
-							</Card>
+									<div className={classes.checkout}>
+										<span>
+											{order.status === "Delivered" &&
+												!reviewed && (
+													<Review
+														order={order}
+														setReviewed={
+															setReviewed
+														}
+													/>
+												)}
+										</span>
+										<span className={classes.total}>
+											Winning Bid: ${getWinningBid()}
+										</span>
+									</div>
+								</Card>
+							</Grid>
+							<Grid item xs={5} sm={5}>
+								<Card className={classes.innerCard}>
+									<Typography
+										type="subheading"
+										component="h2"
+										className={classes.productTitle}
+										color="primary"
+									>
+										Deliver to:
+									</Typography>
+									<Typography
+										type="subheading"
+										component="h3"
+										className={classes.info}
+										color="primary"
+									>
+										<strong>{`${order.buyer.firstName} ${order.buyer.lastName}`}</strong>
+									</Typography>
+									<br />
+									<Typography
+										type="subheading"
+										component="h3"
+										className={classes.info}
+										color="primary"
+									>
+										{order.email}
+									</Typography>
+									<br />
+									<br />
+									<Divider />
+									<br />
+									<Typography
+										type="subheading"
+										component="h3"
+										className={classes.itemShop}
+										color="primary"
+									>
+										{order.shipping_address.street}
+									</Typography>
+									<Typography
+										type="subheading"
+										component="h3"
+										className={classes.itemShop}
+										color="primary"
+									>
+										{order.shipping_address.city},{" "}
+										{order.shipping_address.province}{" "}
+										{order.shipping_address.zipcode}
+									</Typography>
+									<Typography
+										type="subheading"
+										component="h3"
+										className={classes.itemShop}
+										color="primary"
+									>
+										{order.shipping_address.country}
+									</Typography>
+									<br />
+									<Typography
+										type="subheading"
+										component="h3"
+										className={classes.thanks}
+										color="primary"
+									>
+										Thank you for shopping with us! <br />
+										You can track the status of your
+										purchased items on this page.
+									</Typography>
+								</Card>
+							</Grid>
 						</Grid>
-						<Grid item xs={5} sm={5}>
-							<Card className={classes.innerCard}>
-								<Typography
-									type="subheading"
-									component="h2"
-									className={classes.productTitle}
-									color="primary"
-								>
-									Deliver to:
-								</Typography>
-								<Typography
-									type="subheading"
-									component="h3"
-									className={classes.info}
-									color="primary"
-								>
-									<strong>{`${order.buyer.firstName} ${order.buyer.lastName}`}</strong>
-								</Typography>
-								<br />
-								<Typography
-									type="subheading"
-									component="h3"
-									className={classes.info}
-									color="primary"
-								>
-									{order.email}
-								</Typography>
-								<br />
-								<br />
-								<Divider />
-								<br />
-								<Typography
-									type="subheading"
-									component="h3"
-									className={classes.itemShop}
-									color="primary"
-								>
-									{order.shipping_address.street}
-								</Typography>
-								<Typography
-									type="subheading"
-									component="h3"
-									className={classes.itemShop}
-									color="primary"
-								>
-									{order.shipping_address.city},{" "}
-									{order.shipping_address.province}{" "}
-									{order.shipping_address.zipcode}
-								</Typography>
-								<Typography
-									type="subheading"
-									component="h3"
-									className={classes.itemShop}
-									color="primary"
-								>
-									{order.shipping_address.country}
-								</Typography>
-								<br />
-								<Typography
-									type="subheading"
-									component="h3"
-									className={classes.thanks}
-									color="primary"
-								>
-									Thank you for shopping with us! <br />
-									You can track the status of your purchased
-									items on this page.
-								</Typography>
-							</Card>
-						</Grid>
-					</Grid>
-				</>
-			)}
-		</Card>
+					</>
+				)}
+			</Card>
+		</div>
 	);
 }
 

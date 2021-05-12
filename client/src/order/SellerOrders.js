@@ -79,83 +79,98 @@ function SellerOrders() {
 	return (
 		<Container className={classes.root} component="main" maxWidth="xl">
 			<Paper className={classes.paper} elevation={4}>
-				<Typography type="title" className={classes.title}>
-					Orders
-				</Typography>
-				<List dense>
-					{orders.map((order, index) => {
-						return (
-							<span key={index}>
-								<ListItem button onClick={handleClick(index)}>
-									<ListItemText
-										primary={"Order # " + order._id}
-										secondary={new Date(
-											order.createdAt
-										).toDateString()}
-									/>
-									{open === index ? (
-										<ExpandLess />
-									) : (
-										<ExpandMore />
-									)}
-								</ListItem>
-								<Divider />
-								<Collapse
-									component="li"
-									in={open === index}
-									timeout="auto"
-									unmountOnExit
-								>
-									<OrderUpdate
-										order={order}
-										orderIndex={index}
-									/>
-									<div className={classes.customerDetails}>
-										<Typography
-											type="subheading"
-											component="h3"
-											className={classes.subheading}
+				<h3 className="cards__header">Orders For Items Sold</h3>
+				{orders?.length ? (
+					<List dense>
+						{orders.map((order, index) => {
+							return (
+								<span key={index}>
+									<ListItem
+										button
+										onClick={handleClick(index)}
+									>
+										<ListItemText
+											primary={"Order # " + order._id}
+											secondary={new Date(
+												order.createdAt
+											).toDateString()}
+										/>
+										{open === index ? (
+											<ExpandLess />
+										) : (
+											<ExpandMore />
+										)}
+									</ListItem>
+									<Divider />
+									<Collapse
+										component="li"
+										in={open === index}
+										timeout="auto"
+										unmountOnExit
+									>
+										<OrderUpdate
+											order={order}
+											orderIndex={index}
+										/>
+										<div
+											className={classes.customerDetails}
 										>
-											Deliver to:
-										</Typography>
-										<Typography
-											type="subheading"
-											component="h3"
-											color="primary"
-										>
-											<strong>{`${order.buyer.firstName} ${order.buyer.lastName}`}</strong>{" "}
-											({order.email})
-										</Typography>
-										<Typography
-											type="subheading"
-											component="h3"
-											color="primary"
-										>
-											{order.shipping_address.street}
-										</Typography>
-										<Typography
-											type="subheading"
-											component="h3"
-											color="primary"
-										>
-											{order.shipping_address.city},{" "}
-											{order.shipping_address.zipcode}
-										</Typography>
-										<Typography
-											type="subheading"
-											component="h3"
-											color="primary"
-										>
-											{order.shipping_address.country}
-										</Typography>
-										<br />
-									</div>
-								</Collapse>
-								<Divider />
-							</span>
-						);
-					})}
-				</List>
+											<Typography
+												type="subheading"
+												component="h3"
+												className={classes.subheading}
+											>
+												Deliver to:
+											</Typography>
+											<Typography
+												type="subheading"
+												component="h3"
+												color="primary"
+											>
+												<strong>{`${order.buyer.firstName} ${order.buyer.lastName}`}</strong>{" "}
+												({order.email})
+											</Typography>
+											<Typography
+												type="subheading"
+												component="h3"
+												color="primary"
+											>
+												{order.shipping_address.street}
+											</Typography>
+											<Typography
+												type="subheading"
+												component="h3"
+												color="primary"
+											>
+												{order.shipping_address.city},{" "}
+												{order.shipping_address.zipcode}
+											</Typography>
+											<Typography
+												type="subheading"
+												component="h3"
+												color="primary"
+											>
+												{order.shipping_address.country}
+											</Typography>
+											<br />
+										</div>
+									</Collapse>
+									<Divider />
+								</span>
+							);
+						})}
+					</List>
+				) : (
+					<div
+						style={{
+							padding: `20px 10px`,
+							backgroundColor: "#3f3f3f0d",
+							borderRadius: 3,
+						}}
+					>
+						<h4>No Orders Found!!</h4>
+					</div>
+				)}
 			</Paper>
 		</Container>
 	);

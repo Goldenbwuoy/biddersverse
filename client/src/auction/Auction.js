@@ -152,10 +152,6 @@ function Auction({ match }) {
 		return <Redirect to={`/order/${orderId}`} />;
 	}
 
-	if (loading) {
-		return <Loading />;
-	}
-
 	const currentDate = new Date();
 	return (
 		<div className={classes.root}>
@@ -288,8 +284,7 @@ function Auction({ match }) {
 																>
 																	<Typography
 																		style={{
-																			color:
-																				"red",
+																			color: "red",
 																		}}
 																	>
 																		{
