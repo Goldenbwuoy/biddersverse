@@ -37,7 +37,7 @@ function AuctionsBySeller({ location }) {
 		};
 	}, [user._id, status]);
 	return (
-		<div style={{ paddingTop: "30px" }}>
+		<div style={{ paddingTop: "30px", minHeight: "100vh" }}>
 			<AuctionCardGrid
 				auctions={auctions}
 				setAuctions={setAuctions}

@@ -111,9 +111,8 @@ function Bidding(props) {
 								props.auction.bids[0].bidder?._id ===
 									user._id ? (
 									<Typography className={classes.message}>
-										You are the highest bidder in this
-										Auction. You will be notified if another
-										bidder outbids you.
+										You are currently the highest bidder in
+										this Auction.
 									</Typography>
 								) : (
 									<>
@@ -170,7 +169,7 @@ function Bidding(props) {
 						{props.auction.bids.length > 0 ? (
 							<>
 								<Typography className={classes.message}>
-									The winner of this auction is{" "}
+									Item Sold to{" "}
 									{props.auction.bids[0].bidder.firstName}
 								</Typography>
 							</>

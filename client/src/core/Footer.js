@@ -8,8 +8,12 @@ import {
 	Twitter,
 	LinkedIn,
 } from "@material-ui/icons";
+import ContactUs from "./ContactUs";
+import SupportUs from "./Support";
+import auth from "../auth/auth-helper";
 
 function Footer() {
+	const isSeller = auth.isAuthenticated().user?.seller;
 	return (
 		<div className="footer-container">
 			<section className="footer-subscription">
@@ -21,36 +25,32 @@ function Footer() {
 			<div className="footer-links">
 				<div className="footer-link-wrapper">
 					<div className="footer-link-items">
-						<h2>About Us</h2>
-						<Link to="/sign-up">How it works</Link>
-						<Link to="/">Testimonials</Link>
-						<Link to="/">Careers</Link>
-						<Link to="/">Investors</Link>
-						<Link to="/">Terms of Service</Link>
-					</div>
-					<div className="footer-link-items">
 						<h2>Contact Us</h2>
-						<Link to="/">Contact</Link>
-						<Link to="/">Support</Link>
-						<Link to="/">Destinations</Link>
-						<Link to="/">Sponsorships</Link>
+						<SupportUs />
+						<ContactUs />
 					</div>
 				</div>
 				<div className="footer-link-wrapper">
+					{isSeller && (
+						<div className="footer-link-items">
+							<h2>My Listings</h2>
+							<Link to="/auctions/all/by-seller">
+								All Listings
+							</Link>
+							<Link to="/auctions/live/by-seller">
+								Live Listings
+							</Link>
+							<Link to="/auctions/sold/by-seller">
+								Sold Listings
+							</Link>
+						</div>
+					)}
+
 					<div className="footer-link-items">
-						<h2>Videos</h2>
-						<Link to="/">Submit Video</Link>
-						<Link to="/">Ambassadors</Link>
-						<Link to="/">Agency</Link>
-						<Link to="/">Influencer</Link>
-					</div>
-					<div className="footer-link-items">
-						<h2>Quick Links</h2>
-						<Link to="/">My Products</Link>
-						<Link to="/">My Bids</Link>
-						<Link to="/">Sold Auctions</Link>
-						<Link to="/">Won Auctions</Link>
-						<Link to="/">Live Auctions</Link>
+						<h2>My Bids</h2>
+						<Link to="/auctions/all/bids">All Bids</Link>
+						<Link to="/auctions/live/bids">Live Bids</Link>
+						<Link to="/auctions/won/bids">Won Bids</Link>
 					</div>
 				</div>
 			</div>
@@ -66,46 +66,46 @@ function Footer() {
 						Biddersverse © 2021
 					</small>
 					<div className="social-icons">
-						<Link
+						<a
 							className="social-icon-link facebook"
-							to="/"
+							to="https://www.facebook.com/"
 							target="_blank"
 							aria-label="Facebook"
 						>
 							<Facebook />
-						</Link>
-						<Link
+						</a>
+						<a
 							className="social-icon-link instagram"
-							to="/"
+							href="https://www.instagram.com/Goldenbwuoy"
 							target="_blank"
 							aria-label="Instagram"
 						>
 							<Instagram />
-						</Link>
-						<Link
+						</a>
+						<a
 							className="social-icon-link youtube"
-							to="/"
+							href="https://www.youtube.com/channel/UCtnDkTW0WBe9l4vjzgsaApw"
 							target="_blank"
 							aria-label="Youtube"
 						>
 							<YouTube />
-						</Link>
-						<Link
+						</a>
+						<a
 							className="social-icon-link twitter"
-							to="/"
+							href="https://twitter.com/GMumanikidzwa5"
 							target="_blank"
 							aria-label="Twitter"
 						>
 							<Twitter />
-						</Link>
-						<Link
+						</a>
+						<a
 							className="social-icon-link twitter"
-							to="/"
+							href="https://www.linkedin.com/in/golden-mumanikidzwa-276587200/"
 							target="_blank"
 							aria-label="LinkedIn"
 						>
 							<LinkedIn />
-						</Link>
+						</a>
 					</div>
 				</div>
 			</section>

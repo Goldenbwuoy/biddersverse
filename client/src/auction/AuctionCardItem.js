@@ -31,6 +31,7 @@ function AuctionCardItem({ auction }) {
 	};
 
 	const auctionState = labelStatus(auction, currentDate);
+	console.log(auction);
 	return (
 		<>
 			<Link className="cards__item__link" to={`/auction/${auction._id}`}>
@@ -59,7 +60,11 @@ function AuctionCardItem({ auction }) {
 					</div>
 					<div className="cards__item__row">
 						<h4 className="cards__item__row-price">
-							{`$${auction.startingBid}`}
+							{`$${
+								auction.bids?.length > 0
+									? auction.bids[0].bid
+									: auction.startingBid
+							}`}
 						</h4>
 						{currentDate > new Date(auction.bidStart) ? (
 							<ShowTimer
