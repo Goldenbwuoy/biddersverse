@@ -17,6 +17,11 @@ import {
 	Grid,
 	Switch,
 } from "@material-ui/core";
+import {
+	CountryDropdown,
+	RegionDropdown,
+	CountryRegionData,
+} from "react-country-region-selector";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -61,6 +66,10 @@ function EditProfile({ match }) {
 		lastName: "",
 		email: "",
 		phoneNumber: "",
+		street: "",
+		city: "",
+		zipcode: "",
+		country: "",
 		seller: false,
 		error: "",
 		redirectToProfile: false,
@@ -81,6 +90,7 @@ function EditProfile({ match }) {
 			if (data && data.error) {
 				setValues({ ...values, error: data.error });
 			} else {
+				console.log(data);
 				setValues({
 					...values,
 					firstName: data.firstName,
@@ -88,6 +98,10 @@ function EditProfile({ match }) {
 					email: data.email,
 					phoneNumber: data.phoneNumber,
 					seller: data.seller,
+					street: data.address?.street,
+					city: data.address?.city,
+					zipcode: data.address?.zipcode,
+					country: data.address?.country,
 				});
 			}
 		});
@@ -104,6 +118,12 @@ function EditProfile({ match }) {
 			email: values.email || undefined,
 			phoneNumber: values.phoneNumber,
 			seller: values.seller || undefined,
+			address: {
+				street: values.street || undefined,
+				city: values.city || undefined,
+				zipcode: values.zipcode || undefined,
+				country: values.country || undefined,
+			},
 		};
 		update(
 			{
@@ -203,6 +223,67 @@ function EditProfile({ match }) {
 									value={values.phoneNumber}
 									onChange={handleChange("phoneNumber")}
 									margin="normal"
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<Typography
+									variant="subtitle1"
+									className={classes.subheading}
+								>
+									Address
+								</Typography>
+								<TextField
+									variant="outlined"
+									required
+									fullWidth
+									id="street"
+									label="Street"
+									name="street"
+									value={values.street}
+									onChange={handleChange("street")}
+									margin="normal"
+								/>
+							</Grid>
+
+							<Grid item xs={12} sm={6}>
+								<TextField
+									autoComplete="fname"
+									name="city"
+									variant="outlined"
+									required
+									fullWidth
+									id="city"
+									label="City"
+									autoFocus
+									value={values.city}
+									onChange={handleChange("city")}
+								/>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<TextField
+									autoComplete="fname"
+									name="zipcode"
+									variant="outlined"
+									required
+									fullWidth
+									id="zipcode"
+									label="Zip Code"
+									autoFocus
+									value={values.zipcode}
+									onChange={handleChange("zipcode")}
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<CountryDropdown
+									value={values.country}
+									onChange={(val) =>
+										setValues({ ...values, country: val })
+									}
+									style={{
+										height: 60,
+										width: "100%",
+										marginTop: 10,
+									}}
 								/>
 							</Grid>
 							<Grid item xs={12}>

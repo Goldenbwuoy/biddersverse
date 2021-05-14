@@ -47,6 +47,7 @@ function PayDeposit({ auction, updateAuction }) {
 				image={getImage(auction.images[0])}
 				label="Pay Deposit"
 				email={user.email}
+				alipay={true}
 				name="Pay Deposit"
 				amount={amount}
 				stripeKey={process.env.REACT_APP_PUBLISHABLE_KEY}

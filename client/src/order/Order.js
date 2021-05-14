@@ -141,6 +141,7 @@ function Order({ match }) {
 	const getWinningBid = () => {
 		return order?.auction.bids[0].bid;
 	};
+	console.log(order);
 
 	return (
 		<div style={{ height: "100vh" }}>
@@ -266,7 +267,7 @@ function Order({ match }) {
 										className={classes.itemShop}
 										color="primary"
 									>
-										{order.shipping_address.street}
+										{order.buyer.address?.street}
 									</Typography>
 									<Typography
 										type="subheading"
@@ -274,9 +275,8 @@ function Order({ match }) {
 										className={classes.itemShop}
 										color="primary"
 									>
-										{order.shipping_address.city},{" "}
-										{order.shipping_address.province}{" "}
-										{order.shipping_address.zipcode}
+										{order.buyer.address?.city},{" "}
+										{order.buyer.address?.zipcode}
 									</Typography>
 									<Typography
 										type="subheading"
@@ -284,7 +284,7 @@ function Order({ match }) {
 										className={classes.itemShop}
 										color="primary"
 									>
-										{order.shipping_address.country}
+										{order.buyer.address?.country}
 									</Typography>
 									<br />
 									<Typography

@@ -135,22 +135,22 @@ function SellerOrders() {
 												component="h3"
 												color="primary"
 											>
-												{order.shipping_address.street}
+												{order.buyer.address?.street}
 											</Typography>
 											<Typography
 												type="subheading"
 												component="h3"
 												color="primary"
 											>
-												{order.shipping_address.city},{" "}
-												{order.shipping_address.zipcode}
+												{order.buyer.address?.city},{" "}
+												{order.buyer.address?.zipcode}
 											</Typography>
 											<Typography
 												type="subheading"
 												component="h3"
 												color="primary"
 											>
-												{order.shipping_address.country}
+												{order.buyer.address?.country}
 											</Typography>
 											<br />
 										</div>

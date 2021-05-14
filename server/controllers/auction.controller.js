@@ -35,7 +35,7 @@ const create = async (req, res) => {
 
 	try {
 		let result = await auction.save();
-		// notificationHandler.scheduleNotification(result);
+		notificationHandler.scheduleNotification(result);
 		res.status(200).json(result);
 	} catch (err) {
 		return res.status(400).json({

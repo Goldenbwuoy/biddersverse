@@ -36,9 +36,6 @@ function Checkout({
 			},
 		};
 
-		const { address_city, address_country, address_line1, address_zip } =
-			token.card;
-
 		const body = {
 			token: token,
 			order: {
@@ -46,12 +43,6 @@ function Checkout({
 				seller: auction.seller,
 				email: token.email,
 				amount: amount,
-				shipping_address: {
-					street: address_line1,
-					city: address_city,
-					zipcode: address_zip,
-					country: address_country,
-				},
 			},
 		};
 
@@ -80,7 +71,7 @@ function Checkout({
 				name={auction.itemName}
 				email={user.email}
 				amount={amount}
-				shippingAddress
+				alipay={true}
 				stripeKey={process.env.REACT_APP_PUBLISHABLE_KEY}
 				token={placeOrder}
 			/>
