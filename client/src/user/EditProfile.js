@@ -25,7 +25,8 @@ import {
 
 const useStyles = makeStyles((theme) => ({
 	root: {
-		height: "100vh",
+		minHeight: "100vh",
+		marginBottom: 15,
 	},
 	card: {
 		margin: "auto",

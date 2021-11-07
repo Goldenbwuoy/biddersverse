@@ -29,31 +29,26 @@ function Home() {
 	return (
 		<>
 			<HeroSection />
-			{listings.latest && (
-				<AuctionCardSlider
-					auctions={listings.latest}
-					title="New Listings"
-				/>
-			)}
 
-			{listings.popular && (
-				<AuctionCardSlider
-					auctions={listings.popular}
-					title="Popular Listings"
-				/>
-			)}
-			{listings.closing && (
-				<AuctionCardSlider
-					auctions={listings.closing}
-					title="Closing Listings"
-				/>
-			)}
-			{listings.recentlySold && (
-				<AuctionCardSlider
-					auctions={listings.recentlySold}
-					title="Recently Sold Listings"
-				/>
-			)}
+			<AuctionCardSlider
+				auctions={listings.latest}
+				title="New Listings"
+			/>
+
+			<AuctionCardSlider
+				auctions={listings.popular}
+				title="Popular Listings"
+			/>
+
+			<AuctionCardSlider
+				auctions={listings.closing}
+				title="Closing Listings"
+			/>
+
+			<AuctionCardSlider
+				auctions={listings.recentlySold}
+				title="Recently Sold Listings"
+			/>
 		</>
 	);
 }

@@ -44,7 +44,7 @@ function AuctionCardSlider({ auctions, title }) {
 				<div className="slider__cards">
 					<h3 className="slider__header">{title}</h3>
 					<Slider {...settings}>
-						{auctions.map((auction) => (
+						{auctions?.map((auction) => (
 							<AuctionCardItem
 								key={auction._id}
 								auction={auction}
