@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
+import { Card, CardHeader, Typography, Grid, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { listRelated, read } from "./api-auction.js";
 import { Link, Redirect } from "react-router-dom";
+import { ExpandMore, ExpandLess } from "@material-ui/icons";
 import auth from "../auth/auth-helper.js";
 import Timer from "./Timer.js";
 import Bidding from "./Bidding.js";
@@ -15,11 +13,15 @@ import Chat from "./chat/Chat.js";
 import Checkout from "../checkout/Checkout";
 import Loading from "../core/Loading";
 import AuctionImageSlider from "./AuctionImageSlider.js";
+import AuctionDetailTabs from "./AuctionDetailTabs.js";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
 		flexGrow: 1,
-		margin: 30,
+		marginTop: theme.spacing(4),
+		marginBottom: theme.spacing(4),
+		marginLeft: theme.spacing(10),
+		marginRight: theme.spacing(10),
 	},
 	flex: {
 		display: "flex",
@@ -68,12 +70,16 @@ const useStyles = makeStyles((theme) => ({
 	lastBid: {
 		color: "#303030",
 		margin: "16px",
+		fontWeight: "700",
 	},
 	rightIcon: {
 		marginLeft: "12px",
 	},
 	toggleChatsButton: {
 		marginTop: "25px",
+	},
+	paymentError: {
+		margin: theme.spacing(2),
 	},
 }));
 
@@ -87,8 +93,8 @@ function Auction({ match }) {
 	const [redirectToOrder, setRedirectToOrder] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [orderId, setOrderId] = useState("");
-
-	console.log(auction);
+	const [paymentError, setPaymentError] = useState("");
+	const [openChats, setOpenChats] = useState(false);
 
 	useEffect(() => {
 		const abortController = new AbortController();
@@ -134,6 +140,10 @@ function Auction({ match }) {
 		setJustEnded(true);
 	};
 
+	const toggleChats = () => {
+		setOpenChats(!openChats);
+	};
+
 	if (redirectToMyAuctions) {
 		return <Redirect to="/auctions/all/by-seller" />;
 	}
@@ -142,15 +152,11 @@ function Auction({ match }) {
 		return <Redirect to={`/order/${orderId}`} />;
 	}
 
-	if (loading) {
-		return <Loading />;
-	}
-
 	const currentDate = new Date();
 	return (
 		<div className={classes.root}>
 			<Grid container spacing={2}>
-				<Grid item xs={12} md={8} lg={8}>
+				<Grid item xs={12} md={9} lg={9}>
 					<Card className={classes.card}>
 						<CardHeader
 							title={auction.itemName}
@@ -189,7 +195,7 @@ function Auction({ match }) {
 								{/* Image slider */}
 								<AuctionImageSlider auction={auction} />
 
-								<Typography
+								{/* <Typography
 									component="p"
 									variant="subtitle1"
 									className={classes.subheading}
@@ -201,7 +207,7 @@ function Auction({ match }) {
 									className={classes.description}
 								>
 									{auction.description}
-								</Typography>
+								</Typography> */}
 							</Grid>
 
 							<Grid item lg={7} md={6} xs={12} sm={12}>
@@ -211,13 +217,21 @@ function Auction({ match }) {
 											endTime={auction.bidEnd}
 											update={update}
 										/>
-										{auction.bids.length > 0 && (
+										{auction.bids.length > 0 ? (
 											<Typography
 												component="p"
 												variant="subtitle1"
 												className={classes.lastBid}
 											>
-												{` Current highest bid: $ ${auction.bids[0].bid}`}
+												{` Current Highest Bid: $ ${auction.bids[0].bid}`}
+											</Typography>
+										) : (
+											<Typography
+												component="p"
+												variant="subtitle1"
+												className={classes.lastBid}
+											>
+												{` Starting Bid: $ ${auction.startingBid}`}
 											</Typography>
 										)}
 										{!auth.isAuthenticated() && (
@@ -244,18 +258,42 @@ function Auction({ match }) {
 														._id ===
 														auction.bids[0]?.bidder
 															._id && (
-														<Checkout
-															auction={auction}
-															setLoading={
-																setLoading
-															}
-															setRedirectToOrder={
-																setRedirectToOrder
-															}
-															setOrderId={
-																setOrderId
-															}
-														/>
+														<>
+															<Checkout
+																auction={
+																	auction
+																}
+																setLoading={
+																	setLoading
+																}
+																setRedirectToOrder={
+																	setRedirectToOrder
+																}
+																setOrderId={
+																	setOrderId
+																}
+																setPaymentError={
+																	setPaymentError
+																}
+															/>
+															{paymentError && (
+																<div
+																	className={
+																		classes.paymentError
+																	}
+																>
+																	<Typography
+																		style={{
+																			color: "red",
+																		}}
+																	>
+																		{
+																			paymentError
+																		}
+																	</Typography>
+																</div>
+															)}
+														</>
 													)}
 											</>
 										)}
@@ -269,12 +307,36 @@ function Auction({ match }) {
 									).toLocaleString()}`}</Typography>
 								)}
 							</Grid>
+							<AuctionDetailTabs auction={auction} />
 						</Grid>
 					</Card>
 					{/* Chat component */}
-					{auth.isAuthenticated() && <Chat auction={auction} />}
+					{
+						auth.isAuthenticated() && (
+							// <Button
+							// 	className={classes.toggleChatsButton}
+							// 	color="primary"
+							// 	variant="contained"
+							// 	onClick={toggleChats}
+							// >
+							// 	Chat Messages ({auction.messages?.length}){" "}
+							// 	{openChats ? (
+							// 		<ExpandLess className={classes.rightIcon} />
+							// 	) : (
+							// 		<ExpandMore className={classes.rightIcon} />
+							// 	)}
+							// </Button>
+							<Chat
+								auction={auction}
+								openChats={openChats}
+								setOpenChats={setOpenChats}
+							/>
+						)
+
+						// <Chat auction={auction} />
+					}
 				</Grid>
-				<Grid item xs={12} md={4} lg={4}>
+				<Grid item xs={12} md={3} lg={3}>
 					{/* Related products */}
 					<Suggestions
 						auctions={relatedAuctions}
@@ -282,6 +344,11 @@ function Auction({ match }) {
 					/>
 				</Grid>
 			</Grid>
+			{/* <Chat
+				auction={auction}
+				openChats={openChats}
+				setOpenChats={setOpenChats}
+			/> */}
 		</div>
 	);
 }

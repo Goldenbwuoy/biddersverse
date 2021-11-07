@@ -1,22 +1,28 @@
 import React, { useEffect, useState } from "react";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import AddPhoto from "@material-ui/icons/AddPhotoAlternate";
 import auth from "../auth/auth-helper";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-import Icon from "@material-ui/core/Icon";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import { create } from "./api-auction";
-import { MenuItem, Select } from "@material-ui/core";
+import {
+	MenuItem,
+	Select,
+	Card,
+	CardActions,
+	CardContent,
+	Button,
+	TextField,
+	Typography,
+	Icon,
+} from "@material-ui/core";
+import ErrorIcon from "@material-ui/icons/Error";
 import { listCategories } from "../category/api-category";
 import { getDateString } from "../helpers/auction-helper";
 import FileUpload from "./FileUpload";
 
 const useStyles = makeStyles((theme) => ({
+	root: {
+		marginBottom: theme.spacing(4),
+	},
 	card: {
 		maxWidth: 600,
 		margin: "auto",
@@ -32,25 +38,13 @@ const useStyles = makeStyles((theme) => ({
 		color: theme.palette.openTitle,
 		fontSize: "1em",
 	},
-	uploadPhotoSection: {
-		marginLeft: theme.spacing(7),
-		marginRight: theme.spacing(7),
-	},
-	textField: {
-		marginLeft: theme.spacing(1),
-		marginRight: theme.spacing(1),
-		width: 450,
-	},
+
 	submit: {
 		margin: "auto",
 		marginBottom: theme.spacing(2),
+		textDecoration: "none",
 	},
-	select: {
-		marginTop: 25,
-		marginLeft: theme.spacing(1),
-		marginRight: theme.spacing(1),
-		width: 450,
-	},
+
 	input: {
 		display: "none",
 	},
@@ -61,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
 
 function NewAuction() {
 	const classes = useStyles();
+	const history = useHistory();
 	const { user, token } = auth.isAuthenticated();
 	const [categories, setCategories] = useState([]);
 	const currentDate = new Date();
@@ -69,6 +64,8 @@ function NewAuction() {
 		new Date(currentDate.setHours(currentDate.getHours() + 1))
 	);
 	const [images, setImages] = useState([]);
+
+	console.log(history);
 
 	const [values, setValues] = useState({
 		itemName: "",
@@ -143,7 +140,7 @@ function NewAuction() {
 	}
 
 	return (
-		<div>
+		<div className={classes.root}>
 			<Card className={classes.card}>
 				<CardContent>
 					<Typography
@@ -154,7 +151,7 @@ function NewAuction() {
 						New Auction
 					</Typography>
 					<br />
-					<div className={classes.uploadPhotoSection}>
+					<div>
 						<FileUpload updateImages={updateImages} />
 					</div>
 					<br />
@@ -166,15 +163,18 @@ function NewAuction() {
 						onChange={handleChange("itemName")}
 						margin="normal"
 						variant="outlined"
+						fullWidth
+						required
 					/>
 					<br />
 					<Select
 						id="device"
 						variant="filled"
 						// disableUnderline
-						className={classes.select}
 						value={values.category}
 						onChange={handleChange("category")}
+						fullWidth
+						required
 					>
 						<MenuItem value="none" disabled>
 							Select Category
@@ -196,6 +196,8 @@ function NewAuction() {
 						className={classes.textField}
 						margin="normal"
 						variant="outlined"
+						fullWidth
+						required
 					/>
 					<br />
 					<TextField
@@ -207,6 +209,8 @@ function NewAuction() {
 						onChange={handleChange("startingBid")}
 						margin="normal"
 						variant="outlined"
+						fullWidth
+						required
 					/>
 					<br />
 					<br />
@@ -221,6 +225,8 @@ function NewAuction() {
 							shrink: true,
 						}}
 						variant="outlined"
+						fullWidth
+						required
 					/>
 					<br />
 					<br />
@@ -235,18 +241,32 @@ function NewAuction() {
 							shrink: true,
 						}}
 						variant="outlined"
+						fullWidth
+						required
 					/>
 					<br /> <br />
 					{values.error && (
-						<Typography component="p" color="error">
+						<Typography
+							style={{ display: "flex", alignItems: "center" }}
+							color="error"
+						>
 							<Icon color="error" className={classes.error}>
-								error
+								<ErrorIcon />
 							</Icon>
 							{values.error}
 						</Typography>
 					)}
 				</CardContent>
 				<CardActions>
+					<Button
+						className={classes.submit}
+						variant="contained"
+						color="secondary"
+						onClick={() => history.goBack()}
+					>
+						Cancel
+					</Button>
+
 					<Button
 						color="primary"
 						variant="contained"
@@ -255,9 +275,6 @@ function NewAuction() {
 					>
 						Submit
 					</Button>
-					<Link to="/myauctions" className={classes.submit}>
-						<Button variant="contained">Cancel</Button>
-					</Link>
 				</CardActions>
 			</Card>
 		</div>

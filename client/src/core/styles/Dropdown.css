@@ -1,0 +1,60 @@
+.dropdown-menu {
+    width: 300px;
+    position: absolute;
+    top: 80px;
+    list-style: none;
+    text-align: start;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+
+.account {
+    width: 200px;
+  }
+  
+  .dropdown-menu li {
+    background: #006637;
+    cursor: pointer;
+  }
+  
+  .dropdown-menu li:hover {
+    background: #34855f;
+  }
+  
+  .dropdown-menu.clicked {
+    display: none;
+  }
+  
+  .dropdown-link {
+    display: block;
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
+    color: #fff;
+    padding: 16px;
+  }
+
+  .logout-button{
+    display: block;
+    height: 100%;
+    width: 100%;
+    color: #fff;
+    padding: 16px;
+    background: #006637;
+    cursor: pointer;
+    border: none;
+  }
+
+  .logout-button:hover {
+    background: #34855f;
+  }
+  
+  .logout-button.clicked {
+    display: none;
+  }
+  
+  @media screen and (max-width: 960px) {
+    .fa-caret-down {
+      display: none;
+    }
+  }

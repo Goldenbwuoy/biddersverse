@@ -1,0 +1,35 @@
+.slider {
+    padding: 10px;
+    background: #fff;
+}
+
+.slider__cards {
+    padding: 5px 5px 20px 5px;
+    background: #fff;
+    max-width: 1200px;
+    width: 100%;
+    margin: 5px auto;
+    box-shadow: 0 6px 20px rgba(56, 125, 255, 0.17);
+    border-radius: 10px;
+}
+
+.slider__header{
+    margin: 25px;
+
+}
+
+.slick-prev:before {
+    color: #006637 !important;
+
+}
+.slick-next:before {
+    color: #006637 !important;
+}
+
+.slick-slide {
+    padding: 0 15px;
+  }
+  
+  .slick-list {
+    margin: 0 2em;
+  }

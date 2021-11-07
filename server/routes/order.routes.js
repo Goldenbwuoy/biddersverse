@@ -5,44 +5,42 @@ const orderCtrl = require("../controllers/order.controller");
 const auctionCtrl = require("../controllers/auction.controller");
 const reviewCtrl = require("../controllers/review.controller");
 
-router
-  .route("/api/orders/:userId")
-  .post(
-    authCtrl.requireSignin,
-    userCtrl.createCustomer,
-    userCtrl.createCharge,
-    auctionCtrl.setPurchased,
-    orderCtrl.create
-  );
+router.route("/api/orders/:userId").post(
+	authCtrl.requireSignin,
+	userCtrl.createCustomer,
+	// userCtrl.createCharge,
+	auctionCtrl.setPurchased,
+	orderCtrl.create
+);
 
 router
-  .route("/api/orders/seller/:userId")
-  .get(authCtrl.requireSignin, orderCtrl.listBySeller);
+	.route("/api/orders/seller/:userId")
+	.get(authCtrl.requireSignin, orderCtrl.listBySeller);
 
 router
-  .route("/api/order/status/:orderId")
-  .put(authCtrl.requireSignin, orderCtrl.isSeller, orderCtrl.update);
+	.route("/api/order/status/:orderId")
+	.put(authCtrl.requireSignin, orderCtrl.isSeller, orderCtrl.update);
 
 router
-  .route("/api/orders/buyer/:userId")
-  .get(authCtrl.requireSignin, orderCtrl.listByBuyer);
+	.route("/api/orders/buyer/:userId")
+	.get(authCtrl.requireSignin, orderCtrl.listByBuyer);
 
 router
-  .route("/api/order/:orderId")
-  .get(authCtrl.requireSignin, orderCtrl.isBuyer, orderCtrl.read);
+	.route("/api/order/:orderId")
+	.get(authCtrl.requireSignin, orderCtrl.isBuyer, orderCtrl.read);
 
 router
-  .route("/api/order/:orderId/charge/:userId")
-  .put(authCtrl.requireSignin, orderCtrl.isSeller, orderCtrl.update);
+	.route("/api/order/:orderId/charge/:userId")
+	.put(authCtrl.requireSignin, orderCtrl.isSeller, orderCtrl.update);
 
 router
-  .route("/api/order/review/:orderId")
-  .post(
-    authCtrl.requireSignin,
-    orderCtrl.isBuyer,
-    orderCtrl.setReviewed,
-    reviewCtrl.create
-  );
+	.route("/api/order/review/:orderId")
+	.post(
+		authCtrl.requireSignin,
+		orderCtrl.isBuyer,
+		orderCtrl.setReviewed,
+		reviewCtrl.create
+	);
 
 router.route("/api/orders/status_values").get(orderCtrl.getStatusValues);
 

@@ -6,25 +6,38 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Icon from "@material-ui/core/Icon";
-import FileUpload from "@material-ui/icons/AddPhotoAlternate";
 import { makeStyles } from "@material-ui/core/styles";
 import auth from "./../auth/auth-helper";
 import { read, update } from "./api-user.js";
 import { Redirect } from "react-router-dom";
-import { Avatar, FormControlLabel, Switch } from "@material-ui/core";
-import defaultImage from "../assets/images/profile-pic.png";
+import {
+	CircularProgress,
+	Container,
+	FormControlLabel,
+	Grid,
+	Switch,
+} from "@material-ui/core";
+import {
+	CountryDropdown,
+	RegionDropdown,
+	CountryRegionData,
+} from "react-country-region-selector";
 
 const useStyles = makeStyles((theme) => ({
+	root: {
+		minHeight: "100vh",
+		marginBottom: 15,
+	},
 	card: {
-		maxWidth: 600,
 		margin: "auto",
-		textAlign: "center",
 		marginTop: theme.spacing(5),
-		paddingBottom: theme.spacing(2),
+		padding: theme.spacing(2),
+		width: "100%",
 	},
 	title: {
-		margin: theme.spacing(2),
-		color: theme.palette.protectedTitle,
+		margintop: theme.spacing(4),
+		marginBottom: theme.spacing(2),
+		color: theme.palette.primary,
 	},
 	error: {
 		verticalAlign: "middle",
@@ -38,17 +51,9 @@ const useStyles = makeStyles((theme) => ({
 		display: "none",
 	},
 	submit: {
-		margin: "auto",
-		marginBottom: theme.spacing(2),
+		margin: `${theme.spacing(4)} 0`,
 	},
-	filename: {
-		marginLeft: "10px",
-	},
-	bigAvatar: {
-		width: 60,
-		height: 60,
-		margin: "auto",
-	},
+
 	subheading: {
 		marginTop: theme.spacing(2),
 		color: theme.palette.openTitle,
@@ -62,6 +67,10 @@ function EditProfile({ match }) {
 		lastName: "",
 		email: "",
 		phoneNumber: "",
+		street: "",
+		city: "",
+		zipcode: "",
+		country: "",
 		seller: false,
 		error: "",
 		redirectToProfile: false,
@@ -82,6 +91,7 @@ function EditProfile({ match }) {
 			if (data && data.error) {
 				setValues({ ...values, error: data.error });
 			} else {
+				console.log(data);
 				setValues({
 					...values,
 					firstName: data.firstName,
@@ -89,21 +99,32 @@ function EditProfile({ match }) {
 					email: data.email,
 					phoneNumber: data.phoneNumber,
 					seller: data.seller,
+					street: data.address?.street,
+					city: data.address?.city,
+					zipcode: data.address?.zipcode,
+					country: data.address?.country,
 				});
 			}
 		});
 		return function cleanup() {
 			abortController.abort();
 		};
-	}, [match.params.userId]);
+	}, [match.params.userId, jwt.token]);
 
-	const clickSubmit = () => {
+	const clickSubmit = (event) => {
+		event.preventDefault();
 		const user = {
 			firstName: values.firstName || undefined,
 			lastName: values.lastName || undefined,
 			email: values.email || undefined,
 			phoneNumber: values.phoneNumber,
 			seller: values.seller || undefined,
+			address: {
+				street: values.street || undefined,
+				city: values.city || undefined,
+				zipcode: values.zipcode || undefined,
+				country: values.country || undefined,
+			},
 		};
 		update(
 			{
@@ -139,86 +160,183 @@ function EditProfile({ match }) {
 		return <Redirect to={"/user/" + values.userId} />;
 	}
 	return (
-		<Card className={classes.card}>
-			<CardContent>
-				<Typography variant="h6" className={classes.title}>
-					Edit Profile
-				</Typography>
-				<TextField
-					id="firstName"
-					label="First Name"
-					variant="outlined"
-					className={classes.textField}
-					value={values.firstName}
-					onChange={handleChange("firstName")}
-					margin="normal"
-				/>
-				<TextField
-					id="lastName"
-					label="Last Name"
-					variant="outlined"
-					className={classes.textField}
-					value={values.lastName}
-					onChange={handleChange("lastName")}
-					margin="normal"
-				/>
-				<br />
-				<TextField
-					id="email"
-					type="email"
-					variant="outlined"
-					label="Email"
-					className={classes.textField}
-					value={values.email}
-					onChange={handleChange("email")}
-					margin="normal"
-				/>
-				<br />
-				<TextField
-					id="phoneNumber"
-					label="Mobile Phone"
-					variant="outlined"
-					className={classes.textField}
-					value={values.phoneNumber}
-					onChange={handleChange("phoneNumber")}
-					margin="normal"
-				/>
-				<br />
-				<Typography variant="subtitle1" className={classes.subheading}>
-					Seller Account
-				</Typography>
-				<FormControlLabel
-					control={
-						<Switch
-							classes={{
-								checked: classes.checked,
-								bar: classes.bar,
-							}}
-							checked={values.seller}
-							onChange={handleCheck}
-						/>
-					}
-					label={values.seller ? "Active" : "Inactive"}
-				/>
-				<br />{" "}
-				{values.error && (
-					<Typography component="p" color="error">
-						<Icon color="error" className={classes.error}></Icon>
-						{values.error}
-					</Typography>
-				)}
-			</CardContent>
-			<CardActions>
-				<Button
-					color="primary"
-					variant="contained"
-					onClick={clickSubmit}
-					className={classes.submit}
-				>
-					Update
-				</Button>
-			</CardActions>
-		</Card>
+		<Container className={classes.root} component="main" maxWidth="sm">
+			<Card className={classes.card}>
+				<div className={classes.paper}>
+					<form
+						onSubmit={clickSubmit}
+						className={classes.form}
+						noValidate
+					>
+						<Typography variant="h6" className={classes.title}>
+							Edit Profile
+						</Typography>
+						<Grid container spacing={2}>
+							<Grid item xs={12} sm={6}>
+								<TextField
+									autoComplete="fname"
+									name="firstName"
+									variant="outlined"
+									required
+									fullWidth
+									id="firstName"
+									label="First Name"
+									autoFocus
+									value={values.firstName}
+									onChange={handleChange("firstName")}
+								/>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<TextField
+									variant="outlined"
+									required
+									fullWidth
+									id="lastName"
+									label="Last Name"
+									name="lastName"
+									autoComplete="lname"
+									value={values.lastName}
+									onChange={handleChange("lastName")}
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<TextField
+									variant="outlined"
+									required
+									fullWidth
+									id="email"
+									label="Email Address"
+									name="email"
+									autoComplete="email"
+									value={values.email}
+									onChange={handleChange("email")}
+									margin="normal"
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<TextField
+									variant="outlined"
+									required
+									fullWidth
+									id="phoneNumber"
+									label="Phone Number"
+									name="phoneNumber"
+									value={values.phoneNumber}
+									onChange={handleChange("phoneNumber")}
+									margin="normal"
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<Typography
+									variant="subtitle1"
+									className={classes.subheading}
+								>
+									Address
+								</Typography>
+								<TextField
+									variant="outlined"
+									required
+									fullWidth
+									id="street"
+									label="Street"
+									name="street"
+									value={values.street}
+									onChange={handleChange("street")}
+									margin="normal"
+								/>
+							</Grid>
+
+							<Grid item xs={12} sm={6}>
+								<TextField
+									autoComplete="fname"
+									name="city"
+									variant="outlined"
+									required
+									fullWidth
+									id="city"
+									label="City"
+									autoFocus
+									value={values.city}
+									onChange={handleChange("city")}
+								/>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<TextField
+									autoComplete="fname"
+									name="zipcode"
+									variant="outlined"
+									required
+									fullWidth
+									id="zipcode"
+									label="Zip Code"
+									autoFocus
+									value={values.zipcode}
+									onChange={handleChange("zipcode")}
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<CountryDropdown
+									value={values.country}
+									onChange={(val) =>
+										setValues({ ...values, country: val })
+									}
+									style={{
+										height: 60,
+										width: "100%",
+										marginTop: 10,
+									}}
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<Typography
+									variant="subtitle1"
+									className={classes.subheading}
+								>
+									Seller Account
+								</Typography>
+								<FormControlLabel
+									control={
+										<Switch
+											checked={values.seller}
+											onChange={handleCheck}
+										/>
+									}
+									label={
+										values.seller ? "Active" : "Inactive"
+									}
+								/>
+							</Grid>
+							{values.error && (
+								<Grid item xs={12}>
+									<Typography
+										className={classes.error}
+										color="secondary"
+									>
+										{values.error}
+									</Typography>
+								</Grid>
+							)}
+						</Grid>
+						<Button
+							type="submit"
+							fullWidth
+							variant="contained"
+							color="primary"
+							className={classes.submit}
+						>
+							{values.loading ? (
+								<CircularProgress
+									size={24}
+									className={classes.loading}
+								/>
+							) : (
+								"Update Profile"
+							)}
+						</Button>
+					</form>
+				</div>
+			</Card>
+		</Container>
 	);
 }
 

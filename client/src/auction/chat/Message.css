@@ -3,16 +3,15 @@
     border-radius: 20px;
     padding: 5px 8px;
     color: white;
-    display: inline-block;
-    max-width: 80%;
+    max-width: 100%;
     margin-bottom: 5px;
   }
 
   .your-message {
-    border-radius: 10px 10px 0 10px;
+    border-radius: 5px 5px 0 5px;
   }
   .other-message {
-    border-radius: 10px 10px 10px 0;
+    border-radius: 5px 5px 5px 0;
   }
   
   .messageText {
@@ -30,8 +29,15 @@
   .messageContainer {
     display: flex;
     justify-content: flex-end;
-    padding: 0 5%;
+    padding: 0 10px;
     margin-top: 3px;
+  }
+
+  .messageInfo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    max-width: 80%;
   }
   
   .sentText {
@@ -57,6 +63,11 @@
   .justifyEnd {
     justify-content: flex-end;
   }
+  .timeEnd {
+    align-self: flex-end;
+  }
+
+
   
   .colorWhite {
     color: white;
@@ -67,11 +78,12 @@
   }
   
   .backgroundBlue {
-    background: rgb(63,71,113);
+    background: #009e54;
   }
   
   .backgroundLight {
-    background: rgb(231,237,228);
+    background: rgb(253, 253, 253);
+    box-shadow: 0 6px 20px #6cd1a2;
   }
 
   .backgroundGreen {
@@ -83,19 +95,17 @@
   }
 
   .seller-title {
-    font-style: italic;
-    color: rgb(148, 100, 100) !important;
-    font-weight: 900 !important;
+    color: #fc4f4f !important;
+    font-size: 12px;
   }
 
   .title {
-    font-style: italic;
     color: rgb(162, 167, 159);
+    font-size: 12px;
   }
 
   .time {
     float: right;
-    font-style: italic;
     color: rgb(162, 167, 159);
     font-size: small;
   }

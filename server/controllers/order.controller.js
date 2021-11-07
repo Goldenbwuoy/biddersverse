@@ -18,7 +18,7 @@ const listBySeller = async (req, res) => {
 	try {
 		let orders = await Order.find({ seller: req.profile._id })
 			.populate("auction", "_id itemName bids images")
-			.populate("buyer", "_id firstName lastName")
+			.populate("buyer", "_id firstName lastName address")
 			.sort("-createAt")
 			.exec();
 		res.json(orders);
@@ -63,7 +63,7 @@ const OrderById = async (req, res, next, id) => {
 	try {
 		const order = await Order.findById(id)
 			.populate("auction", "_id itemName bids images")
-			.populate("buyer", "_id firstName lastName")
+			.populate("buyer", "_id firstName lastName address")
 			.exec();
 		if (!order) {
 			return res.status(400).json({ error: "Order not found" });

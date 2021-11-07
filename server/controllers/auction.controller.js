@@ -35,7 +35,7 @@ const create = async (req, res) => {
 
 	try {
 		let result = await auction.save();
-		// notificationHandler.scheduleNotification(result);
+		notificationHandler.scheduleNotification(result);
 		res.status(200).json(result);
 	} catch (err) {
 		return res.status(400).json({
@@ -256,15 +256,16 @@ const listSoldBySeller = async (req, res) => {
 	}
 };
 
-const listLatest = async (req, res) => {
+const listLatest = async (req, res, next) => {
 	try {
 		let auctions = await Auction.find({ bidEnd: { $gt: new Date() } })
 			.select("-image")
 			.sort("-createdAt")
-			.limit(5)
+			.limit(8)
 			.populate("seller", "_id firstName lastName")
 			.populate("bids.bidder", "_id firstName lastName");
-		res.json(auctions);
+		req.latest = auctions;
+		next();
 	} catch (err) {
 		return res.status(400).json({
 			error: errorHandler.getErrorMessage(err),
@@ -272,30 +273,69 @@ const listLatest = async (req, res) => {
 	}
 };
 
-const listPopular = async (req, res) => {
+const listRecentlySold = async (req, res, next) => {
 	try {
-		const auctions = await Auction.aggregate([
-			{ $match: { bidEnd: { $gt: new Date() } } },
-			{
-				$project: {
-					itemName: 1,
-					startingBid: 1,
-					bidStart: 1,
-					bidEnd: 1,
-					bids: 1,
-					images: 1,
-					bidCount: { $size: "$bids" },
-				},
-			},
-			{ $sort: { bidsCount: -1 } },
-			{ $limit: 10 },
-		]).exec();
-		res.json(auctions);
+		let auctions = await Auction.find({
+			bidEnd: { $lt: new Date() },
+			$where: "this.bids.length > 0",
+		})
+			.sort("-bidEnd")
+			.limit(8)
+			.populate("seller", "_id firstName lastName");
+		req.recentlySold = auctions;
+		next();
 	} catch (err) {
 		return res.status(400).json({
 			error: errorHandler.getErrorMessage(err),
 		});
 	}
+};
+
+const listClosing = async (req, res, next) => {
+	try {
+		let auctions = await Auction.find({
+			bidEnd: { $gt: new Date() },
+		})
+			.sort("bidEnd")
+			.limit(8)
+			.populate("seller", "_id firstName lastName");
+		req.closing = auctions;
+		next();
+	} catch (err) {
+		return res.status(400).json({
+			error: errorHandler.getErrorMessage(err),
+		});
+	}
+};
+
+const listPopular = async (req, res, next) => {
+	try {
+		let auctions = await Auction.find({
+			bidEnd: { $gt: new Date() },
+			$where: "this.bids.length >= 2",
+		})
+			.sort("-bidEnd")
+			.limit(5)
+			.populate("seller", "_id firstName lastName");
+
+		req.popular = auctions;
+		next();
+	} catch (err) {
+		return res.status(400).json({
+			error: errorHandler.getErrorMessage(err),
+		});
+	}
+};
+
+const homeListings = (req, res) => {
+	const auctions = {
+		popular: req.popular,
+		closing: req.closing,
+		latest: req.latest,
+		recentlySold: req.recentlySold,
+	};
+
+	res.json(auctions);
 };
 
 const isSeller = (req, res, next) => {
@@ -329,6 +369,7 @@ const update = (req, res) => {
 			let result = await auction.save();
 			res.json(result);
 		} catch (err) {
+			console.log(err);
 			return res.status(400).json({
 				error: errorHandler.getErrorMessage(err),
 			});
@@ -362,6 +403,25 @@ const setPurchased = async (req, res, next) => {
 	}
 };
 
+const addBidder = async (req, res) => {
+	console.log(req.profile);
+	try {
+		let result = await Auction.findOneAndUpdate(
+			{
+				_id: req.auction._id,
+			},
+			{ $push: { bidders: { $each: [req.profile] } } },
+			{ new: true }
+		).exec();
+		return res.status(200).json(result);
+	} catch (err) {
+		console.log(err);
+		return res.status(400).json({
+			error: errorHandler.getErrorMessage(err),
+		});
+	}
+};
+
 module.exports = {
 	create,
 	uploadImage,
@@ -371,6 +431,9 @@ module.exports = {
 	listOpenBySeller,
 	listSoldBySeller,
 	listPopular,
+	listRecentlySold,
+	listClosing,
+	homeListings,
 	auctionByID,
 	photo,
 	read,
@@ -384,4 +447,5 @@ module.exports = {
 	listOpenByBidder,
 	listWonByBidder,
 	setPurchased,
+	addBidder,
 };

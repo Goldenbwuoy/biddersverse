@@ -45,10 +45,14 @@ const useStyles = makeStyles((theme) => ({
 		...theme.mixins.toolbar,
 	},
 	appBar: {
+		backgroundColor: "black",
+		height: "100px",
 		transition: theme.transitions.create(["width", "margin"], {
 			easing: theme.transitions.easing.sharp,
 			duration: theme.transitions.duration.leavingScreen,
 		}),
+		display: "flex",
+		justifyContent: "center",
 	},
 	appBarShift: {
 		marginLeft: drawerWidth,
@@ -102,7 +106,7 @@ const useStyles = makeStyles((theme) => ({
 		width: "100px",
 		objectFit: "contain",
 		// margin: "0 20px",
-		// marginTop: " 18px",
+		paddingTop: " 15px",
 	},
 }));
 
@@ -140,7 +144,7 @@ const Dashboard = ({ history }) => {
 						<Link to="/admin/home">
 							<img
 								className={classes.logo}
-								src={Logo}
+								src="/images/logo.png"
 								alt="logo"
 							/>
 						</Link>

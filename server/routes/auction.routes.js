@@ -15,6 +15,7 @@ router
 		authCtrl.requireSignin,
 		authCtrl.hasAuthorization,
 		userCtrl.isSeller,
+		userCtrl.isStripeSeller,
 		auctionCtrl.create
 	)
 	.get(
@@ -40,6 +41,10 @@ router
 	);
 
 router
+	.route("/api/auctions/bidder/:userId/join/:auctionId")
+	.put(authCtrl.requireSignin, auctionCtrl.addBidder);
+
+router
 	.route("/api/auctions/:auctionId")
 	.delete(authCtrl.requireSignin, auctionCtrl.isSeller, auctionCtrl.remove)
 	.put(authCtrl.requireSignin, auctionCtrl.isSeller, auctionCtrl.update);
@@ -62,9 +67,23 @@ router
 	.route("/api/auctions/category/:categoryId")
 	.get(auctionCtrl.listOpenByCategory);
 
-router.route("/api/auctions/added/latest").get(auctionCtrl.listLatest);
+// router.route("/api/auctions/added/latest").get(auctionCtrl.listLatest);
 
-router.route("/api/auctions/popular").get(auctionCtrl.listPopular);
+// router.route("/api/auctions/popular").get(auctionCtrl.listPopular);
+
+// router.route("/api/auctions/recently_sold").get(auctionCtrl.listRecentlySold);
+
+// router.route("/api/auctions/closing").get(auctionCtrl.listClosing);
+
+router
+	.route("/api/auctions/home_listings")
+	.get(
+		auctionCtrl.listLatest,
+		auctionCtrl.listPopular,
+		auctionCtrl.listRecentlySold,
+		auctionCtrl.listClosing,
+		auctionCtrl.homeListings
+	);
 
 router.route("/api/auctions/image/:auctionId").get(auctionCtrl.photo);
 

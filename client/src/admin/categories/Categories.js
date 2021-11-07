@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
 	Button,
 	Divider,
+	Fab,
 	IconButton,
 	makeStyles,
 	Paper,
@@ -22,8 +23,16 @@ import EditIcon from "@material-ui/icons/Edit";
 import auth from "../../auth/auth-helper";
 import { listCategories } from "../api-admin";
 import DeleteCategory from "./DeleteCategory";
+import CreateCategory from "./CreateCategory";
+import UpdateCategory from "./UpdateCategory";
 
 const useStyles = makeStyles((theme) => ({
+	container: {
+		flexGrow: 1,
+		overflow: "auto",
+		paddingTop: theme.spacing(4),
+		marginBottom: theme.spacing(10),
+	},
 	root: theme.mixins.gutters({
 		maxWidth: 600,
 		margin: "auto",
@@ -35,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 			1
 		)}px`,
 		color: theme.palette.openTitle,
-		fontSize: "1.2em",
+		fontSize: "1.3em",
 	},
 	addButton: {
 		float: "right",
@@ -46,11 +55,26 @@ const useStyles = makeStyles((theme) => ({
 	textField: {
 		margin: "10px 0",
 	},
+	fab: {
+		margin: 0,
+		top: "auto",
+		right: 40,
+		bottom: 40,
+		left: "auto",
+		position: "fixed",
+	},
+	link: {
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		color: "white",
+		textDecoration: "none",
+	},
 }));
 
 const StyledTableCell = withStyles((theme) => ({
 	head: {
-		backgroundColor: "#A5BEBD",
+		backgroundColor: "rgba(0, 102, 55, 0.1)",
 		color: theme.palette.common.black,
 		fontWeight: "800",
 	},
@@ -72,6 +96,9 @@ function Categories() {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(5);
 	const [search, setSearch] = useState("");
+	const [openCreate, setOpenCreate] = useState(false);
+	const [openEdit, setOpenEdit] = useState(false);
+	const [selectedCategory, setSelectedCategory] = useState({});
 
 	const { token } = auth.isAdminAuthenticated();
 	const classes = useStyles();
@@ -91,6 +118,11 @@ function Categories() {
 			abortController.abort();
 		};
 	}, [token]);
+
+	const openEditDialog = (category) => {
+		setSelectedCategory(category);
+		setOpenEdit(true);
+	};
 
 	const removeCategory = (category) => {
 		const updatedCategories = [...categories];
@@ -112,23 +144,33 @@ function Categories() {
 		setSearch(event.target.value);
 	};
 
+	const updateCategories = (category) => {
+		setCategories([...categories, category]);
+	};
+
+	const updateCategory = (category) => {
+		let categoriesCopy = [...categories];
+		const updatedCategories = categoriesCopy.map((currentCategory) =>
+			currentCategory._id === category._id
+				? {
+						...currentCategory,
+						categoryName: category.categoryName,
+				  }
+				: currentCategory
+		);
+		setCategories(updatedCategories);
+		console.log(updatedCategories);
+	};
+
 	const emptyRows =
 		rowsPerPage -
 		Math.min(rowsPerPage, categories.length - page * rowsPerPage);
 
 	return (
-		<div>
+		<div className={classes.container}>
 			<Paper className={classes.root} elevation={4}>
 				<Typography type="title" className={classes.title}>
-					Product Categories
-					<span className={classes.addButton}>
-						<Link to="/admin/create/category">
-							<Button color="primary" variant="contained">
-								<AddIcon className={classes.leftIcon}></AddIcon>{" "}
-								New Category
-							</Button>
-						</Link>
-					</span>
+					Listing Categories
 				</Typography>
 				<Divider />
 				<TextField
@@ -167,19 +209,18 @@ function Categories() {
 									</StyledTableCell>
 									<StyledTableCell>
 										<Tooltip title="Edit">
-											<Link
-												to={`/admin/edit/category/${category._id}`}
+											<IconButton
+												style={{
+													marginRight: "15px",
+												}}
+												size="small"
+												color="primary"
+												onClick={() =>
+													openEditDialog(category)
+												}
 											>
-												<IconButton
-													style={{
-														marginRight: "15px",
-													}}
-													size="small"
-													color="primary"
-												>
-													<EditIcon />
-												</IconButton>
-											</Link>
+												<EditIcon />
+											</IconButton>
 										</Tooltip>
 										<DeleteCategory
 											category={category}
@@ -190,7 +231,7 @@ function Categories() {
 							))}
 						{emptyRows > 0 && (
 							<StyledTableRow style={{ height: 63 * emptyRows }}>
-								<StyledTableCell />
+								<StyledTableCell colSpan={2} />
 							</StyledTableRow>
 						)}
 					</TableBody>
@@ -205,6 +246,25 @@ function Categories() {
 					onChangeRowsPerPage={handleChangeRowsPerPage}
 				/>
 			</Paper>
+			<Fab
+				onClick={() => setOpenCreate(true)}
+				className={classes.fab}
+				color="primary"
+				aria-label="add"
+			>
+				<AddIcon />
+			</Fab>
+			<CreateCategory
+				open={openCreate}
+				setOpen={setOpenCreate}
+				updateCategories={updateCategories}
+			/>
+			<UpdateCategory
+				open={openEdit}
+				setOpen={setOpenEdit}
+				category={selectedCategory}
+				editCategory={updateCategory}
+			/>
 		</div>
 	);
 }

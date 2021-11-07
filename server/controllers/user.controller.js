@@ -3,6 +3,7 @@ const Auction = require("../models/auction.model");
 const errorHandler = require("../helpers/dbErrorHandler.js");
 const extend = require("lodash/extend");
 const formidable = require("formidable");
+const bcrypt = require("bcryptjs");
 const fs = require("fs");
 const request = require("request");
 const stripe = require("stripe");
@@ -89,6 +90,35 @@ const update = async (req, res) => {
 		});
 	}
 };
+
+const resetPassword = async (req, res) => {
+	try {
+		const user = await User.findById(req.body.userId);
+		const isCorrectPassword = await user.authenticate(req.body.oldPassword);
+
+		if (!isCorrectPassword)
+			return res
+				.status(403)
+				.json({ error: "The Old Password is Invalid" });
+		const confirmed = req.body.newPassword === req.body.confirmPassword;
+		if (!confirmed)
+			return res.status(403).json({
+				error: "The New Password must be the same as Confirmation",
+			});
+		const salt = await bcrypt.genSalt(10);
+		const updatedPassword = await bcrypt.hash(req.body.newPassword, salt);
+		await User.findOneAndUpdate(
+			{ _id: user._id },
+			{ password: updatedPassword }
+		);
+		return res.status(200).json({ message: "Password Updated" });
+	} catch (err) {
+		console.log(err);
+		return res.status(400).json({
+			error: errorHandler.getErrorMessage(err),
+		});
+	}
+};
 const remove = async (req, res) => {
 	try {
 		let user = req.profile;
@@ -115,6 +145,17 @@ const isSeller = (req, res, next) => {
 	if (!isSeller) {
 		return res.status(403).json({
 			error: "User is not a seller",
+		});
+	}
+	next();
+};
+
+const isStripeSeller = (req, res, next) => {
+	const isStripeSeller = req.profile && req.profile.stripe_seller;
+	if (!isStripeSeller) {
+		return res.status(403).json({
+			error:
+				"Connect your Stripe Account in Profile settings to List Products.",
 		});
 	}
 	next();
@@ -285,8 +326,10 @@ module.exports = {
 	list,
 	remove,
 	update,
+	resetPassword,
 	photo,
 	isSeller,
+	isStripeSeller,
 	stripe_auth,
 	createCustomer,
 	createCharge,

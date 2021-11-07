@@ -1,0 +1,46 @@
+.dashboard {
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: 80px;
+    background: #006637;
+    padding: 20px 40px;
+    justify-content: space-between;
+    box-shadow: 0 6px 20px rgba(238, 240, 237, 0.17);
+  }
+
+  .seller {
+    width: 500px;
+  }
+
+.dashboard__header {
+    color: rgb(219, 204, 204);
+    margin-bottom: 15px;
+    font-weight: 600;
+    text-align: start;
+}
+.dashboard__list {
+    list-style: none;
+    text-align: start;
+  }
+  
+  .dashboard__list li {
+    padding: 10px 0;
+  }
+
+  .dashboard.clicked {
+    display: none;
+  }
+  
+  .dashboard__link {
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
+    color: #fff;
+  }
+
+  .dashboard__link:hover {
+    font-weight: bold;
+    padding-left: 5px;
+  }

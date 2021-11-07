@@ -3,7 +3,11 @@ import axios from "../config/axios";
 import React, { useState } from "react";
 import StripeCheckout from "react-stripe-checkout";
 import auth from "../auth/auth-helper";
-import { getAuctionImage, getImage } from "../helpers/auction-helper";
+import {
+	getAuctionImage,
+	getDepositAmount,
+	getImage,
+} from "../helpers/auction-helper";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -11,13 +15,19 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Checkout({ auction, setLoading, setRedirectToOrder, setOrderId }) {
+function Checkout({
+	auction,
+	setLoading,
+	setRedirectToOrder,
+	setOrderId,
+	setPaymentError,
+}) {
 	const classes = useStyles();
 
 	console.log(auction.seller);
 
 	const { user } = auth.isAuthenticated();
-	const amount = auction.bids[0].bid * 100;
+	const amount = (auction.bids[0].bid - getDepositAmount(auction)) * 100;
 
 	const placeOrder = async (token) => {
 		const config = {
@@ -26,13 +36,6 @@ function Checkout({ auction, setLoading, setRedirectToOrder, setOrderId }) {
 			},
 		};
 
-		const {
-			address_city,
-			address_country,
-			address_line1,
-			address_zip,
-		} = token.card;
-
 		const body = {
 			token: token,
 			order: {
@@ -40,12 +43,6 @@ function Checkout({ auction, setLoading, setRedirectToOrder, setOrderId }) {
 				seller: auction.seller,
 				email: token.email,
 				amount: amount,
-				shipping_address: {
-					street: address_line1,
-					city: address_city,
-					zipcode: address_zip,
-					country: address_country,
-				},
 			},
 		};
 
@@ -60,8 +57,10 @@ function Checkout({ auction, setLoading, setRedirectToOrder, setOrderId }) {
 			setOrderId(response.data._id);
 			setRedirectToOrder(true);
 		} catch (err) {
-			setLoading(false);
+			console.log(err);
 			console.log(err.response.data);
+			setPaymentError(err.response.data.error);
+			setLoading(false);
 		}
 	};
 
@@ -70,8 +69,9 @@ function Checkout({ auction, setLoading, setRedirectToOrder, setOrderId }) {
 			<StripeCheckout
 				image={getImage(auction.images[0])}
 				name={auction.itemName}
+				email={user.email}
 				amount={amount}
-				shippingAddress
+				alipay={true}
 				stripeKey={process.env.REACT_APP_PUBLISHABLE_KEY}
 				token={placeOrder}
 			/>

@@ -16,8 +16,8 @@ POST http://localhost:5000/api/signin
 Content-Type: application/json
 
 {
-    "email": "test@test.com",
-    "password": "test"
+    "email": "golden@mail.com",
+    "password": "password"
 }
 
 ###
@@ -200,9 +200,24 @@ Content-Type: application/json
 ### list popular auctions
 GET http://localhost:5000/api/auctions/popular
 
+### list recently sold auctions
+GET http://localhost:5000/api/auctions/recently_sold
+
+### list closing auctions
+GET http://localhost:5000/api/auctions/home_listings
+
 ### get user reviews
 GET http://localhost:5000/api/reviews/user/6009329fec623b2ba4fa2719
 
 ### get profile stats
 GET http://localhost:5000/api/users/profile/605a99d56266af39e85d97fe
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA5MzJlM2VjNjIzYjJiYTRmYTI3MWEiLCJpYXQiOjE2MTEyODgxMTJ9.uSyQWbiun9XsBsCEGUowQfiQupWVCC4g2kQAWR7S-cQ
+
+### dashboard summary
+GET http://localhost:5000/api/admin/dashboard_summary
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDAyNjNhOTc0MTU1YjIwN2M5NmMzM2UiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTA3NzI0NDd9.pYjBLnvw2WsvXXPOSZl4FXlAVu2oY7Qn-dn66mB509U
+
+### join an auction
+PUT http://localhost:5000/api/auctions/bidder/60613566cc93fc00f82c695a/join/608b72d363a8fd33a8926650
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDcyNzg1MTBhYWFmMzFiMjA3NTEzZmYiLCJpYXQiOjE2MTk3NTE5MDB9.xUozBBmEkyadSXTQCtyvOHqIv-R_d9B3qxc7nGAA1xQ
+

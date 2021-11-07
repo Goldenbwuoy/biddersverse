@@ -1,6 +1,8 @@
 import {
 	Button,
+	Container,
 	Divider,
+	Fab,
 	IconButton,
 	makeStyles,
 	Paper,
@@ -22,20 +24,28 @@ import { Link } from "react-router-dom";
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteUser from "./DeleteUser";
+import CreateUser from "./CreateUser";
+import UpdateUser from "./UpdateUser";
 
 const useStyles = makeStyles((theme) => ({
+	container: {
+		flexGrow: 1,
+		overflow: "auto",
+		paddingTop: theme.spacing(4),
+		marginBottom: theme.spacing(10),
+	},
 	root: theme.mixins.gutters({
 		maxWidth: 1200,
 		margin: "auto",
 		padding: theme.spacing(1),
-		marginBottom: "20px",
+		marginBottom: theme.spacing(2),
 	}),
 	title: {
 		margin: `${theme.spacing(3)}px 0 ${theme.spacing(3)}px ${theme.spacing(
 			1
 		)}px`,
 		color: theme.palette.openTitle,
-		fontSize: "1.2em",
+		fontSize: "1.3em",
 	},
 	addButton: {
 		float: "right",
@@ -46,11 +56,26 @@ const useStyles = makeStyles((theme) => ({
 	textField: {
 		margin: "10px 0",
 	},
+	fab: {
+		margin: 0,
+		top: "auto",
+		right: 40,
+		bottom: 40,
+		left: "auto",
+		position: "fixed",
+	},
+	link: {
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		color: "white",
+		textDecoration: "none",
+	},
 }));
 
 const StyledTableCell = withStyles((theme) => ({
 	head: {
-		backgroundColor: "#A5BEBD",
+		backgroundColor: "rgba(0, 102, 55, 0.1)",
 		color: theme.palette.common.black,
 		fontWeight: "850",
 	},
@@ -72,6 +97,9 @@ function Users() {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(5);
 	const [search, setSearch] = useState("");
+	const [openNew, setOpenNew] = useState(false);
+	const [openEdit, setOpenEdit] = useState(false);
+	const [selectedUser, setSelectedUser] = useState({});
 
 	const classes = useStyles();
 	const { token } = auth.isAdminAuthenticated();
@@ -100,6 +128,24 @@ function Users() {
 		setUsers(updatedUsers);
 	};
 
+	const updateUser = (user) => {
+		let usersCopy = [...users];
+		const updatedUsers = usersCopy.map((currentUser) =>
+			currentUser._id === user._id
+				? {
+						...currentUser,
+						firstName: user.firstName,
+						lastName: user.lastName,
+						email: user.email,
+						phoneNumber: user.phoneNumber,
+						seller: user.seller,
+				  }
+				: currentUser
+		);
+		setUsers(updatedUsers);
+		console.log(updatedUsers);
+	};
+
 	const handleSearchChange = (event) => {
 		setSearch(event.target.value);
 	};
@@ -113,22 +159,23 @@ function Users() {
 		setPage(0);
 	};
 
+	const updateUsers = (user) => {
+		setUsers([...users, user]);
+	};
+
+	const openEditDialog = (user) => {
+		setSelectedUser(user);
+		setOpenEdit(true);
+	};
+
 	const emptyRows =
 		rowsPerPage - Math.min(rowsPerPage, users.length - page * rowsPerPage);
 
 	return (
-		<div>
+		<div className={classes.container}>
 			<Paper className={classes.root} elevation={4}>
 				<Typography type="title" className={classes.title}>
-					Users
-					<span className={classes.addButton}>
-						<Link to="/admin/create/user">
-							<Button color="primary" variant="contained">
-								<AddIcon className={classes.leftIcon}></AddIcon>{" "}
-								New User
-							</Button>
-						</Link>
-					</span>
+					Registered Users
 				</Typography>
 				<Divider />
 				<TextField
@@ -192,19 +239,18 @@ function Users() {
 									</StyledTableCell>
 									<StyledTableCell>
 										<Tooltip title="Edit">
-											<Link
-												to={`/admin/edit/user/${user._id}`}
+											<IconButton
+												style={{
+													marginRight: "15px",
+												}}
+												size="small"
+												color="primary"
+												onClick={() =>
+													openEditDialog(user)
+												}
 											>
-												<IconButton
-													style={{
-														marginRight: "15px",
-													}}
-													size="small"
-													color="primary"
-												>
-													<EditIcon />
-												</IconButton>
-											</Link>
+												<EditIcon />
+											</IconButton>
 										</Tooltip>
 
 										<DeleteUser
@@ -231,6 +277,25 @@ function Users() {
 					onChangeRowsPerPage={handleChangeRowsPerPage}
 				/>
 			</Paper>
+			<Fab
+				onClick={() => setOpenNew(true)}
+				className={classes.fab}
+				color="primary"
+				aria-label="add"
+			>
+				<AddIcon />
+			</Fab>
+			<CreateUser
+				updateUsers={updateUsers}
+				open={openNew}
+				setOpen={setOpenNew}
+			/>
+			<UpdateUser
+				open={openEdit}
+				setOpen={setOpenEdit}
+				user={selectedUser}
+				editUser={updateUser}
+			/>
 		</div>
 	);
 }
