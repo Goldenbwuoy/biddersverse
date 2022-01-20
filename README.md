@@ -1,70 +1,120 @@
-# Getting Started with Create React App
+# About Biddersverse
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+-   Biddersverse is a multivendor online auction application for consumer electronic products.
 
-## Available Scripts
+-   Sellers can create listings for bidders to bid on. Bidding takes place within a period of time specified by the seller.
 
-In the project directory, you can run:
+-   At the end of the auction, the system automatically notifies the winning bidder and the seller by email.
 
-### `npm start`
+-   All sellers must have Stripe accounts to be able to post listings.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+-   The winning bidders can pay for the won items (the system only supports card payments for now).
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+-   A user can use the same account for both selling items and bidding. To be able to sell items, a user needs to activate seller account features in the profile settings (This step requires the user to have a Stripe account or create one).
 
-### `npm test`
+# Links
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+-   Checkout the [Repo](https://github.com/Goldenbwuoy/biddersverse "Skedula Repo")
 
-### `npm run build`
+-   Report [Bugs](https://github.com/Goldenbwuoy/biddersverse/issues "Issues Page")
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Main Futures
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+-   [x] Authentication (Signup & Signin)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+-   [x] Browse Auctions
 
-### `npm run eject`
+-   [x] Activate seller account (connect Stripe account)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+-   [x] Create Listings
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+-   [x] Update Listing
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+-   [x] Place Bids
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+-   [x] Realtime Auction chat rooms (each auction item has its own chat room)
 
-## Learn More
+-   [x] Notify the winning bidder and seller by email at the end of the auction.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+-   [x] Pay for Items (only card payments are supported)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+-   [x] Browse orders
 
-### Code Splitting
+-   [x] Update order status (sellers' feature)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+# Screenshots
 
-### Analyzing the Bundle Size
+</br>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+![Listings](/assets/screenshots/listings.png "Listings")
 
-### Making a Progressive Web App
+![My Listings](/assets/screenshots/mylistings.png "My Listings")
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+![Place Bid](/assets/screenshots/bid.png "Place Bid")
 
-### Advanced Configuration
+</br>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+</br>
 
-### Deployment
+# Installation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Make sure you have Node installed or [download](https://nodejs.org/en/) and install.
 
-### `npm run build` fails to minify
+## server side
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+In the project root directory
+
+Install dependencies: `npm install`
+
+create a `.env` file and add the following variables:
+
+```
+
+EMAIL_USER=your_email_address
+EMAIL_PASSWORD=email_password
+
+MONGODB_LOCAL_URI=your_mongo_db_uri
+
+JWT_SECRET=your_jwt_token_secret
+PORT=port_number
+
+STRIPE_CONNECT_CLIENT_ID=stripe_client_id
+STRIPE_TEST_SECRET_KEY=stripe_test_secret_key
+
+```
+
+run server locally: `npm run backend`
+
+## client side
+
+`cd client`
+
+Install dependencies: `npm install`
+
+create a `.env` file and add the following variables:
+
+```
+
+REACT_APP_DEV_SERVER_URL=the_server_url
+REACT_APP_CLIENT_ID=stripe_client_id
+REACT_APP_PUBLISHABLE_KEY=stripe_test_public_key
+
+```
+
+Run client locally: `npm start`
+
+_Note: concurrently has been for this projects, so the server and the client can be run simulteneously from the root directory._ User the command `npm run dev` in the project root directory, after completing the steps above to run both the client and the server locally.
+
+# Author
+
+**Golden Mumanikidzwa**
+
+-   Check my [Profile](https://github.com/Goldenbwuoy "Goldenbwuoy")
+
+-   Follow me on [Twitter](https://github.com/Goldenbwuoy "Goldenbwuoy")
+
+## 🤝 Support
+
+Contributions, issues, and feature requests are welcome!
+
+Give a ⭐️ if you like this project!
